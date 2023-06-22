@@ -1,0 +1,161 @@
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Geologica&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --l: #ffffff;
+    --d: #000305;
+    --ltxt: #020806;
+    --dtxt: #fafcff;
+    --main: #7fcbdc;
+    --sec: #f3f6fc;
+    --dsec: #000000;
+    --acc: #3561c0;
+}
+
+
+body {
+    background-color: var(--d);
+    color: var(--main);
+    font-family: 'Josefin Sans', sans-serif;
+}   
+
+.mainBanner {
+    width: 100%;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.mainBanner h3 {
+    font-size: 1.8em;
+}
+.mainBanner img {
+    margin: -150px;
+    font-size: 4em;
+}
+
+.about {
+
+    background-color: var(--sec);
+    display: flex;
+    justify-content: space-between;
+}
+
+.read-nav {
+    font-family: 'Josefin Sans', sans-serif;
+    background-color: var(--bc);
+    text-transform: uppercase;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    display: flex;
+    justify-content: space-between;
+    gap: 100px;
+}
+
+.read-nav img {
+    width: 50px;
+}
+
+.read-nav-logo {
+    margin-right: 150px;
+    color: var(--main);
+    font-size: 50px;
+    text-decoration: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: baseline;
+    padding: 20px;
+}
+
+.read-nav-nav {
+    margin-top: 40px;
+    font-size: 2em;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: baseline;
+    justify-content: space-between;
+}
+
+.read-nav-nav a {
+    color: #aeaead;
+    margin: 0 20px;
+    text-decoration: none;
+    transition: ease-out 50ms;
+}
+
+.read-nav-nav a:hover {
+    transform: scale(1.2);
+    color: var(--acc);
+    transition: ease-in 50ms;
+}
+
+.read-nav-btn {
+    text-decoration: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: baseline;
+    padding: 20px;
+}
+
+.read-nav-btn button {
+    background-color: var(--acc);
+    color: var(--dtxt);
+    border-radius: 20px;
+    font-size: 2em;
+    border: none;
+    font-family: ;
+    padding: 15px 30px;
+    transition: ease-out 50ms;
+    font-size: 2em;
+    text-transform: uppercase;
+    font-family: 'Josefin Sans', sans-serif;
+}
+
+.read-nav-btn button:hover{
+    transform: scale(1.1);
+    background-color: var(--main);
+    transition: ease-in 50ms;
+}
+
+.about {
+    text-transform: uppercase;
+
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+
+.about div {
+
+    padding: 40px;
+    border-radius: 20px;
+    color: var(--acc);
+    background-color: var(--dsec);
+    margin: 100px 0;
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+}
+
+.about h1 {
+    font-size: 3.5em;
+}
+
+.text b {
+    color: var(--main);
+}
