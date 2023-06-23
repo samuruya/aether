@@ -21,6 +21,7 @@ body::-webkit-scrollbar {
     --sec: #f3f6fc;
     --dsec: #000000;
     --acc: #3561c0;
+    --alt: #aeaead;
 }
 
 
@@ -86,17 +87,16 @@ body {
 .read-nav-nav {
     margin-top: 40px;
     font-size: 2em;
-        display: grid;
-        justify-content: center;
-        align-items: center;
-        grid-template-columns: 3em 3em 3em;
-        grid-template-rows: 1fr 1fr 1fr;
-        grid-column-gap: 70px;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    grid-template-columns: 3em 3em 3em;
+    grid-template-rows: 1fr 1fr 1fr;
+    grid-column-gap: 70px;
 }
 
 .read-nav-nav a {
-    color: #aeaead;
-    margin: 0 20px;
+    color: var(--alt);
     text-decoration: none;
     transition: ease-out 50ms;
 }
@@ -176,6 +176,106 @@ body {
 .promo a {
     text-decoration: none;
 }
+
+
+.login {
+    color: var(--dtxt);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.login a {
+    text-decoration: none;
+    font-size: 1.5em;
+}
+
+.login h1 {
+    font-size: 4em;
+    text-transform: uppercase;
+}
+
+.login form {
+
+    border-radius: 20px;
+    padding: 20px;
+    font-size: 1.5em;
+    width: 40%;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    grid-template-columns: 1fr;
+    grid-template-rows: 120px 120px 120px 120px 120px;
+    grid-column-gap: 70px;
+}
+
+.login div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-transform: uppercase;
+
+}
+
+.login button {
+    display: flex;
+    justify-self: center;
+    justify-content: center;
+    width: 20%;
+    padding: 20px 20px 10px 20px;
+    font-size: 1em;
+    text-align: center;
+    border: none;
+    background-color: var(--acc);
+    color: var(--dtxt);
+    border-radius: 3em;
+    font-family: 'Josefin Sans', sans-serif;
+    text-transform: uppercase;
+}
+
+.login input {
+    width: 80%;
+    padding: 20px;
+    border-radius: 20px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
