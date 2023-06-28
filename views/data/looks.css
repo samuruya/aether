@@ -14,14 +14,15 @@ body::-webkit-scrollbar {
 
 :root {
     --l: #ffffff;
-    --d: #000305;
+    --d: #01000f;
     --ltxt: #020806;
-    --dtxt: #fafcff;
-    --main: #7fcbdc;
+    --dtxt: #ecebff;
+    --main: #fc8682;
     --sec: #f3f6fc;
     --dsec: #000000;
     --acc: #3561c0;
     --alt: #aeaead;
+    --gre: #82fc86;
 }
 
 
@@ -129,7 +130,6 @@ body {
 
 .read-nav-btn button:hover{
     transform: scale(1.1);
-
     transition: ease-in 50ms;
 }
 
@@ -247,6 +247,51 @@ body {
 }
 
 
+.space-bar {
+    padding-top: 40px;
+    background-color: var(--dsec);
+    width: 20%;
+    height: 80%;
+    border-radius: 0 20px 20px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+}
+
+.space-bar div {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    width: 90%;
+}
+
+.space-bar button {
+    font-size: 1.5em;
+    padding: 10px;
+    width: 90%;
+    background-color: var(--main);
+    border: none;
+    font-family: 'Josefin Sans', sans-serif;
+    text-transform: uppercase;
+    border-radius: 10px;
+    transition: ease-out 100ms;
+}
+
+.space-bar button:hover {
+    transform: scale(1.1);
+    transition: ease-in 50ms;
+}
+
+
+.space-bar div button {
+    width: 100%;
+}
+
+.space-bar h2 {
+    padding: 10px;
+    background-color: var(--alt);
+}
 
 
 

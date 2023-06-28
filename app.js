@@ -38,6 +38,18 @@ const users = [
   }
 ]
 
+const titleFont = [
+  "https://i.ibb.co/Qf51Qh4/adadwad.png",
+  "https://i.ibb.co/rfTN95k/adwaaaaa.png",
+  "https://i.ibb.co/jH1P3h4/aad.png",
+  "https://i.ibb.co/QHtBt7H/adadd.png",
+]
+
+function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
+}
+console.log(getRandomInt(4));
+
 app.use(express.static(__dirname + '/views/data'));
 app.set('view-engine', 'ejs')
 app.use(express.urlencoded({ extended: false}))
@@ -53,13 +65,16 @@ app.use(passport.session())
 
 app.get('/', (req, res) => {
       if (req.isAuthenticated()) {
-        res.render('index.ejs', {name: 'Hey '+req.user.name,  hub: 'hub'})
+        res.render('index.ejs', {name: 'Hey '+req.user.name,  hub: 'hub', font: titleFont[getRandomInt(4)]})
       } else {
-        res.render('index.ejs', {name: ' ', hub: ' '})
+        res.render('index.ejs', {name: ' ', hub: ' ', font: titleFont[getRandomInt(4)]})
       }
 });
 app.get('/login', (req, res) => {
   res.render('login.ejs')
+});
+app.get('/docs', (req, res) => {
+  res.render('docs.ejs')
 });
 app.get('/register', (req, res) => {
   res.render('reg.ejs')

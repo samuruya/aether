@@ -16,10 +16,14 @@
 
 
     
-    <div id="space-bar">
-        <% for (let i = 0; i < spaces.length; i++) { %>
-        <h2><%= spaces[i].title  %></h2>
-        <% } %>
+    <div class="space-bar">
+        <h1><%= name %>'s spaces</h1>
+        <div>
+            <% for (let i = 0; i < spaces.length; i++) { %>
+                <button><%= spaces[i].title  %></button>
+            <% } %>
+        </div>
+        <button class="addsp">Add Space</button>
     </div>
 
 
