@@ -233,6 +233,12 @@ body {
     border-radius: 3em;
     font-family: 'Josefin Sans', sans-serif;
     text-transform: uppercase;
+    transition: ease-out 50ms;
+}
+
+.login button:hover {
+    transform: scale(1.1);
+    transition: ease-in 50ms;
 }
 
 .login input {

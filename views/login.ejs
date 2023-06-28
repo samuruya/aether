@@ -16,9 +16,12 @@
         <div id='stars2'></div>
         <div id='stars3'></div>
     </div>
-
+    <% if (messages.error) { %>
+        <%= messages.error %>
+    <% } %>
     <div class="login">
         <h1>login</h1>
+
         <form action="/login" method="POST">
             <div>
                 <label for="name">Name</label>
