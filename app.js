@@ -11,7 +11,8 @@ const initPass = require('./passport-config');
 const flash = require('express-flash');
 
 initPass(passport, 
-  nickname => users.find(user => user.name === nickname)
+  tag => users.find(user => user.name === tag),
+  id => users.find(user => user.id === id)
 );
 
 
@@ -33,7 +34,7 @@ app.use(passport.session())
 
 
 app.get('/', (req, res) => {
-      res.render('index.ejs')
+      res.render('index.ejs', { name: req.user.name})
 });
 app.get('/login', (req, res) => {
   res.render('login.ejs')
