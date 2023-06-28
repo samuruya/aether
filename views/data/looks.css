@@ -87,12 +87,11 @@ body {
 .read-nav-nav {
     margin-top: 40px;
     font-size: 2em;
-    display: grid;
+    display: flex;
+    gap: 20px;
     justify-content: center;
     align-items: center;
-    grid-template-columns: 3em 3em 3em;
-    grid-template-rows: 1fr 1fr 1fr;
-    grid-column-gap: 70px;
+
 }
 
 .read-nav-nav a {
