@@ -5,7 +5,7 @@ const form = document.querySelector('form');
 
 
 
-// feature detection for drag&drop upload
+// feature detection
 var isAdvancedUpload = function()
 {
 	var div = document.createElement( 'div' );
@@ -13,7 +13,7 @@ var isAdvancedUpload = function()
 }();
 
 
-// applying the effect for every form
+// applying effect
 var forms = document.querySelectorAll( '.box' );
 Array.prototype.forEach.call( forms, function( form )
 {
@@ -21,7 +21,6 @@ Array.prototype.forEach.call( forms, function( form )
 		label		 = form.querySelector( 'label' ),
 		errorMsg	 = form.querySelector( '.box__error span' ),
 		restart		 = form.querySelectorAll( '.box__restart' ),
-		//droppedFiles = false,
 		showFiles	 = function( files )
 		{
 			label.textContent = files.length > 1 ? ( input.getAttribute( 'data-multiple-caption' ) || '' ).replace( '{count}', files.length ) : files[ 0 ].name;
@@ -29,16 +28,14 @@ Array.prototype.forEach.call( forms, function( form )
 		
 
 
-		// drag&drop files if the feature is available
 		if( isAdvancedUpload )
 		{
-			form.classList.add( 'has-advanced-upload' ); // letting the CSS part to know drag&drop is supported by the browser
+			form.classList.add( 'has-advanced-upload' ); 
 
 			[ 'drag', 'dragstart', 'dragend', 'dragover', 'dragenter', 'dragleave', 'drop' ].forEach( function( event )
 			{
 				form.addEventListener( event, function( e )
 				{
-					// preventing the unwanted behaviours
 					e.preventDefault();
 					e.stopPropagation();
 				});
@@ -59,13 +56,10 @@ Array.prototype.forEach.call( forms, function( form )
 			});
 			form.addEventListener( 'drop', function( e )
 			{
-				droppedFiles = e.dataTransfer.files; // the files that were dropped
+				droppedFiles = e.dataTransfer.files; 
 				showFiles( droppedFiles );
 
-				
-				//console.log(droppedFiles);
-
-								});
+				});
 		}
 
 });
@@ -76,13 +70,13 @@ Array.prototype.forEach.call( forms, function( form )
 form.addEventListener('submit', (e) => {
     
     e.preventDefault();
-    // Prevents HTML handling submission
+    
  
     const files = document.getElementById("files");
     const formData = new FormData();
-    // Creates empty formData object
+    
     formData.append("name", name.value);
-    // Appends value of text input
+    
     for(let i =0; i < files.files.length; i++) {
         formData.append("files", files.files[i]);
     }
@@ -92,11 +86,10 @@ form.addEventListener('submit', (e) => {
         }
     }
     
-    // Appends value(s) of file input
-    // Post data to Node and Express server:
+    
     fetch('http://localhost:3000/uploads', {
         method: 'POST',
-        body: formData, // Payload is formData object
+        body: formData, 
     })
     .then(res => res.json())
     .then(data => console.log(data));
