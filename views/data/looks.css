@@ -12,6 +12,14 @@ body::-webkit-scrollbar {
     display: none; /* for Chrome, Safari, and Opera */
 }
 
+.on {
+    display: unset;
+}
+
+.off {
+    display: none;
+}
+
 :root {
     --l: #ffffff;
     --d: #01000f;
