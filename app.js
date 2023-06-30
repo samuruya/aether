@@ -113,8 +113,11 @@ app.get('/upload', (req, res) => {
   res.render('upload.ejs')
 });
 app.get('/hub', checkAuth, (req, res) => {
-  var temp = req.user
-  res.render('hub.ejs', temp)
+
+  res.render('hub.ejs', {
+    user: req.user,
+    spaces: req.user.spaces,
+  })
 });
 
 
