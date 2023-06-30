@@ -11,8 +11,9 @@ const initPass = require('./passport-config');
 const flash = require('express-flash');
 const multer = require('multer');
 const cors = require('cors');
+const db = require('./db.js')
 
-initPass(passport, 
+initPass(passport,
   name => users.find(user => user.name === name),
   id => users.find(user => user.id === id)
 );
@@ -68,8 +69,8 @@ app.use(passport.session())
 app.get('/', (req, res) => {
       if (req.isAuthenticated()) {
         res.render('index.ejs', {
-          name: 'Hey '+req.user.name,  
-          hub: 'hub', 
+          name: 'Hey '+req.user.name,
+          hub: 'hub',
           font: titleFont[getRandomInt(4)],
           DUI: 'off',
           UUI: 'on',
@@ -78,8 +79,8 @@ app.get('/', (req, res) => {
         })
       } else {
         res.render('index.ejs', {
-        name: ' ', 
-        hub: ' ', 
+        name: ' ',
+        hub: ' ',
         font: titleFont[getRandomInt(4)],
         DUI: 'on',
         UUI: 'off',
@@ -99,7 +100,7 @@ app.get('/register', (req, res) => {
 });
 app.get('/upload', (req, res) => {
   res.render('upload.ejs')
- 
+
 });
 app.get('/hub', checkAuth, (req, res) => {
   console.log(req.user);
@@ -149,30 +150,42 @@ function checkNotAuth(req, res, next) {
 }
 
 //upload_stuff
-app.use(cors()); 
+app.use(cors());
 
 const storage = multer.diskStorage({
     destination: function (req, file, callback) {
         callback(null, __dirname + '/uploads');
     },
-   
-    filename: function (req, file, callback) {
-        callback(null, file.originalname);
-    }
-    
+
+    // filename: function (req, file, callback) {
+    //     callback(null, file.originalname);
+    // }
+
   })
-  
+
 
 const upload = multer({ storage: storage })
 
 app.post("/uploads", upload.array("files"), (req, res) => {
 
+  // db.fileUp(req.files.path, req.files.originalname);
 
-    console.log(req.body); 
-    console.log(req.files); 
+  for(let i =0; i < req.files.length; i++) {
+    db.fileUp(req.files[i].path, req.files[i].originalname);
+    
+}
+
+    console.log(req.body);
+    console.log(req.files);
     res.json({ message: "File(s) uploaded successfully" });
 
+    // db.fileUp("1", "2");
+
+
+
 });
+
+
 
 app.listen(port,() => {
   console.log('Running at Port', port);
