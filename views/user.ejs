@@ -1,28 +1,68 @@
 <title>Aether/Hub</title>
 <link rel="stylesheet" type="text/css" href="looks.css">
-
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
 <body>
     <nav class="read-nav">
         <a href="/" class="read-nav-logo">                    
                 <img src="https://i.ibb.co/4ZcLKjY/borderless.png" alt="">
         </a>
         <div class="read-nav-nav" id="nav">
-            <a class="/hub">Hub</a>
+            <a class="/"></a>
         </div>
 
-        <a href="" class="read-nav-btn">
-            <button><%= Back %></button>
+        <a href="/logout" class="read-nav-btn logout">
+            <button>logout</button>
         </a>
     </nav>
 
+    <div class="user-body">
 
+        <div>
+            <button class="pfp-edit" onclick="pfpPop()">
+                <div>
+                    <span class="material-symbols-outlined">edit</span>
+                </div>
+                <img src="<%= user.pfp %>" alt="">
+            </button>
+            <h1><%= user.name %></h1>
+        </div>
+
+
+
+
+
+
+
+
+
+    </div>
     
-    <div class="space-bar">
-        <h1><%= name %>'s spaces</h1>
+    <div class="pfp-changer" id="pfpPop">
+        <button class="close-pfp-changer" onclick="xpfpPop()">
+            <span class="material-symbols-outlined">close</span>
+        </button>
+        <img src="<%= user.pfp %>" alt="">
+        <form action="/user" method="POST">
+            <div>
+                <label for="newpfp">Enter your picture url:</label>
+                <input type="text" name="newpfp" id="newpfp" required>
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+
     </div>
 
-
-
     <script>
+
+        function pfpPop() {
+            document.getElementById('pfpPop').style.display = 'flex';
+        }
+
+        function xpfpPop() {
+            document.getElementById('pfpPop').style.display = 'none';
+        }
+
+
     </script>
 </body>

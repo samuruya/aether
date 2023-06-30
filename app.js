@@ -26,6 +26,7 @@ const users = [
     name: 'dev',
     email: 'dev@aether',
     password: '$2b$10$jNJizazegxB2ZuTCug9MxuiNEi6V4xWvVnTR58Aw7TJCeyomo/uhm',
+    pfp: 'https://i.ibb.co/m8bCySY/83bc8b88cf6bc4b4e04d153a418cde62.jpg',
     spaces: [
       {
         title: 'bpbpb'
@@ -68,17 +69,15 @@ app.use(passport.session())
 app.get('/', (req, res) => {
       if (req.isAuthenticated()) {
         res.render('index.ejs', {
-          name: 'Hey '+req.user.name,  
           hub: 'hub', 
           font: titleFont[getRandomInt(4)],
           DUI: 'off',
           UUI: 'on',
           isUser: true,
-          user: req.user.name
+          user: req.user,
         })
       } else {
-        res.render('index.ejs', {
-        name: ' ', 
+        res.render('index.ejs', { 
         hub: ' ', 
         font: titleFont[getRandomInt(4)],
         DUI: 'on',
@@ -91,18 +90,43 @@ app.get('/', (req, res) => {
 app.get('/login', (req, res) => {
   res.render('login.ejs')
 });
-app.get('/docs', (req, res) => {
-  res.render('docs.ejs')
+app.get('/logout', (req, res) => {
+  console.log('User '+ req.user.name + ' logged out');
+  req.logout(function(err) {
+    if (err) { return next(err); }
+    res.redirect('/');
+  });
+
 });
 app.get('/register', (req, res) => {
   res.render('reg.ejs')
 });
+app.get('/doc', (req, res) => {
+  res.render('docs.ejs')
+});
+app.get('/user', checkAuth, (req, res) => {
+  res.render('user.ejs', {
+    user: req.user,
+  })
+});
+app.get('/upload', (req, res) => {
+  res.render('upload.ejs')
+});
 app.get('/hub', checkAuth, (req, res) => {
-  console.log(req.user);
   var temp = req.user
   res.render('hub.ejs', temp)
 });
 
+
+app.post('/user', (req, res) => {
+  for(let i in users) {
+    if(req.user.id == users[i].id) {
+      users[i].pfp = req.body.newpfp;
+    }
+  }
+
+  res.redirect('/user')
+})
 
 app.post('/login', passport.authenticate('local', {
   successRedirect: '/hub',
@@ -117,7 +141,8 @@ app.post('/register', async (req, res) => {
       name: req.body.name,
       email: req.body.email,
       password: hashpw,
-      space: {}
+      pfp: 'https://i.ibb.co/m8bCySY/83bc8b88cf6bc4b4e04d153a418cde62.jpg',
+      spaces: {}
     })
     res.redirect('/login')
   } catch (error) {
@@ -171,6 +196,4 @@ app.post("/uploads", upload.array("files"), (req, res) => {
 
 app.listen(port,() => {
   console.log('Running at Port', port);
-
-  console.log(users)
 });
