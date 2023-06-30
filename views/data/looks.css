@@ -12,13 +12,11 @@ body::-webkit-scrollbar {
     display: none; /* for Chrome, Safari, and Opera */
 }
 
-.on {
-    display: unset;
+a {
+    font-family: 'Josefin Sans', sans-serif;
+    text-decoration: none;
 }
 
-.off {
-    display: none;
-}
 
 :root {
     --l: #ffffff;
@@ -141,9 +139,15 @@ body {
     transition: ease-in 50ms;
 }
 
+.defix {
+    display: flex;
+    flex-direction: column;
+}
+
 .about {
     text-transform: uppercase;
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
     padding: 20px;
     border-radius: 0 0 20px 20px;
@@ -155,7 +159,7 @@ body {
     border-radius: 20px;
     color: var(--ltxt);
     margin: 100px 0;
-    width: 40%;
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -163,9 +167,48 @@ body {
     gap: 40px;
 }
 
+.about div div {
+    display: flex;
+    flex-direction: column;
+}
+
 .about h1 {
     font-size: 3.5em;
     color: var(--acc);
+}
+
+.about p {
+    width: 40%;
+}
+
+
+.udex {
+    margin-top: -10px;
+    font-size: 1.5em;
+    background-color: var(--sec);
+    padding: 40px;
+    border-radius:0 0 20px 20px;
+    color: var(--ltxt);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+}
+
+.memberview {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.udex a {
+    margin: 20px;
+    padding: 15px 20px 10px 20px;
+    background-color: var(--acc);
+    color: var(--sec);
+    font-size: 1.5em;
+    border-radius: 15px;
 }
 
 .text b {
@@ -174,7 +217,7 @@ body {
 
 .promo {
     padding: 40px;
-    width: 100%;
+
     background-color: var(--d);
     z-index: 2;
     color: var(--dtxt);
@@ -300,6 +343,202 @@ body {
     padding: 10px;
     background-color: var(--alt);
 }
+
+.usr {
+    display: flex;
+    flex-direction: row;
+    margin-right: 50px;
+}
+
+.usr img {
+    margin-top: -10px;
+    margin-left: 0;
+    border-radius: 30px;
+}
+
+.usr button {
+    margin: -20px;
+    color: var(--sec);
+    background-color: var(--acc);
+    padding: 20px 30px 10px 30px;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.logout button{
+    color: var(--main);
+}
+
+
+.user-body {
+    color: var(--sec);
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.user-body div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.user-body img {
+    display: grid;
+    position: relative;
+    margin-top: -300px;
+    z-index: -1;
+    width: 300px;
+    height: 300px;
+    border-radius: 150px;
+}
+
+.pfp-edit {
+    border: none;
+    background: none;
+
+}
+
+
+.pfp-edit div{
+    z-index: 10;
+    width: 100%;
+    height: 300px;
+    background-color: #000000;
+    opacity: 0;
+    border-radius: 150px;
+}
+
+.pfp-edit:hover div{
+    opacity: 0.4;
+}
+
+.pfp-edit span {
+    font-size: 10em;
+    color: var(--sec);
+    z-index: 10;
+}
+
+.pfp-changer {
+    width: 90%;
+    height: 90%;
+    background-color: var(--dsec);
+    border-radius: 50px;
+    position:absolute; 
+    top:50%; 
+    left:50%; 
+    transform:translate(-50%, -50%); 
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.pfp-changer img {
+    width: 300px;
+    height: 300px;
+    border-radius: 10px;
+}
+
+.pfp-changer div {
+    display: flex;
+    flex-direction: column;
+}
+
+.close-pfp-changer {
+    border: none;
+    background: none;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.close-pfp-changer span {
+    font-size: 3em;
+    color: var(--sec);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 48
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -517,4 +756,19 @@ background-color: #fff;
 .box_restart:hover
 {
     color: #39bfd3;
+}
+
+
+
+
+
+
+
+
+.on {
+    display: flex;
+}
+
+.off {
+    display: none;
 }

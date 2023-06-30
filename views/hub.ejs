@@ -9,15 +9,15 @@
         <div class="read-nav-nav" id="nav">
         </div>
 
-        <a href="" class="read-nav-btn">
-            <button><%= name %></button>
+        <a href="/user" class="read-nav-btn usr">
+            <button><%= user.name %> <img src="<%= user.pfp %>" alt=""></button>
         </a>
     </nav>
 
 
     
     <div class="space-bar">
-        <h1><%= name %>'s spaces</h1>
+        <h1><%= user.name %>'s spaces</h1>
         <div>
             <% for (let i = 0; i < spaces.length; i++) { %>
                 <button><%= spaces[i].title  %></button>
