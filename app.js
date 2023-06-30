@@ -81,11 +81,16 @@ app.get('/docs', (req, res) => {
 app.get('/register', (req, res) => {
   res.render('reg.ejs')
 });
+app.get('/upload', (req, res) => {
+  res.render('upload.ejs')
+ 
+});
 app.get('/hub', checkAuth, (req, res) => {
   console.log(req.user);
   var temp = req.user
   res.render('hub.ejs', temp)
 });
+
 
 
 app.post('/login', passport.authenticate('local', {
