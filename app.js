@@ -118,6 +118,7 @@ app.get('/hub', checkAuth, (req, res) => {
 });
 
 
+
 app.post('/user', (req, res) => {
   for(let i in users) {
     if(req.user.id == users[i].id) {
