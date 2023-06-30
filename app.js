@@ -18,7 +18,7 @@ initPass(passport,
 );
 
 
-const port = 3000;
+const port = 1234;
 
 const users = [
   {
@@ -67,9 +67,25 @@ app.use(passport.session())
 
 app.get('/', (req, res) => {
       if (req.isAuthenticated()) {
-        res.render('index.ejs', {name: 'Hey '+req.user.name,  hub: 'hub', font: titleFont[getRandomInt(4)]})
+        res.render('index.ejs', {
+          name: 'Hey '+req.user.name,  
+          hub: 'hub', 
+          font: titleFont[getRandomInt(4)],
+          DUI: 'off',
+          UUI: 'on',
+          isUser: true,
+          user: req.user.name
+        })
       } else {
-        res.render('index.ejs', {name: ' ', hub: ' ', font: titleFont[getRandomInt(4)]})
+        res.render('index.ejs', {
+        name: ' ', 
+        hub: ' ', 
+        font: titleFont[getRandomInt(4)],
+        DUI: 'on',
+        UUI: 'off',
+        isUser: false,
+        user: 'login'
+      })
       }
 });
 app.get('/login', (req, res) => {

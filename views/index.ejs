@@ -1,4 +1,4 @@
-<title>Aether</title>
+<title>AetherHub</title>
 <link rel="stylesheet" type="text/css" href="looks.css">
 
 <body>
@@ -7,53 +7,86 @@
                 <img src="https://i.ibb.co/4ZcLKjY/borderless.png" alt="">
         </a>
         <div class="read-nav-nav">
-            <a href="/docs">Docs</a>
-            <a href="/hub"><%= hub %></a>
+            <a href="/doc">Docs</a>
+            <a href="/hub" class="<%= UUI %>">hub</a>
             <a href="">news</a>
         </div>
+        
+        <% if(isUser) {%>
         <a href="/login" class="read-nav-btn">
-            <button>Login</button>
+            <button><%= user %></button>
         </a>
+        <% } else { %>
+            <a href="/hub" class="read-nav-btn usr">
+                <button><%= user %></button>
+            </a> 
+        <% } %>
     </nav>
+
     <div class="bc">
         <div id='stars'></div>
         <div id='stars2'></div>
         <div id='stars3'></div>
     </div>
+
+    
     <div class="mainBanner">
-        <h3><%= name  %></h3>
         <h3>Welcome to</h3>
         <img src="<%= font %>" alt="" style="width: 400px;">
     </div>
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#f3f6fc" fill-opacity="1" d="M0,256L60,229.3C120,203,240,149,360,160C480,171,600,245,720,234.7C840,224,960,128,1080,112C1200,96,1320,160,1380,192L1440,224L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
-    <div class="about">
-        <div>
-            <h1>Why AETHER?</h1>
-            <p>
-                At AETHER, our mission is to empower individuals and businesses by offering a reliable, secure, and efficient cloud save solution. We believe that everyone should have the freedom to access their files from anywhere, collaborate effortlessly, and experience peace of mind knowing that their data is protected.
-                We are committed to continuously innovating and improving our services, staying ahead of the ever-evolving digital landscape, and providing exceptional customer support.
-            </p>
+    
+    <% if(isUser = true) {%>
+    <div class="<%= DUI %>">
+
+    </div>
+        <div class="about">
+            <div>
+                <div>
+                    <h1><%= user %>Why AETHER?</h1>
+                    <p>
+                        At AETHER, our mission is to empower individuals and businesses by offering a reliable, secure, and efficient cloud save solution. We believe that everyone should have the freedom to access their files from anywhere, collaborate effortlessly, and experience peace of mind knowing that their data is protected.
+                        We are committed to continuously innovating and improving our services, staying ahead of the ever-evolving digital landscape, and providing exceptional customer support.
+                    </p>
+                </div>
+                <div class="text">
+                    <h1>Our Values</h1>
+                    <ul>
+                      <li><strong><b>Innovation:</b></strong> We continuously strive to innovate and deliver cutting-edge solutions to meet the evolving needs of our users.</li>
+        
+                      <li><strong><b>Security:</b></strong> We prioritize the utmost security to safeguard your data.</li>
+        
+                      <li><strong><b>Reliability:</b></strong> We ensure a reliable and uninterrupted service, backed by robust infrastructure.</li>
+        
+                      <li><strong><b>Simplicity:</b></strong> We believe in simplicity and user-friendly experiences, making cloud saving effortless for all.</li>
+        
+                    </ul>
+                  </div>
+            </div>
+    
         </div>
-        <div class="text">
-            <h1>Our Values</h1>
-            <ul>
-              <li><strong><b>Innovation:</b></strong> We continuously strive to innovate and deliver cutting-edge solutions to meet the evolving needs of our users.</li>
 
-              <li><strong><b>Security:</b></strong> We prioritize the utmost security to safeguard your data.</li>
+        <div class="promo">
+            <h1>interested?</h1>
+           <a href="/register">Register Now</a> 
+        </div>
+    <% } else { %>
 
-              <li><strong><b>Reliability:</b></strong> We ensure a reliable and uninterrupted service, backed by robust infrastructure.</li>
+        <div class="<%= UUI %>">
 
-              <li><strong><b>Simplicity:</b></strong> We believe in simplicity and user-friendly experiences, making cloud saving effortless for all.</li>
+        </div>
+        <div class="memberview">
+            <h1>enter your hub</h1>
+            <a href="/hub">here</a>
+        </div>
+    <% } %>
 
-            </ul>
-          </div>
-    </div>
 
-    <div class="promo">
-        <h1>interested?</h1>
-       <a href="/register">Register Now</a> 
-    </div>
+
+
+
+
 
 
     
-</body>
+</body> 
