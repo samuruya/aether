@@ -1,4 +1,4 @@
-
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
 
 <title>Aether/Reg</title>
 <link rel="stylesheet" type="text/css" href="looks.css">
@@ -22,8 +22,13 @@
             <h1 class="title-log">Register</h1>
 
             <div>
+                    
 
                 <form action="/register" method="POST">
+                    <% if (typeof regerror !== "undefined") { %>
+                        <p><%= regerror %></p>
+                        <a href="/join#token-explain">learn more about it here</a>
+                    <% } %>
                     <div>
                         <label for="name">Name</label>
                         <input type="text" name="name" id="name" required>
@@ -40,7 +45,12 @@
                         <input type="text" name="password2" id="password2" required>
                     </div>
                     <div>
-                        <label for="token">Token</label>
+                        <label for="token" class="token">Token
+                            <span class="tooltip">
+                                <span class="tooltiptext">You need an invite token to create an account learn more under /join</span>
+                                <span class="material-symbols-outlined">priority_high</span>
+                            </span>
+                        </label>
                         <input type="text" name="token" id="token" required>
                     </div>
                     <button type="submit">Enter</button>

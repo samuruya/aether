@@ -20,6 +20,7 @@ initPass(passport,
 
 
 const port = 1234;
+const token = 121212
 
 const users = [
   {
@@ -105,6 +106,10 @@ app.get('/register', (req, res) => {
 app.get('/doc', (req, res) => {
   res.render('docs.ejs')
 });
+
+app.get('/join', (req, res) => {
+  res.render('join.ejs')
+});
 app.get('/user', checkAuth, (req, res) => {
   res.render('user.ejs', {
     user: req.user,
@@ -139,20 +144,25 @@ app.post('/login', passport.authenticate('local', {
   failureFlash: true
 }))
 app.post('/register', async (req, res) => {
-  try {
-    const hashpw = await bcrypt.hash(req.body.password, 10)
-    users.push({
-      id: users.length + 1,
-      name: req.body.name,
-      email: req.body.email,
-      password: hashpw,
-      pfp: 'https://i.ibb.co/m8bCySY/83bc8b88cf6bc4b4e04d153a418cde62.jpg',
-      spaces: {}
-    })
-    res.redirect('/login')
-  } catch (error) {
-    res.redirect('/register')
+  if (req.body.token == token) {
+    try {
+      const hashpw = await bcrypt.hash(req.body.password, 10)
+      users.push({
+        id: users.length + 1,
+        name: req.body.name,
+        email: req.body.email,
+        password: hashpw,
+        pfp: 'https://i.ibb.co/m8bCySY/83bc8b88cf6bc4b4e04d153a418cde62.jpg',
+        spaces: {}
+      })
+      res.redirect('/login')
+    } catch (error) {
+      res.redirect('/register')
+    }
+  } else {
+    res.render('reg.ejs', {regerror: 'wrong token!'})
   }
+
   console.log(users);
 })
 

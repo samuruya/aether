@@ -333,6 +333,15 @@ body {
     text-align: center;
 }
 
+.token {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.token span {
+    font-size: 1.1em;
+}
 
 
 
@@ -440,7 +449,23 @@ body {
 
 
 
+.doc-contain {
+    margin-top: 200px;
+    margin-bottom: 200px;
+    color: var(--sec);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 100px;
+}
 
+.doc-content {
+    display: flex;
+    flex-direction: column;
+    gap: 100px;
+    width: 40%;
+}
 
 
 
@@ -633,18 +658,34 @@ body {
 
 
 
+.tooltip {
+    position: relative;
+    display: inline-block;
 
+    width: 10%;
 
-
-
-
-
-
-
-
-
-
-
+  }
+  
+  /* Tooltip text */
+  .tooltip .tooltiptext {
+    visibility: hidden;
+    width: 200px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    top: -0px;
+    left: 20px;
+    padding: 10px;
+    border-radius: 6px;
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    z-index: 1;
+  }
+  
+  /* Show the tooltip text when you mouse over the tooltip container */
+  .tooltip:hover .tooltiptext {
+    visibility: visible;
+  }
 
 
 .bc {
