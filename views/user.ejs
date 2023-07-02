@@ -30,6 +30,17 @@
             <h1><%= user.name %></h1>
         </div>
 
+        <div class="disc-cont">
+            <form action="/user/disc" method="POST">
+                <div class="disc-change">
+                    <label for="disc">Your Discription</label>
+                    <input type="text" name="disc" id="disc" placeholder="<%= user.disc %>">
+                </div>
+                <button type="submit">Change Discription</button>
+            </form>
+
+        </div>
+
 
 
 

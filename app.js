@@ -15,36 +15,23 @@ const db = require('./db.js');
 var favicon = require('serve-favicon');
 var path = require('path')
 
+const { MongoClient } = require("mongodb");
+const { log } = require('console');
+const uri = 'mongodb://localhost:27017/';
+const dbName = 'aether';
+const client = new MongoClient(uri);
+
+var users = []
 
 initPass(passport,
   name => users.find(user => user.name === name),
-  id => users.find(user => user.id === id)
+  Uid => users.find(user => user.Uid === Uid)
 );
-
 
 const port = 1234;
 const token = 121212
 
-const users = [
-  {
-    id: 1,
-    name: 'dev',
-    email: 'dev@aether',
-    password: '$2b$10$jNJizazegxB2ZuTCug9MxuiNEi6V4xWvVnTR58Aw7TJCeyomo/uhm',
-    pfp: 'https://i.ibb.co/m8bCySY/83bc8b88cf6bc4b4e04d153a418cde62.jpg',
-    spaces: [
-      {
-        title: 'bpbpb'
-      },
-      {
-        title: 'untitladwaded'
-      },
-      {
-        title: 'untitlawdwadaed'
-      },
-    ]
-  }
-]
+
 
 const titleFont = [
   "https://i.ibb.co/Qf51Qh4/adadwad.png",
@@ -52,6 +39,26 @@ const titleFont = [
   "https://i.ibb.co/jH1P3h4/aad.png",
   "https://i.ibb.co/QHtBt7H/adadd.png",
 ]
+
+
+
+async function connectDB() {
+    try {
+      await client.connect();
+      console.log('client connected');
+      const db = client.db(dbName);
+      const collection = db.collection('users')
+      const findResult = await collection.find().toArray()
+      for(const i in findResult) {
+        users.push(findResult[i]);
+      }
+      console.log(users)
+    } catch (error) {
+      console.error(error);
+
+    }
+}
+
 
 function getRandomInt(max) {
   return Math.floor(Math.random() * max);
@@ -131,11 +138,41 @@ app.get('/hub', checkAuth, (req, res) => {
 
 
 
-app.post('/user/pfp', (req, res) => {
+app.post('/user/pfp', async (req, res) => {
+  console.log('/user/pfp');
   for(let i in users) {
-    if(req.user.id == users[i].id) {
+    if(req.user.Uid == users[i].Uid) {
       users[i].pfp = req.body.newpfp;
     }
+  }
+  try{
+    await client.connect();
+    console.log('client connected');
+    const db = client.db(dbName);
+    const collection = db.collection('users')
+    const updatedResult = await collection.updateOne({Uid: req.user.Uid}, {$set: {pfp: req.body.newpfp}})
+    console.log(updatedResult)
+  } catch (error){
+    console.error(error);
+  }
+  res.redirect('/user')
+})
+
+app.post('/user/disc', async (req, res) => {
+  for(let i in users) {
+    if(req.user.Uid == users[i].Uid) {
+      users[i].disc = req.body.disc;
+    }
+  }
+  try{
+    await client.connect();
+    console.log('client connected');
+    const db = client.db(dbName);
+    const collection = db.collection('users')
+    const updatedResult = await collection.updateOne({Uid: req.user.Uid}, {$set: {disc: req.body.disc}})
+    console.log(updatedResult)
+  } catch (error){
+    console.error(error);
   }
   res.redirect('/user')
 })
@@ -149,14 +186,31 @@ app.post('/register', async (req, res) => {
   if (req.body.token == token) {
     try {
       const hashpw = await bcrypt.hash(req.body.password, 10)
-      users.push({
-        id: users.length + 1,
-        name: req.body.name,
-        email: req.body.email,
-        password: hashpw,
-        pfp: 'https://i.ibb.co/m8bCySY/83bc8b88cf6bc4b4e04d153a418cde62.jpg',
-        spaces: {}
+      //database user register
+      await client.connect();
+      console.log('client connected');
+      const db = client.db(dbName);
+      const collection = db.collection('users')
+      collection.insertOne({
+      Uid: users.length +1,
+      name: req.body.name,
+      email: req.body.email,
+      password: hashpw,
+      pfp:"https://i.ibb.co/m8bCySY/83bc8b88cf6bc4b4e04d153a418cde62.jpg",
+      disc:"im a user!",
+      spaces:
+            [
+              {
+                 title:"new space"
+              }
+            ] 
       })
+      users = []
+      const findResult = await collection.find().toArray()
+      for(const i in findResult) {
+        users.push(findResult[i]);
+      }
+      console.log(users)
       res.redirect('/login')
     } catch (error) {
       res.redirect('/register')
@@ -165,7 +219,6 @@ app.post('/register', async (req, res) => {
     res.render('reg.ejs', {regerror: 'wrong token!'})
   }
 
-  console.log(users);
 })
 
 
@@ -184,6 +237,17 @@ function checkNotAuth(req, res, next) {
 
   next()
 }
+
+
+
+
+
+
+
+
+
+
+
 
 //upload_stuff
 app.use(cors());
@@ -224,5 +288,6 @@ app.post("/uploads", upload.array("files"), (req, res) => {
 
 
 app.listen(port,() => {
+  connectDB();
   console.log('Running at Port', port);
 });
