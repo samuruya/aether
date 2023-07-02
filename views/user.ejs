@@ -2,6 +2,8 @@
 <link rel="stylesheet" type="text/css" href="looks.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+<link rel="icon" href="favicon.ico?v=1.1">
+
 <body>
     <nav class="read-nav">
         <a href="/" class="read-nav-logo">                    
@@ -39,17 +41,27 @@
     </div>
     
     <div class="pfp-changer" id="pfpPop">
-        <button class="close-pfp-changer" onclick="xpfpPop()">
-            <span class="material-symbols-outlined">close</span>
-        </button>
-        <img src="<%= user.pfp %>" alt="">
-        <form action="/user" method="POST">
-            <div>
-                <label for="newpfp">Enter your picture url:</label>
-                <input type="text" name="newpfp" id="newpfp" required>
-            </div>
-            <button type="submit">Submit</button>
-        </form>
+        <div class="pop-bc">
+        </div>
+        <div class="pop-input">
+            <h1>Change your Picture</h1>
+            <button class="close-pfp-changer" onclick="xpfpPop()">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+            <img src="<%= user.pfp %>" alt="">
+            <form action="/user/pfp" method="POST">
+                <div>
+                    <label for="newpfp">Enter your picture url                             
+                        <span class="tooltip">
+                            <span class="tooltiptext">Upload your picture on a img hosting server and</span>
+                            <span class="material-symbols-outlined smoll">info</span>
+                        </span>:
+                    </label>
+                    <input type="text" name="newpfp" id="newpfp" required>
+                </div>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
 
     </div>
 

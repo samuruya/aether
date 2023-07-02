@@ -98,7 +98,10 @@ body {
     gap: 20px;
     justify-content: center;
     align-items: center;
+}
 
+.read-nav-nav span {
+    width: 100px;
 }
 
 .read-nav-nav a {
@@ -244,28 +247,41 @@ body {
     width: 40%;
     height: 100%;
     border-radius: 20px 0 0 20px;
+    display: grid;
+    align-items: center;
+    justify-content:center;
+    grid-template-columns: 100%;
+    grid-template-rows: 20% 60% 20%;
+
+}
+
+.login-part1 h1 {
+    justify-self: start;
+}
+
+
+.body-log {
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    gap: 20px;
 }
 
-
-.login-part1 div {
+.login-part1 label {
+    width: 100%;
+    text-align: left;
+}
+.login-form {
     width: 60%;
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
-.login-part1 form {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
 
-
-.login-part1 form div {
+.login-form div {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -286,7 +302,8 @@ body {
 }
 
 .login-part2 {
-    background-color: var(--dsec);
+    background: rgb(53,97,192);
+    background: linear-gradient(0deg, rgba(53,97,192,1) 0%, rgba(0,212,255,1) 100%);
     width: 40%;
     height: 100%;
     border-radius: 0 20px 20px 0;
@@ -305,32 +322,46 @@ body {
     width: 500px;
 }
 
-.login button {
-    display: flex;
-    justify-self: center;
-    justify-content: center;
-    width: 100%;
-    padding: 20px;
-    font-size: 1em;
-    text-align: center;
-    border: none;
-    background-color: var(--acc);
-    color: var(--dtxt);
-    border-radius: 20px;
-    font-family: 'Josefin Sans', sans-serif;
-    text-transform: uppercase;
-    transition: ease-out 50ms;
+.reg-part2 {
+    background: rgb(53,97,192);
+    background: linear-gradient(22deg, rgba(53,97,192,1) 0%, rgba(252,134,130,1) 100%);
+    width: 40%;
+    height: 100%;
+    border-radius: 0 20px 20px 0;
 }
+
+.reg-part2 div {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.reg-part2 img {
+    width: 500px;
+}
+
+
+
+
 
 .login button:hover {
     transform: scale(1.05);
     transition: ease-in 50ms;
 }
 
+.switch-log {
+    height: 100%;
+    display: flex;
+    align-items: end;
+    justify-content: center;
+}
 
 .signup {
-    width: 90%;
     text-align: center;
+    margin-bottom: 20px;
 }
 
 .token {
@@ -349,16 +380,79 @@ body {
 
 
 
+.register-form {
+    width: 100%;
+}
+
+.body-reg {
+    height: 100%;
+}
 
 
+.register {
+    width: 100%;
+    display: grid;
+    align-items: start;
+    justify-content:center;
+    grid-column-gap: 20px;
+    grid-template-columns: 40% 40%;
+    grid-row-gap: 20px;
+    grid-template-rows: 33% 33% 33%;
+}
 
+.register div {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
 
+.reg-btn {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.reg-btn button {
+    width: 85%;
+    padding: 20px;
+    font-size: 1em;
+    text-align: center;
+    border: none;
+    background-color: var(--acc);
+    color: var(--dtxt);
+    border-radius: 20px;
+    font-family: 'Josefin Sans', sans-serif;
+    text-transform: uppercase;
+    transition: ease-out 50ms;
+}
+
+.log-btn {
+
+}
+
+.log-btn button {
+    width: 100%;
+    padding: 20px;
+    font-size: 1em;
+    text-align: center;
+    border: none;
+    background-color: var(--acc);
+    color: var(--dtxt);
+    border-radius: 20px;
+    font-family: 'Josefin Sans', sans-serif;
+    text-transform: uppercase;
+    transition: ease-out 50ms;
+}
 
 .title-log {
-    position: absolute;
-    font-size: 2em;
-    top: 120px;
-    left: 220px;
+    font-size: 1em;
+    height: 100%;
+}
+
+.title-log h1 {
+    margin: 20px;
 }
 
 
@@ -540,6 +634,66 @@ body {
 }
 
 .pfp-changer {
+
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+}
+
+.pfp-changer form {
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+.pfp-changer form div {
+    width: 100%;
+    gap: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.pfp-changer form label {
+    font-size: 1.2em;
+}
+.pfp-changer form input {
+    width: 60%;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+}
+.pfp-changer form button {
+    width: 60%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--acc);
+    font-family: 'Josefin Sans', sans-serif;
+    text-transform: uppercase;
+    color: var(--sec);
+    transition: ease-out 50ms;
+}
+
+.pfp-changer form button:hover {
+    transform: scale(1.1);
+    transition: ease-in 50ms;
+}
+
+.pop-bc {
+    position: absolute;
+    opacity: 0.5;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--dsec);
+}
+.pop-input {
+    opacity: 2;
     width: 90%;
     height: 90%;
     background-color: var(--dsec);
@@ -572,13 +726,18 @@ body {
     position: absolute;
     top: 20px;
     right: 20px;
+    transition: ease-out 50ms;
+}
+
+.close-pfp-changer:hover {
+    transform: scale(1.1);
+    transition: ease-in 50ms;
 }
 
 .close-pfp-changer span {
     font-size: 3em;
     color: var(--sec);
 }
-
 
 
 
@@ -670,13 +829,13 @@ body {
   .tooltip .tooltiptext {
     visibility: hidden;
     width: 200px;
-    background-color: black;
+    background-color: var(--d);
     color: #fff;
     text-align: center;
     top: -0px;
     left: 20px;
     padding: 10px;
-    border-radius: 6px;
+    border-radius: 0 6px 6px 6px;
     /* Position the tooltip text - see examples below! */
     position: absolute;
     z-index: 1;

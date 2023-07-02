@@ -2,16 +2,19 @@ if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config()
 }
 
-const express = require('express')
-const app = express()
-const bcrypt = require('bcrypt')
-const passport = require('passport')
-const session = require('express-session')
+const express = require('express');
+const app = express();
+const bcrypt = require('bcrypt');
+const passport = require('passport');
+const session = require('express-session');
 const initPass = require('./passport-config');
 const flash = require('express-flash');
 const multer = require('multer');
 const cors = require('cors');
-const db = require('./db.js')
+const db = require('./db.js');
+var favicon = require('serve-favicon');
+var path = require('path')
+
 
 initPass(passport,
   name => users.find(user => user.name === name),
@@ -66,7 +69,7 @@ app.use(session({
 }))
 app.use(passport.initialize())
 app.use(passport.session())
-
+app.use(favicon(path.join(__dirname, 'views', 'data', 'favicon.ico')));
 
 app.get('/', (req, res) => {
       if (req.isAuthenticated()) {
@@ -128,13 +131,12 @@ app.get('/hub', checkAuth, (req, res) => {
 
 
 
-app.post('/user', (req, res) => {
+app.post('/user/pfp', (req, res) => {
   for(let i in users) {
     if(req.user.id == users[i].id) {
       users[i].pfp = req.body.newpfp;
     }
   }
-
   res.redirect('/user')
 })
 

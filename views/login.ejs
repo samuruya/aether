@@ -4,6 +4,7 @@
 
 <title>AetherHub</title>
 <link rel="stylesheet" type="text/css" href="looks.css">
+<link rel="icon" href="favicon.ico?v=1.1">
 
 <body>
     <nav class="read-nav">
@@ -20,14 +21,15 @@
 
     <div class="login">
         <div class="login-part1">
-            <h1 class="title-log">login</h1>
-
-            <div>
+            <div class="title-log">
+                <h1 >login</h1>
+            </div>
+            <div class="body-log">
                 <h1>Welcome back!</h1>
                 <% if (messages.error) { %>
                     <%= messages.error %>
                 <% } %>
-                <form action="/login" method="POST">
+                <form action="/login" method="POST" class="login-form">
                     <div>
                         <label for="name">Name</label>
                         <input type="text" name="name" id="name" required>
@@ -36,8 +38,13 @@
                         <label for="password">Password</label>
                         <input type="text" name="password" id="password" required>
                     </div>
-                    <button type="submit">Enter</button>
+                    <div class="log-btn">
+                        <button type="submit">Enter</button>
+                    </div>
                 </form>
+
+            </div>
+            <div class="switch-log">
                 <p class="signup">Dont have an account? <a href="/register">Sign up</a></p>
             </div>
         </div>
