@@ -98,7 +98,10 @@ body {
     gap: 20px;
     justify-content: center;
     align-items: center;
+}
 
+.read-nav-nav span {
+    width: 100px;
 }
 
 .read-nav-nav a {
@@ -143,6 +146,27 @@ body {
     display: flex;
     flex-direction: column;
 }
+
+
+.links {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.links a {
+    transition: ease-out 100ms;
+}
+
+.links a:hover {
+    transform: scale(1.1);
+    transition: ease-in 100ms;
+}
+
+.dc {margin-top: 10px;}
 
 .about {
     text-transform: uppercase;
@@ -229,7 +253,36 @@ body {
 
 
 .login {
-    color: var(--dtxt);
+    text-transform: uppercase;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 80%;
+    color: var(--d);
+}
+
+.login-part1 {
+    background-color: var(--sec);
+    width: 40%;
+    height: 100%;
+    border-radius: 20px 0 0 20px;
+    display: grid;
+    align-items: center;
+    justify-content:center;
+    grid-template-columns: 100%;
+    grid-template-rows: 20% 60% 20%;
+
+}
+
+.login-part1 h1 {
+    justify-self: start;
+}
+
+
+.body-log {
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -237,65 +290,197 @@ body {
     gap: 20px;
 }
 
-.login a {
-    text-decoration: none;
-    font-size: 1.5em;
+.login-part1 label {
+    width: 100%;
+    text-align: left;
+}
+.login-form {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
-.login h1 {
-    font-size: 4em;
-    text-transform: uppercase;
+
+.login-form div {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
-.login form {
+.login-part1 div input {
+    padding: 15px;
+    border-radius: 15px;
+    width: 100%;
+    border: none;
+    background-color: var(--alt);
+    color: var(--sec);
+}
 
-    border-radius: 20px;
-    padding: 20px;
-    font-size: 1.5em;
+.login-part1 div h1 {
+    font-size: 2em;
+}
+
+.login-part2 {
+    background: rgb(53,97,192);
+    background: linear-gradient(0deg, rgba(53,97,192,1) 0%, rgba(0,212,255,1) 100%);
     width: 40%;
+    height: 100%;
+    border-radius: 0 20px 20px 0;
+}
+
+.login-part2 div {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-part2 img {
+    width: 500px;
+}
+
+.reg-part2 {
+    background: rgb(53,97,192);
+    background: linear-gradient(22deg, rgba(53,97,192,1) 0%, rgba(252,134,130,1) 100%);
+    width: 40%;
+    height: 100%;
+    border-radius: 0 20px 20px 0;
+}
+
+.reg-part2 div {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.reg-part2 img {
+    width: 500px;
+}
+
+
+
+
+
+.login button:hover {
+    transform: scale(1.05);
+    transition: ease-in 50ms;
+}
+
+.switch-log {
+    height: 100%;
+    display: flex;
+    align-items: end;
+    justify-content: center;
+}
+
+.signup {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.token {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.token span {
+    font-size: 1.1em;
+}
+
+
+
+
+
+
+
+.register-form {
+    width: 100%;
+}
+
+.body-reg {
+    height: 100%;
+}
+
+
+.register {
+    width: 100%;
     display: grid;
-    justify-content: center;
-    align-items: center;
-    grid-template-columns: 1fr;
-    grid-template-rows: 120px 120px 120px 120px 120px;
-    grid-column-gap: 70px;
+    align-items: start;
+    justify-content:center;
+    grid-column-gap: 20px;
+    grid-template-columns: 40% 40%;
+    grid-row-gap: 20px;
+    grid-template-rows: 33% 33% 33%;
 }
 
-.login div {
+.register div {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    text-transform: uppercase;
-
+    flex-direction: column;
+    gap: 20px;
 }
 
-.login button {
+.reg-btn {
+    width: 100%;
+    height: 100%;
     display: flex;
-    justify-self: center;
     justify-content: center;
-    width: 20%;
-    padding: 20px 20px 10px 20px;
+    align-items: center;
+}
+
+.reg-btn button {
+    width: 85%;
+    padding: 20px;
     font-size: 1em;
     text-align: center;
     border: none;
     background-color: var(--acc);
     color: var(--dtxt);
-    border-radius: 3em;
+    border-radius: 20px;
     font-family: 'Josefin Sans', sans-serif;
     text-transform: uppercase;
     transition: ease-out 50ms;
 }
 
-.login button:hover {
-    transform: scale(1.1);
-    transition: ease-in 50ms;
+.log-btn {
+
 }
 
-.login input {
-    width: 80%;
+.log-btn button {
+    width: 100%;
     padding: 20px;
+    font-size: 1em;
+    text-align: center;
+    border: none;
+    background-color: var(--acc);
+    color: var(--dtxt);
     border-radius: 20px;
+    font-family: 'Josefin Sans', sans-serif;
+    text-transform: uppercase;
+    transition: ease-out 50ms;
 }
+
+.title-log {
+    font-size: 1em;
+    height: 100%;
+}
+
+.title-log h1 {
+    margin: 20px;
+}
+
+
+
+
+
+
 
 
 .space-bar {
@@ -379,7 +564,23 @@ body {
 
 
 
+.doc-contain {
+    margin-top: 200px;
+    margin-bottom: 200px;
+    color: var(--sec);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 100px;
+}
 
+.doc-content {
+    display: flex;
+    flex-direction: column;
+    gap: 100px;
+    width: 40%;
+}
 
 
 
@@ -391,7 +592,12 @@ body {
 
 
 .logout button{
-    color: var(--main);
+    background-color: var(--main);
+    color: var(--d);
+    padding: 20px 30px 10px 30px;
+    margin: -20px;
+    margin-right: 40px;
+    border-radius: 15px;
 }
 
 
@@ -449,6 +655,66 @@ body {
 }
 
 .pfp-changer {
+
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+}
+
+.pfp-changer form {
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+.pfp-changer form div {
+    width: 100%;
+    gap: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.pfp-changer form label {
+    font-size: 1.2em;
+}
+.pfp-changer form input {
+    width: 60%;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+}
+.pfp-changer form button {
+    width: 60%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--acc);
+    font-family: 'Josefin Sans', sans-serif;
+    text-transform: uppercase;
+    color: var(--sec);
+    transition: ease-out 50ms;
+}
+
+.pfp-changer form button:hover {
+    transform: scale(1.1);
+    transition: ease-in 50ms;
+}
+
+.pop-bc {
+    position: absolute;
+    opacity: 0.5;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--dsec);
+}
+.pop-input {
+    opacity: 2;
     width: 90%;
     height: 90%;
     background-color: var(--dsec);
@@ -481,13 +747,18 @@ body {
     position: absolute;
     top: 20px;
     right: 20px;
+    transition: ease-out 50ms;
+}
+
+.close-pfp-changer:hover {
+    transform: scale(1.1);
+    transition: ease-in 50ms;
 }
 
 .close-pfp-changer span {
     font-size: 3em;
     color: var(--sec);
 }
-
 
 
 
@@ -567,18 +838,34 @@ body {
 
 
 
+.tooltip {
+    position: relative;
+    display: inline-block;
 
+    width: 10%;
 
-
-
-
-
-
-
-
-
-
-
+  }
+  
+  /* Tooltip text */
+  .tooltip .tooltiptext {
+    visibility: hidden;
+    width: 200px;
+    background-color: var(--d);
+    color: #fff;
+    text-align: center;
+    top: -0px;
+    left: 20px;
+    padding: 10px;
+    border-radius: 0 6px 6px 6px;
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    z-index: 1;
+  }
+  
+  /* Show the tooltip text when you mouse over the tooltip container */
+  .tooltip:hover .tooltiptext {
+    visibility: visible;
+  }
 
 
 .bc {

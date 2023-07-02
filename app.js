@@ -2,17 +2,18 @@ if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config()
 }
 
-const express = require('express')
-const app = express()
-const bcrypt = require('bcrypt')
-const passport = require('passport')
-const session = require('express-session')
+const express = require('express');
+const app = express();
+const bcrypt = require('bcrypt');
+const passport = require('passport');
+const session = require('express-session');
 const initPass = require('./passport-config');
 const flash = require('express-flash');
 const multer = require('multer');
 const cors = require('cors');
-const db = require('./db.js')
-// const upl = require('./upload.js');
+const db = require('./db.js');
+var favicon = require('serve-favicon');
+var path = require('path')
 
 
 initPass(passport,
@@ -22,6 +23,7 @@ initPass(passport,
 
 
 const port = 1234;
+const token = 121212
 
 const users = [
   {
@@ -67,7 +69,7 @@ app.use(session({
 }))
 app.use(passport.initialize())
 app.use(passport.session())
-
+app.use(favicon(path.join(__dirname, 'views', 'data', 'favicon.ico')));
 
 app.get('/', (req, res) => {
       if (req.isAuthenticated()) {
@@ -107,6 +109,10 @@ app.get('/register', (req, res) => {
 app.get('/doc', (req, res) => {
   res.render('docs.ejs')
 });
+
+app.get('/join', (req, res) => {
+  res.render('join.ejs')
+});
 app.get('/user', checkAuth, (req, res) => {
   res.render('user.ejs', {
     user: req.user,
@@ -129,13 +135,12 @@ app.get('/share/:link', (req, res) => {
 
 
 
-app.post('/user', (req, res) => {
+app.post('/user/pfp', (req, res) => {
   for(let i in users) {
     if(req.user.id == users[i].id) {
       users[i].pfp = req.body.newpfp;
     }
   }
-
   res.redirect('/user')
 })
 
@@ -145,20 +150,25 @@ app.post('/login', passport.authenticate('local', {
   failureFlash: true
 }))
 app.post('/register', async (req, res) => {
-  try {
-    const hashpw = await bcrypt.hash(req.body.password, 10)
-    users.push({
-      id: users.length + 1,
-      name: req.body.name,
-      email: req.body.email,
-      password: hashpw,
-      pfp: 'https://i.ibb.co/m8bCySY/83bc8b88cf6bc4b4e04d153a418cde62.jpg',
-      spaces: {}
-    })
-    res.redirect('/login')
-  } catch (error) {
-    res.redirect('/register')
+  if (req.body.token == token) {
+    try {
+      const hashpw = await bcrypt.hash(req.body.password, 10)
+      users.push({
+        id: users.length + 1,
+        name: req.body.name,
+        email: req.body.email,
+        password: hashpw,
+        pfp: 'https://i.ibb.co/m8bCySY/83bc8b88cf6bc4b4e04d153a418cde62.jpg',
+        spaces: {}
+      })
+      res.redirect('/login')
+    } catch (error) {
+      res.redirect('/register')
+    }
+  } else {
+    res.render('reg.ejs', {regerror: 'wrong token!'})
   }
+
   console.log(users);
 })
 

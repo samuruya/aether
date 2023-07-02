@@ -4,6 +4,7 @@
 
 <title>AetherHub</title>
 <link rel="stylesheet" type="text/css" href="looks.css">
+<link rel="icon" href="favicon.ico?v=1.1">
 
 <body>
     <nav class="read-nav">
@@ -16,28 +17,47 @@
         <div id='stars2'></div>
         <div id='stars3'></div>
     </div>
-    <% if (messages.error) { %>
-        <%= messages.error %>
-    <% } %>
-    <div class="login">
-        <h1>login</h1>
 
-        <form action="/login" method="POST">
-            <div>
-                <label for="name">Name</label>
-                <input type="text" name="name" id="name" required>
+
+    <div class="login">
+        <div class="login-part1">
+            <div class="title-log">
+                <h1 >login</h1>
             </div>
-            <div>
-                <label for="password">Password</label>
-                <input type="text" name="password" id="password" required>
+            <div class="body-log">
+                <h1>Welcome back!</h1>
+                <% if (messages.error) { %>
+                    <%= messages.error %>
+                <% } %>
+                <form action="/login" method="POST" class="login-form">
+                    <div>
+                        <label for="name">Name</label>
+                        <input type="text" name="name" id="name" required>
+                    </div>
+                    <div>
+                        <label for="password">Password</label>
+                        <input type="text" name="password" id="password" required>
+                    </div>
+                    <div class="log-btn">
+                        <button type="submit">Enter</button>
+                    </div>
+                </form>
+
             </div>
-            <button type="submit">Enter</button>
-        </form>
-        <a href="/register">New here?</a>
+            <div class="switch-log">
+                <p class="signup">Dont have an account? <a href="/register">Sign up</a></p>
+            </div>
+        </div>
+
+        <div class="login-part2">
+            <div>
+                <img src="https://i.ibb.co/D8KnzYs/mfimg.png" alt="">
+            </div>
+        </div>
     </div>
 
 
 
 
-    
+
 </body>
