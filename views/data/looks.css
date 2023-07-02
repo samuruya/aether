@@ -147,6 +147,27 @@ body {
     flex-direction: column;
 }
 
+
+.links {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.links a {
+    transition: ease-out 100ms;
+}
+
+.links a:hover {
+    transform: scale(1.1);
+    transition: ease-in 100ms;
+}
+
+.dc {margin-top: 10px;}
+
 .about {
     text-transform: uppercase;
     display: flex;
