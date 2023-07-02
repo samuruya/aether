@@ -17,7 +17,7 @@ var path = require('path')
 
 const { MongoClient } = require("mongodb");
 const { log } = require('console');
-const uri = 'mongodb://localhost:27017/';
+const uri = 'mongodb+srv://servaccs:cloudy@aether.r5ictv4.mongodb.net/?retryWrites=true&w=majority';
 const dbName = 'aether';
 const client = new MongoClient(uri);
 
