@@ -35,11 +35,23 @@
           
         </form>
       </div>
+
+      <div class="qr_popup">
+        <div class="qr_window">
+          <button type="back" id="qr_back">&ltBack</button>
+        <form class="qr_box" >
+          
+        </form>
+        <lable class="qr_link">link</lable>
+      </div>
+      </div>
+
       <script>
+        var shareLink = 'n';
         droppedFiles = null;
         const form = document.querySelector('form');
-        
-        
+
+
         const handleFileButtonClick = () => {
           if (!event.target.matches('.box_button') && !event.target.closest('.box_button')) {
                 document.getElementById('files').click();
@@ -133,7 +145,29 @@
                 body: formData, 
             })
             .then(res => res.json())
-            .then(data => console.log(data));
-        })</script>
+            .then(data => {
+            setShareLink(data.variable);
+            
+          })
+
+
+        })
+
+        document.getElementById('qr_back').addEventListener('click', () => {
+          document.querySelector('.qr_popup').style.display = 'none';
+        });
+        
+        function setShareLink(sLink){
+          shareLink = sLink;
+          
+          document.querySelector('.qr_popup').style.display = 'flex';
+          document.querySelector('.qr_link').textContent = shareLink;
+          
+          
+        }
+
+        
+        
+        </script>
 
 </body>

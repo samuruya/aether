@@ -135,6 +135,10 @@ app.get('/hub', checkAuth, (req, res) => {
     spaces: req.user.spaces,
   })
 });
+app.get('/share/:link', (req, res) => {
+  
+});
+
 
 
 
@@ -268,23 +272,37 @@ const upload = multer({ storage: storage })
 
 app.post("/uploads", upload.array("files"), (req, res) => {
 
-  // db.fileUp(req.files.path, req.files.originalname);
+  var shareLink = randomString(30, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
+  var urlShareLink =`${req.headers.origin}/share/${shareLink}`;
 
   for(let i =0; i < req.files.length; i++) {
-    db.fileUp(req.files[i].path, req.files[i].originalname);
+    db.fileUp(req.files[i].path, req.files[i].originalname, shareLink);
     
 }
-
-    console.log(req.body);
-    console.log(req.files);
-    res.json({ message: "File(s) uploaded successfully" });
-
-    // db.fileUp("1", "2");
-
-
-
+// qr_popup(shareLink)
+res.json({ variable: urlShareLink });
+    
 });
 
+
+function randomString(length, characters) {
+  var result = '';
+  var charactersLength = characters.length;
+  
+  for (var i = 0; i < length; i++) {
+    var randomIndex = Math.floor(Math.random() * charactersLength);
+    result += characters.charAt(randomIndex);
+  }
+  
+  return result;
+}
+function getLink(){
+  return shareLink
+}
+
+module.exports = {
+  randomString,
+};
 
 
 app.listen(port,() => {
