@@ -12,8 +12,8 @@ const pool = mysql.createPool({
 
 let rs = "";
 
-function fileUp(path, originalName){
-    let files = {path: path, originalName: originalName}
+function fileUp(path, originalName, link){
+    let files = {path: path, originalName: originalName, url: link}
     let sqlSta = 'INSERT INTO files SET ?'
     pool.query(sqlSta, files, (err, result) =>{
         if(err) throw err;
