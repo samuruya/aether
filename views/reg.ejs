@@ -26,10 +26,6 @@
 
             <div class="body-reg">
                 <form action="/register" method="POST" class="register-form">
-                    <% if (typeof regerror !== "undefined") { %>
-                        <p><%= regerror %></p>
-                        <a href="/join#token-explain">learn more about it here</a>
-                    <% } %>
                     <div class="register">
 
                         <div>
@@ -59,15 +55,19 @@
                             </label>
                             <input type="text" name="token" id="token" required>
                         </div>
+                        <% if (typeof regerror !== "undefined") { %>
+                            <p><%= regerror %> <br><a href="/join#token-explain">learn more about it here</a></p>
 
+                        <% } %>
                     </div>
+
+        
                     <div class="reg-btn">
                         <button type="submit">Enter</button>
                     </div>
                 </form>
 
             </div>
-
             <div class="switch-log">
                 <p class="signup"><a href="/login">Been here before?</a></p>
             </div>

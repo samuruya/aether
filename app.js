@@ -17,7 +17,8 @@ var path = require('path')
 
 const { MongoClient } = require("mongodb");
 const { log } = require('console');
-const uri = 'mongodb+srv://servaccs:cloudy@aether.r5ictv4.mongodb.net/?retryWrites=true&w=majority';
+const uri = process.env.MDB_HOSTED_KEY;
+
 const dbName = 'aether';
 const client = new MongoClient(uri);
 
@@ -28,7 +29,7 @@ initPass(passport,
   Uid => users.find(user => user.Uid === Uid)
 );
 
-const port = 1234;
+const port = 80;
 const token = 121212
 
 
@@ -187,7 +188,7 @@ app.post('/login', passport.authenticate('local', {
   failureFlash: true
 }))
 app.post('/register', async (req, res) => {
-  if (req.body.token == token) {
+  if (req.body.token == token && req.body.password == req.body.password2) {
     try {
       const hashpw = await bcrypt.hash(req.body.password, 10)
       //database user register
