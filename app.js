@@ -5,7 +5,7 @@ if (process.env.NODE_ENV !== 'production') {
 var fs = require('fs');
 const express = require('express');
 const app = express();
-const bcrypt = require('bcrypt-nodejs');
+const bcrypt = require('bcrypt')
 const passport = require('passport');
 const session = require('express-session');
 const initPass = require('./passport-config');
@@ -336,7 +336,7 @@ module.exports = {
 };
 
 
-http.listen(port,() => {
+app.listen(port,() => {
   connectDB();
   console.log('Running at Port', port);
 });

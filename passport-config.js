@@ -1,5 +1,5 @@
 const LocalStrategy = require('passport-local').Strategy;
-const bcrypt = require('bcrypt-nodejs');
+const bcrypt = require('bcrypt')
 const { MongoClient } = require("mongodb");
 const uri = 'mongodb://localhost:27017/';
 const client = new MongoClient(uri);
