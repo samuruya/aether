@@ -1135,7 +1135,7 @@ background-color: #fff;
     display: flex;
     /* justify-content: center; */
     /* align-items: center; */
-    z-index: 9999;
+    z-index: 1;
     text-align: center;
 	margin: 0 auto;
     display: none;
@@ -1167,11 +1167,17 @@ background-color: #fff;
     display: flex;
     top: 0;
     justify-content: center;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    border-radius: 12px;
 }
 .qr_link{
     position: fixed;
     text-align: center;
     margin-top: 400px;
+    cursor: pointer;
+    background-color: #b8c8cc;
+    padding: 3px;
+    border-radius: 5px;
 }
 #qr_back{
     position: absolute; /* Add this line */
@@ -1184,3 +1190,17 @@ background-color: #fff;
     cursor: pointer;
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
 }
+.copyLinkMessage{
+    position: fixed;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    display: block;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    z-index: 2;
+  }
