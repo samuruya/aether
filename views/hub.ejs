@@ -19,15 +19,45 @@
     <div class="space-bar">
         <h1><%= user.name %>'s spaces</h1>
         <div>
-            <% for (let i = 0; i < spaces.length; i++) { %>
-                <button><%= spaces[i].title  %></button>
-            <% } %>
+            <form action="/space" method="POST" name="space_name">
+                <% if(spaces.length != null) { %>
+                    <% for (let i = 0; i < spaces.length; i++) { %>
+                        <input type="submit" value="<%= spaces[i].title %>" name="openSpace">
+                    <% } %>
+                <% } %>
+            </form>
         </div>
-        <button class="addsp">Add Space</button>
+        <input class="addsp" type="submit" value="Add Space" onclick="pfpPop()">
+    </div>
+
+    <div class="pfp-changer" id="pfpPop">
+        <div class="pop-bc">
+        </div>
+        <div class="pop-in-bc">
+        </div>
+        <div class="pop-smoll-input">
+            <h1>Name Your Space!</h1>
+            <button class="close-pfp-changer" onclick="xpfpPop()">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+            <form action="/hub/addspace" method="POST">                   
+                <input type="text" name="spacename" id="spacename">
+                <button type="submit">Create</button>
+            </form>
+        </div>
+
     </div>
 
 
-
     <script>
+
+        function pfpPop() {
+            document.getElementById('pfpPop').style.display = 'flex';
+        }
+
+        function xpfpPop() {
+            document.getElementById('pfpPop').style.display = 'none';
+        }
+
     </script>
 </body>

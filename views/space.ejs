@@ -1,0 +1,33 @@
+<title>Aether/Hub/<%= space.title %></title>
+<link rel="stylesheet" type="text/css" href="looks.css">
+
+<body>
+    <nav class="read-nav">
+        <a href="/" class="read-nav-logo">                    
+                <img src="https://i.ibb.co/4ZcLKjY/borderless.png" alt="">
+        </a>
+        <div class="read-nav-nav" id="nav">
+            <div>
+                <form action="/hub/delspace" method="POST">
+                    <input type="submit" value="<%= space.title %>" name="delspace">
+                </form>
+            </div>
+        </div>
+
+        <a href="/user" class="read-nav-btn usr">
+            <button><%= user.name %> <img src="<%= user.pfp %>" alt=""></button>
+        </a>
+    </nav>
+
+    <div class="space-title">
+        <h1><%= space.title %></h1>
+    </div>
+    <div class="space-body">
+
+
+    </div>
+
+
+    <script>
+    </script>
+</body>
