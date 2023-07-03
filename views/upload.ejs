@@ -186,7 +186,7 @@
         function generateQRCode(link) {
           const qrCodeContainer = document.querySelector('.qr_box');
           console.log(qrCodeContainer)
-          qrCodeContainer.innerHTML = ''; // Clear previous QR code (if any)
+          qrCodeContainer.innerHTML = ''; 
 
           const qr = new QRious({
             element: qrCodeContainer,
@@ -206,20 +206,19 @@
           navigator.clipboard.writeText(linkText)
             .then(() => {
               console.log('Text copied to clipboard:', linkText);
-              // Optionally, you can show a success message to the user
+              
             })
             .catch((error) => {
               console.error('Unable to copy text to clipboard:', error);
-              // Optionally, you can show an error message to the user
+              
             });
 
             const messageElement = document.querySelector('.copyLinkMessage');
-            // messageElement.textContent = message;
-            // messageElement.style.display = 'block';
+            
             messageElement.style.opacity = 0.6;
 
             setTimeout(() => {
-              // messageElement.style.display = 'none';
+              
               messageElement.style.opacity = 0;
             }, 1500);
         }

@@ -136,8 +136,29 @@ app.get('/hub', checkAuth, (req, res) => {
     spaces: req.user.spaces,
   })
 });
-app.get('/share/:link', (req, res) => {
-  
+app.get('/share', async (req, res) => { /* '/share/:link' */
+  const link = req.query.link;  
+  // res.render('download.ejs')
+  try {
+    // const link = req.query.link;
+    console.log(link)
+    const files = await db.fileDown(link);
+
+    for (const file of files) {
+    const { originalName, path } = file;
+    console.log('Original Name:', originalName);
+    console.log('Path:', path);
+    res.setHeader('Content-Disposition', `attachment; filename="${originalName}"`);
+      res.download(path);
+    }
+
+    
+
+  } catch (err) {
+    console.error(err);
+    // res.status(500).send('Internal Server Error');
+  }
+  res.render('download.ejs')
 });
 
 
@@ -274,7 +295,8 @@ const upload = multer({ storage: storage })
 app.post("/uploads", upload.array("files"), (req, res) => {
 
   var shareLink = randomString(30, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
-  var urlShareLink =`${req.headers.origin}/share/${shareLink}`;
+  var urlShareLink =`${req.headers.origin}/share?link=${shareLink}`; //Localhost: req.headers.origin
+  
 
   for(let i =0; i < req.files.length; i++) {
     db.fileUp(req.files[i].path, req.files[i].originalname, shareLink);
@@ -297,8 +319,19 @@ function randomString(length, characters) {
   
   return result;
 }
-function getLink(){
-  return shareLink
+function downloadFiles(link){
+  const fileData = db.fileDown(link);
+
+  fileData.then((files) => {
+    for (const file of files) {
+      const { originalName, path } = file;
+      console.log('Original Name:', originalName);
+      console.log('Path:', path);
+      res.download(path, originalName)
+    }
+  }).catch((err) => {
+    console.error(err);
+  });
 }
 
 module.exports = {

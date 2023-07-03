@@ -1,4 +1,5 @@
-const mysql = require('mysql2');
+// const mysql = require('mysql2');
+const mysql = require('mysql2/promise');
 const express = require('express');
 const app = express();
 const env = require('dotenv').config();
@@ -22,14 +23,18 @@ function fileUp(path, originalName, link){
     });
 };
 
-function fileDown(){
-    let sqlSta = 'SELECT path, originalName FROM files'
-    pool.query(sqlSta, (err, results) =>{
-        if(err) throw err;
-        console.log(results);
-        
-    });
-};
+function fileDown(link) {
+  return new Promise((resolve, reject) => {
+    const sqlSta = 'SELECT path, originalName FROM files WHERE url = ?';
+    pool.query(sqlSta, [link])
+      .then(([rows, fields]) => {
+        resolve(rows);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+}
 
 
 module.exports = {
