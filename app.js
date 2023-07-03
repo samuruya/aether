@@ -2,6 +2,7 @@ if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config()
 }
 
+var fs = require('fs');
 const express = require('express');
 const app = express();
 const bcrypt = require('bcrypt');
@@ -14,6 +15,7 @@ const cors = require('cors');
 const db = require('./db.js');
 var favicon = require('serve-favicon');
 var path = require('path')
+const http = require('http').createServer(app)
 
 const { MongoClient } = require("mongodb");
 const { log } = require('console');
@@ -29,8 +31,10 @@ initPass(passport,
   Uid => users.find(user => user.Uid === Uid)
 );
 
-const port = 80;
+const port = 3000;
 const token = 121212
+
+
 
 
 
@@ -53,7 +57,7 @@ async function connectDB() {
       for(const i in findResult) {
         users.push(findResult[i]);
       }
-      console.log(users)
+
     } catch (error) {
       console.error(error);
 
@@ -188,40 +192,66 @@ app.post('/login', passport.authenticate('local', {
   failureFlash: true
 }))
 app.post('/register', async (req, res) => {
-  if (req.body.token == token && req.body.password == req.body.password2) {
-    try {
-      const hashpw = await bcrypt.hash(req.body.password, 10)
-      //database user register
-      await client.connect();
-      console.log('client connected');
-      const db = client.db(dbName);
-      const collection = db.collection('users')
-      collection.insertOne({
-      Uid: users.length +1,
-      name: req.body.name,
-      email: req.body.email,
-      password: hashpw,
-      pfp:"https://i.ibb.co/m8bCySY/83bc8b88cf6bc4b4e04d153a418cde62.jpg",
-      disc:"im a user!",
-      spaces:
-            [
-              {
-                 title:"new space"
+  try {
+    await client.connect();
+    console.log('client connected');
+    const db = client.db(dbName);
+    const collection = db.collection('users')
+    var tempUser = await collection.find({name: req.body.name}).toArray()
+    console.log(tempUser)
+    if(tempUser.length === 0 ) {
+      if( 2 < req.body.name.length < 13) {
+        if(req.body.password == req.body.password2) {
+          if (req.body.token == token) {
+            try {
+              const hashpw = await bcrypt.hash(req.body.password, 10)
+              //database user register
+              await client.connect();
+              console.log('client connected');
+              const db = client.db(dbName);
+              const collection = db.collection('users')
+              collection.insertOne({
+              Uid: users.length +1,
+              name: req.body.name,
+              email: req.body.email,
+              password: hashpw,
+              pfp:"https://i.ibb.co/m8bCySY/83bc8b88cf6bc4b4e04d153a418cde62.jpg",
+              disc:"im a user!",
+              spaces:
+                    [
+                      {
+                         title:"new space"
+                      }
+                    ] 
+              })
+              users = []
+              const findResult = await collection.find().toArray()
+              for(const i in findResult) {
+                users.push(findResult[i]);
               }
-            ] 
-      })
-      users = []
-      const findResult = await collection.find().toArray()
-      for(const i in findResult) {
-        users.push(findResult[i]);
+              console.log(users)
+              res.redirect('/login')
+            } catch (error) {
+              res.redirect('/register')
+            }
+  
+          } else {
+            res.render('reg.ejs', {regerror: 'wrong token!'})
+          }
+        } else {
+          res.render('reg.ejs', {regerror: 'Both Passwords need to match!'})
+        }
+      } else {
+        res.render('reg.ejs', {regerror: 'your username needs to be between 3 and 12 Chars long'})
       }
-      console.log(users)
-      res.redirect('/login')
-    } catch (error) {
-      res.redirect('/register')
+
+
+    } else {
+      res.render('reg.ejs', {regerror: 'Username is already taken!'})
     }
-  } else {
-    res.render('reg.ejs', {regerror: 'wrong token!'})
+
+  } catch(error) {
+
   }
 
 })
@@ -306,7 +336,7 @@ module.exports = {
 };
 
 
-app.listen(port,() => {
+http.listen(port,() => {
   connectDB();
   console.log('Running at Port', port);
 });
