@@ -11,7 +11,7 @@
   "author": "Samuru",
   "license": "ISC",
   "dependencies": {
-    "bcrypt": "^5.1.0",
+    "bcrypt-nodejs": "^0.0.3",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "ejs": "^3.1.9",
@@ -22,7 +22,6 @@
     "mongodb": "^5.6.0",
     "mongoose": "^7.3.1",
     "multer": "^1.4.5-lts.1",
-    "mysql": "^2.18.1",
     "mysql2": "^3.4.3",
     "nodemon": "^2.0.22",
     "passport": "^0.6.0",
