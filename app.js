@@ -48,6 +48,7 @@ const titleFont = [
 
 
 async function connectDB() {
+    console.log(makeid(4))
     try {
       await client.connect();
       console.log('client connected');
@@ -153,16 +154,13 @@ app.get('/hub', checkAuth, async (req, res) => {
 });
 app.post('/hub/addspace', checkAuth, async (req, res) => {
   var setSpaceName = ''
-  var setSpaceId = 0;
+  var setSpaceId = makeid(5)
   if(req.body.spacename == '' ) {
     console.log('empty');
     setSpaceName = 'New Space'
   } else {
     setSpaceName = req.body.spacename;
   }
-
-  const tempUser = await getUsrById(req.user.Uid)
-  setSpaceId = tempUser[0].spaces.length + 1
 
   try {
     await client.connect();
@@ -199,7 +197,7 @@ app.post('/hub/delspace', checkAuth, async (req, res) => {
     console.log('#');
     const delt = await collection.updateOne(
       {Uid: req.user.Uid},
-      { $pull: {spaces: {"title": req.body.delspace}}}
+      { $pull: {spaces: {"Sid": req.body.delspace}}}
     )
     console.log(delt);
   } catch(error) {
@@ -430,7 +428,17 @@ async function refreshUser() {
 }
 
 
-
+function makeid(length) {
+  let result = '';
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const charactersLength = characters.length;
+  let counter = 0;
+  while (counter < length) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    counter += 1;
+  }
+  return result;
+}
 
 
 
