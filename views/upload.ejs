@@ -1,9 +1,14 @@
 
 
 
+<head>
 
-<title>AetherHub</title>
-<link rel="stylesheet" type="text/css" href="looks.css">
+  <title>AetherHub</title>
+  <link rel="stylesheet" type="text/css" href="looks.css">
+  <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
+
+</head>
+
 
 
 <body>
@@ -39,15 +44,20 @@
       <div class="qr_popup">
         <div class="qr_window">
           <button type="back" id="qr_back">&ltBack</button>
-        <form class="qr_box" >
+        <div class="qr_box" >
           
-        </form>
-        <lable class="qr_link">link</lable>
+        </div>
+        <lable class="qr_link" onclick="copyToClipboard(event)">link</lable>
       </div>
       </div>
 
+      <div class="copyLinkMessage" id="copyMessage">Link copied to clipboard</div>
+
       <script>
-        var shareLink = 'n';
+        // const QRCode = require('qrcode')
+        // const qrCodeFilePath = './views/data/';
+
+        var shareLink = 'unableToLoad';
         droppedFiles = null;
         const form = document.querySelector('form');
 
@@ -163,7 +173,55 @@
           document.querySelector('.qr_popup').style.display = 'flex';
           document.querySelector('.qr_link').textContent = shareLink;
           
+          // qrcode.toFile(qrCodeFilePath, shareLink, (error) => {
+          //   if (error) {
+          //     console.error('Error generating QR code:', error);
+          //     return;
+          //  }
+          // });
+          generateQRCode(shareLink);
           
+        }
+
+        function generateQRCode(link) {
+          const qrCodeContainer = document.querySelector('.qr_box');
+          console.log(qrCodeContainer)
+          qrCodeContainer.innerHTML = ''; // Clear previous QR code (if any)
+
+          const qr = new QRious({
+            element: qrCodeContainer,
+            value: shareLink,
+            size: 350
+          });
+          console.log("worked")
+          const qrCodeImage = document.createElement('img');
+          qrCodeImage.src = qr.toDataURL();
+          // qrCodeImage.style.borderRadius = '10px';
+          qrCodeContainer.appendChild(qrCodeImage);
+        }
+
+        function copyToClipboard(event) {
+          const linkText = event.target.innerText;
+
+          navigator.clipboard.writeText(linkText)
+            .then(() => {
+              console.log('Text copied to clipboard:', linkText);
+              // Optionally, you can show a success message to the user
+            })
+            .catch((error) => {
+              console.error('Unable to copy text to clipboard:', error);
+              // Optionally, you can show an error message to the user
+            });
+
+            const messageElement = document.querySelector('.copyLinkMessage');
+            // messageElement.textContent = message;
+            // messageElement.style.display = 'block';
+            messageElement.style.opacity = 0.6;
+
+            setTimeout(() => {
+              // messageElement.style.display = 'none';
+              messageElement.style.opacity = 0;
+            }, 1500);
         }
 
         
