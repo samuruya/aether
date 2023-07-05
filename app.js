@@ -13,6 +13,8 @@ const flash = require('express-flash');
 const multer = require('multer');
 const cors = require('cors');
 const db = require('./db.js');
+const archiver = require('archiver');
+const os = require('os');
 var favicon = require('serve-favicon');
 var path = require('path')
 const http = require('http').createServer(app)
@@ -210,28 +212,58 @@ app.post('/hub/delspace', checkAuth, async (req, res) => {
 app.get('/share', async (req, res) => { /* '/share/:link' */
   const link = req.query.link;  
   // res.render('download.ejs')
-  try {
+  
     // const link = req.query.link;
-    console.log(link)
-    const files = await db.fileDown(link);
+    console.log('link: '+ link)
+    // const files = await db.fileDown(link);
+    //-------------------------
+    
+    await client.connect();
+    console.log('client connected');
+    const db = client.db(dbName);
+    const collection = db.collection('files')
+    const files = await collection.find({ url: link }).toArray();
 
-    for (const file of files) {
-    const { originalName, path } = file;
-    console.log('Original Name:', originalName);
-    console.log('Path:', path);
-    res.setHeader('Content-Disposition', `attachment; filename="${originalName}"`);
-      res.download(path);
+    // if (files.length == 0) {
+    //     console.log("No Entries Found")
+    // }else if(files.length == 1){
+
+    // }
+
+    // files.forEach(file => {
+    //   console.log('Original Name:', file.originalName);
+    //   console.log('Path:', file.path);
+    //   res.download(file.path);
+    // });
+
+    if (files.length === 1) {
+      console.log('Original Name:', files[0].originalName);
+      console.log('Path:', files[0].path);
+      res.download(files[0].path, files[0].originalName);
+      return;
     }
-    app.get('/t', (req,res)=>{
-      res.download('/home/sandro/Documents/Projects-noSync/aether/uploads/t.txt')
-    })
+    if (files.length > 1) {
+      const zipFileName = 'files.zip';
+      const output = fs.createWriteStream(zipFileName);
+      const archive = archiver('zip', {
+        zlib: { level: 1 } // Set compression level to 9 (maximum)
+      });
 
+      files.forEach(file => {
+        archive.file(file.path, { name: file.originalName });
+      });
+      res.download(zipFileName, 'files.zip');
+    }
     
 
-  } catch (err) {
-    console.error(err);
-    // res.status(500).send('Internal Server Error');
-  }
+    //-------------------------
+
+  
+  res.render('download.ejs')
+});
+app.get('/ip', (req,res)=>{
+  const localIP = os.networkInterfaces()['en0'][1].address;
+  console.log(localIP);
   res.render('download.ejs')
 });
 
@@ -462,14 +494,24 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage })
 
-app.post("/uploads", upload.array("files"), (req, res) => {
+app.post("/uploads", upload.array("files"),async (req, res) => {
 
   var shareLink = randomString(30, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
   var urlShareLink =`${req.headers.origin}/share?link=${shareLink}`; //Localhost: req.headers.origin
   
+  await client.connect();
+    console.log('client connected');
+    const db = client.db(dbName);
+    const collection = db.collection('files')
 
   for(let i =0; i < req.files.length; i++) {
-    db.fileUp(req.files[i].path, req.files[i].originalname, shareLink);
+    // db.fileUp(req.files[i].path, req.files[i].originalname, shareLink);
+    collection.insertOne({
+      path: req.files[i].path,
+      originalName: req.files[i].originalname,
+      url: shareLink
+
+    })
     
 }
 // qr_popup(shareLink)

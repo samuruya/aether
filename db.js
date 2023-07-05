@@ -13,29 +13,56 @@ const pool = mysql.createPool({
 
 let rs = "";
 
-function fileUp(path, originalName, link){
-    let files = {path: path, originalName: originalName, url: link}
-    let sqlSta = 'INSERT INTO files SET ?'
-    pool.query(sqlSta, files, (err, result) =>{
-        if(err) throw err;
-        console.log(result);
+// function fileUp(path, originalName, link){
+//     let files = {path: path, originalName: originalName, url: link}
+//     let sqlSta = 'INSERT INTO files SET ?'
+//     pool.query(sqlSta, files, (err, result) =>{
+//         if(err) throw err;
+//         console.log(result);
         
-    });
+//     });
+// };
+
+// function fileDown(link) {
+//   return new Promise((resolve, reject) => {
+//     const sqlSta = 'SELECT path, originalName FROM files WHERE url = ?';
+//     pool.query(sqlSta, [link])
+//       .then(([rows, fields]) => {
+//         resolve(rows);
+//       })
+//       .catch((err) => {
+//         reject(err);
+//       });
+//   });
+// }
+
+async function fileUp(path, originalName, link){
+  await client.connect();
+    console.log('client connected');
+    const db = client.db(dbName);
+    const collection = db.collection('files')
+    collection.insertOne({
+      path: path,
+      originalName: originalName,
+      url: link
+
+    })
+
+
 };
 
-function fileDown(link) {
-  return new Promise((resolve, reject) => {
-    const sqlSta = 'SELECT path, originalName FROM files WHERE url = ?';
-    pool.query(sqlSta, [link])
-      .then(([rows, fields]) => {
-        resolve(rows);
-      })
-      .catch((err) => {
-        reject(err);
-      });
-  });
+async function fileDown(link) {
+return new Promise((resolve, reject) => {
+  const sqlSta = 'SELECT path, originalName FROM files WHERE url = ?';
+  pool.query(sqlSta, [link])
+    .then(([rows, fields]) => {
+      resolve(rows);
+    })
+    .catch((err) => {
+      reject(err);
+    });
+});
 }
-
 
 module.exports = {
     fileUp,
