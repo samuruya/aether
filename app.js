@@ -222,6 +222,9 @@ app.get('/share', async (req, res) => { /* '/share/:link' */
     res.setHeader('Content-Disposition', `attachment; filename="${originalName}"`);
       res.download(path);
     }
+    app.get('/t', (req,res)=>{
+      res.download('/home/sandro/Documents/Projects-noSync/aether/uploads/t.txt')
+    })
 
     
 
@@ -447,7 +450,7 @@ app.use(cors());
 
 const storage = multer.diskStorage({
     destination: function (req, file, callback) {
-        callback(null, __dirname + '/uploads');
+        callback(null, __dirname + '/public/uploads');
     },
 
     // filename: function (req, file, callback) {
