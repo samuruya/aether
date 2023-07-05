@@ -2,7 +2,7 @@ if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config()
 }
 
-var fs = require('fs');
+const fs = require('fs');
 const express = require('express');
 const app = express();
 const bcrypt = require('bcrypt')
@@ -16,8 +16,8 @@ const db = require('./db.js');
 const archiver = require('archiver');
 const os = require('os');
 var favicon = require('serve-favicon');
-var path = require('path')
-const http = require('http').createServer(app)
+var path = require('path');
+const http = require('http').createServer(app);
 
 const { MongoClient } = require("mongodb");
 const { log } = require('console');
@@ -209,32 +209,18 @@ app.post('/hub/delspace', checkAuth, async (req, res) => {
   res.redirect('/hub')
 })
 
-app.get('/share', async (req, res) => { /* '/share/:link' */
+app.get('/share', async (req, res) => { 
   const link = req.query.link;  
-  // res.render('download.ejs')
   
-    // const link = req.query.link;
     console.log('link: '+ link)
-    // const files = await db.fileDown(link);
-    //-------------------------
-    
+   
     await client.connect();
     console.log('client connected');
     const db = client.db(dbName);
     const collection = db.collection('files')
     const files = await collection.find({ url: link }).toArray();
 
-    // if (files.length == 0) {
-    //     console.log("No Entries Found")
-    // }else if(files.length == 1){
-
-    // }
-
-    // files.forEach(file => {
-    //   console.log('Original Name:', file.originalName);
-    //   console.log('Path:', file.path);
-    //   res.download(file.path);
-    // });
+  
 
     if (files.length === 1) {
       console.log('Original Name:', files[0].originalName);
@@ -242,28 +228,49 @@ app.get('/share', async (req, res) => { /* '/share/:link' */
       res.download(files[0].path, files[0].originalName);
       return;
     }
-    if (files.length > 1) {
-      const zipFileName = 'files.zip';
-      const output = fs.createWriteStream(zipFileName);
+    else if (files.length > 1) {
+      const tmpFileName = './public/temp/files.zip';
+      const output = fs.createWriteStream(tmpFileName);
       const archive = archiver('zip', {
-        zlib: { level: 1 } // Set compression level to 9 (maximum)
+        zlib: { level: 1 }
       });
-
+    
+      output.on('close', () => {
+        console.log(archive.pointer() + ' total bytes');
+        console.log('Zip archive created successfully');
+    
+        res.download(tmpFileName, 'files.zip', (err) => {
+          if (err) {
+            console.error('Error sending zip file:', err);
+          }
+    
+          fs.unlinkSync(tmpFileName);
+        });
+      });
+    
+      output.on('aborted', () => {
+        console.error('Download aborted by the client');
+        res.status(500).send('Download aborted by the client.');
+      });
+    
+      archive.on('error', err => {
+        console.error('Error creating zip archive:', err);
+        res.render('download.ejs');
+      });
+    
+      archive.pipe(output);
+    
       files.forEach(file => {
+        console.log('Original Name:', file.originalName);
+        console.log('Path:', file.path);
         archive.file(file.path, { name: file.originalName });
       });
-      res.download(zipFileName, 'files.zip');
+    
+      archive.finalize();
+     
     }
     
-
-    //-------------------------
-
   
-  res.render('download.ejs')
-});
-app.get('/ip', (req,res)=>{
-  const localIP = os.networkInterfaces()['en0'][1].address;
-  console.log(localIP);
   res.render('download.ejs')
 });
 
@@ -497,8 +504,7 @@ const upload = multer({ storage: storage })
 app.post("/uploads", upload.array("files"),async (req, res) => {
 
   var shareLink = randomString(30, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
-  var urlShareLink =`${req.headers.origin}/share?link=${shareLink}`; //Localhost: req.headers.origin
-  
+  var urlShareLink =`http://${getIP()}:${port}/share?link=${shareLink}`; //Localhost: req.headers.origin
   await client.connect();
     console.log('client connected');
     const db = client.db(dbName);
@@ -531,20 +537,15 @@ function randomString(length, characters) {
   
   return result;
 }
-function downloadFiles(link){
-  const fileData = db.fileDown(link);
-
-  fileData.then((files) => {
-    for (const file of files) {
-      const { originalName, path } = file;
-      console.log('Original Name:', originalName);
-      console.log('Path:', path);
-      res.download(path, originalName)
-    }
-  }).catch((err) => {
-    console.error(err);
-  });
-}
+function getIP(){
+  const networkInterfaces = os.networkInterfaces();
+  const localIP = Object.values(networkInterfaces)
+    .flat()
+    .find(({ family, internal }) => family === 'IPv4' && !internal)?.address || '';
+  
+  console.log(localIP);
+ return localIP; 
+};
 
 module.exports = {
   randomString,
