@@ -209,70 +209,67 @@ app.post('/hub/delspace', checkAuth, async (req, res) => {
   res.redirect('/hub')
 })
 
-app.get('/share', async (req, res) => { 
-  const link = req.query.link;  
-  
-    console.log('link: '+ link)
-   
+app.get('/share', async (req, res) => {
+  const link = req.query.link;
+  console.log('link: ' + link);
+
+  try {
     await client.connect();
     console.log('client connected');
-    const db = client.db(dbName);
-    const collection = db.collection('files')
-    const files = await collection.find({ url: link }).toArray();
 
-  
+    const db = client.db(dbName);
+    const collection = db.collection('files');
+    const files = await collection.find({ url: link }).toArray();
 
     if (files.length === 1) {
       console.log('Original Name:', files[0].originalName);
       console.log('Path:', files[0].path);
       res.download(files[0].path, files[0].originalName);
       return;
-    }
-    else if (files.length > 1) {
+    } else if (files.length > 1) {
       const tmpFileName = './public/temp/files.zip';
       const output = fs.createWriteStream(tmpFileName);
       const archive = archiver('zip', {
         zlib: { level: 1 }
       });
-    
+
       output.on('close', () => {
         console.log(archive.pointer() + ' total bytes');
         console.log('Zip archive created successfully');
-    
+
         res.download(tmpFileName, 'files.zip', (err) => {
           if (err) {
             console.error('Error sending zip file:', err);
           }
-    
+
           fs.unlinkSync(tmpFileName);
         });
       });
-    
-      output.on('aborted', () => {
-        console.error('Download aborted by the client');
-        res.status(500).send('Download aborted by the client.');
-      });
-    
-      archive.on('error', err => {
-        console.error('Error creating zip archive:', err);
-        res.render('download.ejs');
-      });
-    
+
       archive.pipe(output);
-    
+
       files.forEach(file => {
         console.log('Original Name:', file.originalName);
         console.log('Path:', file.path);
         archive.file(file.path, { name: file.originalName });
       });
-    
+
       archive.finalize();
-     
+      return;
+    }else if (files.length < 1) {
+      console.log("couldn't  retrieve files")
+      return;
     }
-    
-  
-  res.render('download.ejs')
+
+    // No files found
+    console.log('No files found with the specified URL');
+  } catch (err) {
+    console.error('Error:', err);
+    res.render('download.ejs');
+  }
+  res.render('download.ejs');
 });
+
 
 app.post('/space', async (req, res) => {
   const tempUser = await getUsrById(req.user.Uid)
