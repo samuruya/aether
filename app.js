@@ -257,7 +257,8 @@ app.get('/share', async (req, res) => {
       archive.finalize();
       return;
     }else if (files.length < 1) {
-      console.log("couldn't  retrieve files")
+      const error = "couldn't  retrieve files :(";
+      res.render('error_msg.ejs', { error })
       return;
     }
 

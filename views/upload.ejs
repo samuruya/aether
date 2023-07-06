@@ -149,6 +149,10 @@
                 }
             }
             
+            if (formData.getAll("files").length < 0) {
+              console.log("Files were appended");
+            }
+            console.log(formData)
             
             fetch('http://localhost:3000/uploads', {
                 method: 'POST',
@@ -157,7 +161,6 @@
             .then(res => res.json())
             .then(data => {
             setShareLink(data.variable);
-            
           })
 
 

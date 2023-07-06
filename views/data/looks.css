@@ -1334,3 +1334,19 @@ background-color: #fff;
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
     vertical-align:middle;
 }
+
+/* Error.ejs */
+.msg_container{
+    width: 100%;
+    max-width: 680px;
+    height: 100%;
+    max-height: 400px;
+    text-align: center;
+    margin: 0 auto;
+    font-size: 25px;
+    background-color: #c8dadf;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
