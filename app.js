@@ -262,7 +262,6 @@ app.get('/share', async (req, res) => {
       return;
     }
 
-    // No files found
     console.log('No files found with the specified URL');
   } catch (err) {
     console.error('Error:', err);
