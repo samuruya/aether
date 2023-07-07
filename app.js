@@ -114,7 +114,7 @@ app.get('/logout', (req, res) => {
   console.log('User '+ req.user.name + ' logged out');
   req.logout(function(err) {
     if (err) { return next(err); }
-    res.redirect('/');
+    res.redirect('/'); 
   });
 
 });
@@ -125,7 +125,7 @@ app.get('/doc', (req, res) => {
   res.render('docs.ejs')
 });
 app.get('/space', checkAuth, (req, res) => {
-  res.render('space.ejs')
+  res.redirect('/hub')
 });
 app.get('/join', (req, res) => {
   res.render('join.ejs')
@@ -162,29 +162,35 @@ app.post('/hub/addspace', checkAuth, async (req, res) => {
     setSpaceName = req.body.spacename;
   }
 
-  try {
-    await client.connect();
-    console.log('client connected');
-    const db = client.db(dbName);
-    const collection = db.collection('users')
-    const addt = await collection.updateOne({Uid: req.user.Uid}, {$push: {
-      spaces: {
-        Sid: setSpaceId,
-        title: setSpaceName,
-        body: []
-      }
-    }})
-    console.log(addt)
-  } catch(error) {
-    console.error(error);
+  const tempUser = await getUsrById(req.user.Uid)
+  const spacesList = tempUser[0].spaces;
+
+  if(spacesList.length < 9) {
+    try {
+      await client.connect();
+      console.log('client connected');
+      const db = client.db(dbName);
+      const collection = db.collection('users')
+      const addt = await collection.updateOne({Uid: req.user.Uid}, {$push: {
+        spaces: {
+          Sid: setSpaceId,
+          title: setSpaceName,
+          body: []
+        }
+      }})
+      console.log(addt)
+    } catch(error) {
+      console.error(error);
+    }
+  
+  
+    console.log(setSpaceName);
+    console.log(setSpaceId)
+  } else {
+    console.log('not enough space space');
   }
-
-
-  console.log(setSpaceName);
-  console.log(setSpaceId)
   res.redirect('/hub')
 })
-
 app.post('/hub/delspace', checkAuth, async (req, res) => {
   console.log(req.body.delspace)
   try {
@@ -206,7 +212,6 @@ app.post('/hub/delspace', checkAuth, async (req, res) => {
 
   res.redirect('/hub')
 })
-
 app.get('/share', async (req, res) => { /* '/share/:link' */
   const link = req.query.link;  
   // res.render('download.ejs')
@@ -231,15 +236,22 @@ app.get('/share', async (req, res) => { /* '/share/:link' */
   }
   res.render('download.ejs')
 });
-
 app.post('/space', async (req, res) => {
   const tempUser = await getUsrById(req.user.Uid)
   const spacesList = tempUser[0].spaces;
   const space = []
-  if(spacesList[0].title == req.body.openSpace){
-    console.log(spacesList[0]);
-    space.push(spacesList[0]);
+
+  for(var i in spacesList) {
+    console.log('input: '+ req.body.openSpace);
+    console.log(spacesList[i]);
+    if(spacesList[i].title == req.body.openSpace){
+      space.push(spacesList[i]);
+      break
+    }
   }
+
+
+
   if(space.length != 0) {
     res.render('space.ejs', {
       space:  space[0],
@@ -251,7 +263,6 @@ app.post('/space', async (req, res) => {
     res.redirect('/hub')
   }
 })
-
 app.post('/user/pfp', async (req, res) => {
   console.log('/user/pfp');
   for(let i in users) {
@@ -271,7 +282,6 @@ app.post('/user/pfp', async (req, res) => {
   }
   res.redirect('/user')
 })
-
 app.post('/user/disc', async (req, res) => {
   for(let i in users) {
     if(req.user.Uid == users[i].Uid) {
@@ -290,7 +300,6 @@ app.post('/user/disc', async (req, res) => {
   }
   res.redirect('/user')
 })
-
 app.post('/login', passport.authenticate('local', {
   successRedirect: '/hub',
   failureRedirect: '/login',
@@ -360,6 +369,10 @@ app.post('/register', async (req, res) => {
   }
 
 })
+
+
+
+
 
 
 function checkAuth(req, res, next) {

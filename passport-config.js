@@ -7,7 +7,7 @@ const client = new MongoClient(uri);
 
 
 function initialize(passport, getUserbyName, getUserbyId) {
-    const authUser = async (name, password, done) => {
+    const authUser = async (name, password, done) => {   
         const user = getUserbyName(name)
         if(user == null) {
             return done(null, false, { message:  'there is no user with this name'})
