@@ -556,7 +556,6 @@ function getIP(){
     .flat()
     .find(({ family, internal }) => family === 'IPv4' && !internal)?.address || '';
   
-  console.log(localIP);
  return localIP; 
 };
 
@@ -568,4 +567,5 @@ module.exports = {
 app.listen(port,() => {
   connectDB();
   console.log('Running at Port', port);
+  console.log(`server-adress: http//${getIP()}:${port}/`);
 });
