@@ -1,4 +1,6 @@
 <title>AetherHub</title>
+<meta name="viewport" content="width=device-width" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 <link rel="stylesheet" type="text/css" href="looks.css">
 <link rel="icon" href="favicon.ico?v=1.1">
 <body>
@@ -10,6 +12,7 @@
             <a href="/doc">Docs</a>
             <a href="/hub" class="hub <%= UUI %>">hub</a>
             <a href="">news</a>
+            
         </div>
         
 
@@ -32,7 +35,7 @@
     
     <div class="mainBanner">
         <h3>Welcome to</h3>
-        <img src="<%= font %>" alt="" style="width: 400px;">
+        <img src="<%= font %>" alt="">
     </div>
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#f3f6fc" fill-opacity="1" d="M0,256L60,229.3C120,203,240,149,360,160C480,171,600,245,720,234.7C840,224,960,128,1080,112C1200,96,1320,160,1380,192L1440,224L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
     
@@ -77,3 +80,19 @@
     </div>
     
 </body> 
+
+<footer>
+    <nav>
+        <div class="mobile-nav">
+            <a href="/doc"><span class="material-symbols-outlined">description</span></a>
+            <a href="/hub" class="hub <%= UUI %>"><span class="material-symbols-outlined">home</span></a>
+            <a href="/login" class="mobile-nav-log <%= DUI %>">
+    	        <span class="material-symbols-outlined">login</span>
+            </a>
+            <a href="/user" class="mob-usr <%= UUI %>">
+                <img src="<%= user.pfp %>" alt="">
+            </a> 
+            
+        </div>
+    </nav>
+</footer>

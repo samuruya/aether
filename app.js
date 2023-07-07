@@ -34,7 +34,7 @@ initPass(passport,
 );
 
 const port = 3000;
-const token = 121212
+const token = process.env.REG_TOKEN
 
 
 
@@ -539,4 +539,5 @@ app.listen(port,() => {
   connectDB();
   console.log('Running at Port', port);
   console.log(`server-adress: http//${getIP()}:${port}/`);
+  
 });

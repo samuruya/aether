@@ -6,6 +6,16 @@
     padding: 0;
     scrollbar-width: none;
     -ms-overflow-style: none;
+    /*outline: solid #f00 1px !important;*/ /*thos is a dev tool*/
+}
+
+html,body
+{
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+
 }
 
 body::-webkit-scrollbar {
@@ -52,6 +62,7 @@ body {
     font-size: 1.8em;
 }
 .mainBanner img {
+    width: 400px;
     margin: -150px;
     font-size: 4em;
 }
@@ -61,6 +72,10 @@ body {
     background-color: var(--sec);
     display: flex;
     justify-content: space-between;
+}
+
+.mobile-menu {
+    display: none;
 }
 
 .read-nav {
@@ -1372,3 +1387,156 @@ background-color: #fff;
     height: 450px;
     position: absolute;
 }
+
+
+
+footer nav {
+    display: none;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@media only screen and (max-width: 600px) {
+
+    .read-nav {
+        grid-template-columns: 30% 30% 30%;
+    }
+
+    .read-nav-logo {
+        margin-left: 20px;
+    }
+
+
+    .read-nav img {
+        width: 75px;
+        height: 75px;
+    }
+
+    .read-nav-btn  {
+        display: none;
+    }
+
+
+    .read-nav-nav a {
+        display: none;
+    }
+
+    footer nav {
+        z-index: 3;
+        position: fixed;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        background-color: var(--sec);
+        width: 100%;
+        height: 100px;
+        bottom: 0;
+        border-radius: 20px 20px 0 0;
+    }
+
+    footer nav div {
+        display: flex;
+        flex-direction: row;
+        gap: 20px;
+    }
+
+    .mobile-nav a {
+        padding: 20px;
+        background-color: var(--acc);
+        color: var(--sec);
+        border-radius: 20px;
+    }
+
+    .mobile-nav img {
+        width: 24px;
+        height: 24px;
+    }
+
+    .mobile-menu {
+        display: flex;
+    }
+
+
+    .bc {
+        display: none;
+    }
+
+    .defix {
+        width: 100vw;
+        padding-bottom: 100px;
+    }
+
+    .usix {
+        padding-bottom: 100px;
+    }
+
+    .mainBanner {
+        width: 100%;
+    }
+
+    .mainBanner h3 {
+        margin-bottom: 40px;
+    }
+
+    .mainBanner img {
+        width: 300px;
+    }
+
+    .about {
+
+
+    }
+
+    .about div {
+        padding: 0;
+    }
+
+    .about p {
+        width: 90%;
+    }
+
+    /* Login/register */
+    .login-part1{
+        width: 100%;
+        height: 100%;
+        border-radius: 20px;
+    }
+    .reg-btn {
+        height: 50%;
+    }
+
+    .reg-part2,
+    .login-part2 {
+        display: none;
+    }
+
+
+
+    /*User.ejs*/
+    .logout {
+        display: flex;
+    }
+
+    /*Misc*/
+    .doc-content {
+        width: 90%;
+    }
+
+}
+
+
