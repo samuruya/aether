@@ -12,11 +12,11 @@
 
 
 <body>
-    <nav class="read-nav">
-        <a href="/" class="read-nav-logo">                    
-                <img src="https://i.ibb.co/4ZcLKjY/borderless.png" alt="">
-        </a>
-    </nav>
+  <nav class="read-nav">
+    <a href="/" class="read-nav-logo">                    
+            <img src="https://i.ibb.co/4ZcLKjY/borderless.png" alt="">
+    </a>
+</nav>
     <div class="bc">
 
         <div id='stars2'></div>
@@ -56,6 +56,8 @@
       <script>
         // const QRCode = require('qrcode')
         // const qrCodeFilePath = './views/data/';
+        const urlString = '<%= urlString %>';
+        console.log(urlString);
 
         var shareLink = 'unableToLoad';
         droppedFiles = null;
@@ -133,7 +135,6 @@
         form.addEventListener('submit', (e) => {
             
             e.preventDefault();
-            
          
             const files = document.getElementById("files");
             const formData = new FormData();
@@ -148,17 +149,33 @@
                     formData.append("files", droppedFiles[i]);
                 }
             }
+            console.log(getLength(formData));
+
+            if (getLength(formData) > 1) {
+              console.log("Files were appended");
+
+                  fetch(urlString, {
+                    method: 'POST',
+                    body: formData, 
+                })
+                .then(res => res.json())
+                .then(data => {
+                setShareLink(data.variable);
+              })
+            }else{
+              console.log("no files appended")
+              const messageElement = document.querySelector('.copyLinkMessage');
+              messageElement.textContent = 'no files appended';
+            
+              messageElement.style.opacity = 0.8;
+
+              setTimeout(() => {
+                
+                messageElement.style.opacity = 0;
+              }, 1500);
+            }
             
             
-            fetch('http://localhost:80/uploads', {
-                method: 'POST',
-                body: formData, 
-            })
-            .then(res => res.json())
-            .then(data => {
-            setShareLink(data.variable);
-            
-          })
 
 
         })
@@ -214,13 +231,22 @@
             });
 
             const messageElement = document.querySelector('.copyLinkMessage');
+            messageElement.textContent = 'Link copied to clipboard';
             
-            messageElement.style.opacity = 0.6;
+            messageElement.style.opacity = 0.8;
 
             setTimeout(() => {
               
               messageElement.style.opacity = 0;
             }, 1500);
+        }
+
+        function getLength(formData){
+          var count = 0;
+          for (const value of formData.values()) {
+            count++;
+          }
+          return count;
         }
 
         
