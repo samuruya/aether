@@ -138,7 +138,8 @@ app.get('/user', checkAuth, (req, res) => {
   })
 });
 app.get('/upload', (req, res) => {
-  res.render('upload.ejs')
+  const urlString = `http://${getIP()}:${port}/uploads`;
+  res.render('upload.ejs', { urlString })
 });
 app.get('/hub', checkAuth, async (req, res) => {
   refreshUser();
@@ -290,6 +291,7 @@ app.post('/space', async (req, res) => {
     res.redirect('/hub')
   }
 })
+
 
 app.post('/user/pfp', async (req, res) => {
   console.log('/user/pfp');

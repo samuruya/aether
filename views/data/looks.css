@@ -1291,7 +1291,7 @@ background-color: #fff;
     top: 55%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: #fff;
+    background-color: #c8dadf;
     padding: 10px 20px;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
@@ -1337,6 +1337,7 @@ background-color: #fff;
 
 /* Error.ejs */
 .msg_container{
+    position: fixed;
     width: 100%;
     max-width: 680px;
     height: 100%;
@@ -1349,4 +1350,14 @@ background-color: #fff;
     align-items: center;
     justify-content: center;
     display: flex;
+}
+.msg_img{
+    background-image: url("page_error.png");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    opacity: 0.3;
+    width: 100%;
+    height: 100%;
+    position: absolute;
 }

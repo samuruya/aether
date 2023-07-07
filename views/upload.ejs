@@ -56,6 +56,8 @@
       <script>
         // const QRCode = require('qrcode')
         // const qrCodeFilePath = './views/data/';
+        const urlString = '<%= urlString %>';
+        console.log(urlString);
 
         var shareLink = 'unableToLoad';
         droppedFiles = null;
@@ -133,7 +135,6 @@
         form.addEventListener('submit', (e) => {
             
             e.preventDefault();
-            
          
             const files = document.getElementById("files");
             const formData = new FormData();
@@ -148,20 +149,33 @@
                     formData.append("files", droppedFiles[i]);
                 }
             }
-            
-            if (formData.getAll("files").length < 0) {
+            console.log(getLength(formData));
+
+            if (getLength(formData) > 1) {
               console.log("Files were appended");
-            }
-            console.log(formData)
+
+                  fetch(urlString, {
+                    method: 'POST',
+                    body: formData, 
+                })
+                .then(res => res.json())
+                .then(data => {
+                setShareLink(data.variable);
+              })
+            }else{
+              console.log("no files appended")
+              const messageElement = document.querySelector('.copyLinkMessage');
+              messageElement.textContent = 'no files appended';
             
-            fetch('http://localhost:3000/uploads', {
-                method: 'POST',
-                body: formData, 
-            })
-            .then(res => res.json())
-            .then(data => {
-            setShareLink(data.variable);
-          })
+              messageElement.style.opacity = 0.8;
+
+              setTimeout(() => {
+                
+                messageElement.style.opacity = 0;
+              }, 1500);
+            }
+            
+            
 
 
         })
@@ -217,13 +231,22 @@
             });
 
             const messageElement = document.querySelector('.copyLinkMessage');
+            messageElement.textContent = 'Link copied to clipboard';
             
-            messageElement.style.opacity = 0.6;
+            messageElement.style.opacity = 0.8;
 
             setTimeout(() => {
               
               messageElement.style.opacity = 0;
             }, 1500);
+        }
+
+        function getLength(formData){
+          var count = 0;
+          for (const value of formData.values()) {
+            count++;
+          }
+          return count;
         }
 
         
