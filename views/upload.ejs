@@ -12,11 +12,11 @@
 
 
 <body>
-    <nav class="read-nav">
-        <a href="/" class="read-nav-logo">                    
-                <img src="https://i.ibb.co/4ZcLKjY/borderless.png" alt="">
-        </a>
-    </nav>
+  <nav class="read-nav">
+    <a href="/" class="read-nav-logo">                    
+            <img src="https://i.ibb.co/4ZcLKjY/borderless.png" alt="">
+    </a>
+</nav>
     <div class="bc">
 
         <div id='stars2'></div>
@@ -149,15 +149,18 @@
                 }
             }
             
+            if (formData.getAll("files").length < 0) {
+              console.log("Files were appended");
+            }
+            console.log(formData)
             
-            fetch('http://localhost:80/uploads', {
+            fetch('http://localhost:3000/uploads', {
                 method: 'POST',
                 body: formData, 
             })
             .then(res => res.json())
             .then(data => {
             setShareLink(data.variable);
-            
           })
 
 
