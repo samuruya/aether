@@ -1,11 +1,12 @@
 {
   "name": "aether",
-  "version": "1.5.3",
+  "version": "1.5.4",
   "description": "",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npx nodemon app.js"
+    "start": "npx node app.js",
+    "dev": "npx nodemon app.js"
   },
   "keywords": [],
   "author": "Samuru",

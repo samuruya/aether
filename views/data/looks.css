@@ -494,11 +494,22 @@ body {
     gap: 30px;
 }
 
-.space-bar div {
+.space-bar form {
+    margin: 0;
+}
+
+
+
+.list-wrapper {
     display: flex;
     flex-direction: column;
-    gap: 30px;
-    width: 90%;
+    width: 80%;
+}
+
+.user-space-list {
+    height: 80%;
+    width: 100%;
+    gap: 0;
 }
 
 .space-bar input {

@@ -21,14 +21,17 @@
     
     <div class="space-bar">
         <h1><%= user.name %>'s spaces</h1>
-        <div>
-            <form action="/space" method="POST" name="space_name">
+        <div class="list-wrapper">
+            <div class="user-space-list">
                 <% if(spaces.length != null) { %>
                     <% for (let i = 0; i < spaces.length; i++) { %>
+                        <form action="/space" method="POST" name="space_name">
+                        <input type = "hidden" name = "spaceid" value = "<%= spaces[i].Sid %>" />
                         <input type="submit" value="<%= spaces[i].title %>" name="openSpace">
+                        </form>
                     <% } %>
                 <% } %>
-            </form>
+            </div>
         </div>
         <input class="addsp" type="submit" value="Add Space" onclick="pfpPop()">
     </div>

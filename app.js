@@ -51,12 +51,11 @@ async function connectDB() {
     console.log(makeid(4))
     try {
       await client.connect();
-      console.log('client connected');
       const db = client.db(dbName);
       const collection = db.collection('users')
       const findResult = await collection.find().toArray()
       const finds = await collection.find({"spaces.Sid": "0"}).toArray()
-      console.log(finds)
+
       for(const i in findResult) {
         users.push(findResult[i]);
       }
@@ -111,7 +110,6 @@ app.get('/login', (req, res) => {
   res.render('login.ejs')
 });
 app.get('/logout', (req, res) => {
-  console.log('User '+ req.user.name + ' logged out');
   req.logout(function(err) {
     if (err) { return next(err); }
     res.redirect('/');
@@ -141,7 +139,6 @@ app.get('/upload', (req, res) => {
 app.get('/hub', checkAuth, async (req, res) => {
   refreshUser();
   const updatedUser = await getUsrById(req.user.Uid)
-  console.log(updatedUser[0].spaces)
   var splength = 0
   if(updatedUser[0].spaces != []) {
     splength = updatedUser[0].spaces.length
@@ -156,45 +153,38 @@ app.post('/hub/addspace', checkAuth, async (req, res) => {
   var setSpaceName = ''
   var setSpaceId = makeid(5)
   if(req.body.spacename == '' ) {
-    console.log('empty');
     setSpaceName = 'New Space'
   } else {
     setSpaceName = req.body.spacename;
   }
 
-  try {
-    await client.connect();
-    console.log('client connected');
-    const db = client.db(dbName);
-    const collection = db.collection('users')
-    const addt = await collection.updateOne({Uid: req.user.Uid}, {$push: {
-      spaces: {
-        Sid: setSpaceId,
-        title: setSpaceName,
-        body: []
-      }
-    }})
-    console.log(addt)
-  } catch(error) {
-    console.error(error);
+  const tempUser = await getUsrById(req.user.Uid)
+  console.log(tempUser[0].spaces.length);
+  if(tempUser[0].spaces.length < 9) {
+    try {
+      await client.connect();
+      const db = client.db(dbName);
+      const collection = db.collection('users')
+      const addt = await collection.updateOne({Uid: req.user.Uid}, {$push: {
+        spaces: {
+          Sid: setSpaceId,
+          title: setSpaceName,
+          body: []
+        }
+      }})
+      console.log(addt)
+    } catch(error) {
+      console.error(error);
+    }
+  } else {
   }
-
-
-  console.log(setSpaceName);
-  console.log(setSpaceId)
   res.redirect('/hub')
 })
-
 app.post('/hub/delspace', checkAuth, async (req, res) => {
-  console.log(req.body.delspace)
   try {
     await client.connect();
-    console.log('client connected');
     const db = client.db(dbName);
     const collection = db.collection('users')
-    console.log('#');
-    console.log(req.body.delspace);
-    console.log('#');
     const delt = await collection.updateOne(
       {Uid: req.user.Uid},
       { $pull: {spaces: {"Sid": req.body.delspace}}}
@@ -236,13 +226,12 @@ app.post('/space', async (req, res) => {
   const tempUser = await getUsrById(req.user.Uid)
   const spacesList = tempUser[0].spaces;
   const space = []
-  if(spacesList[0].title == req.body.openSpace){
-    console.log(spacesList[0]);
-    space.push(spacesList[0]);
-  }
-  if(space.length != 0) {
+  const foundspace = spacesList.filter(function(dawd) {
+    return dawd.Sid === req.body.spaceid
+  })
+  if(foundspace.length != 0) {
     res.render('space.ejs', {
-      space:  space[0],
+      space:  foundspace[0],
       user: req.user
     })
   } else {
@@ -253,7 +242,6 @@ app.post('/space', async (req, res) => {
 })
 
 app.post('/user/pfp', async (req, res) => {
-  console.log('/user/pfp');
   for(let i in users) {
     if(req.user.Uid == users[i].Uid) {
       users[i].pfp = req.body.newpfp;
@@ -261,7 +249,6 @@ app.post('/user/pfp', async (req, res) => {
   }
   try{
     await client.connect();
-    console.log('client connected');
     const db = client.db(dbName);
     const collection = db.collection('users')
     const updatedResult = await collection.updateOne({Uid: req.user.Uid}, {$set: {pfp: req.body.newpfp}})
@@ -280,7 +267,6 @@ app.post('/user/disc', async (req, res) => {
   }
   try{
     await client.connect();
-    console.log('client connected');
     const db = client.db(dbName);
     const collection = db.collection('users')
     const updatedResult = await collection.updateOne({Uid: req.user.Uid}, {$set: {disc: req.body.disc}})
@@ -299,7 +285,7 @@ app.post('/login', passport.authenticate('local', {
 app.post('/register', async (req, res) => {
   try {
     await client.connect();
-    console.log('client connected');
+
     const db = client.db(dbName);
     const collection = db.collection('users')
     var tempUser = await collection.find({name: req.body.name}).toArray()
@@ -312,7 +298,6 @@ app.post('/register', async (req, res) => {
               const hashpw = await bcrypt.hash(req.body.password, 10)
               //database user register
               await client.connect();
-              console.log('client connected');
               const db = client.db(dbName);
               const collection = db.collection('users')
               collection.insertOne({
@@ -383,7 +368,6 @@ function checkNotAuth(req, res, next) {
 async function getUsrById(id) {
   try {
     await client.connect();
-    console.log('client connected');
     const db = client.db(dbName);
     const collection = db.collection('users')
     const findResult = await collection.find({ Uid: id}).toArray()
@@ -396,7 +380,6 @@ async function getUsrById(id) {
 async function getSpaceByIds( eUid, eSid) {
   try{
     await client.connect();
-    console.log('client connected');
     const db = client.db(dbName);
     const collection = db.collection('users')
     const findusr = await collection.find({ Uid: eUid}).toArray()
@@ -439,6 +422,8 @@ function makeid(length) {
   }
   return result;
 }
+
+
 
 
 
