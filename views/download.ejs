@@ -21,15 +21,17 @@
   
       <div class="down_container" >
   
-        <form class="down_box" >
+        <div class="down_box" >
             
-            
+            <form action="/download" method="POST">
             <!-- <div class="box_button-wrapper"> -->
-              <button class="down_box_button" ><span>Download</span></button>
+              <input type="hidden" name="link" value="<%= link %>">
+              <button type="submit" class="down_box_button">Download</button>
             <!-- </div> -->
+            </form>
   
             
-          </form>
+            </div>
         </div>
         <div class="down_files">
             
@@ -39,5 +41,6 @@
 
         <script>
 
+         
 
         </script>

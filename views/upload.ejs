@@ -154,7 +154,7 @@
             if (getLength(formData) > 1) {
               console.log("Files were appended");
 
-                  fetch(urlString, {
+                  fetch('/uploads', {
                     method: 'POST',
                     body: formData, 
                 })

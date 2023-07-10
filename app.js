@@ -87,6 +87,7 @@ app.use(passport.session())
 app.use(favicon(path.join(__dirname, 'views', 'data', 'favicon.ico')));
 
 
+
 app.get('/', (req, res) => {
       if (req.isAuthenticated()) {
         res.render('index.ejs', {
@@ -136,7 +137,7 @@ app.get('/user', checkAuth, (req, res) => {
   })
 });
 app.get('/upload', (req, res) => {
-  const urlString = `http://${getIP()}:${port}/uploads`;
+  const urlString = `${getDomain()}/uploads`;
   res.render('upload.ejs', { urlString })
 });
 app.get('/hub', checkAuth, async (req, res) => {
@@ -200,7 +201,12 @@ app.post('/hub/delspace', checkAuth, async (req, res) => {
   res.redirect('/hub')
 })
 
-app.get('/share', async (req, res) => {
+app.get('/share', (req, res) => {
+  const link = req.query.link;
+  res.render('download.ejs', { link })
+});
+
+app.get('/d-share', async (req, res) => {
   const link = req.query.link;
   console.log('link: ' + link);
 
@@ -259,6 +265,66 @@ app.get('/share', async (req, res) => {
     res.render('download.ejs');
   }
   res.render('download.ejs');
+});
+
+app.post('/download', async (req, res) => {
+  const link = req.body.link;
+  console.log("download:" + link);
+
+  try {
+    await client.connect();
+    console.log('client connected');
+
+    const db = client.db(dbName);
+    const collection = db.collection('files');
+    const files = await collection.find({ url: link }).toArray();
+
+    if (files.length === 1) {
+      console.log('Original Name:', files[0].originalName);
+      console.log('Path:', files[0].path);
+      res.download(files[0].path, files[0].originalName);
+      return;
+    } else if (files.length > 1) {
+      const tmpFileName = './public/temp/files.zip';
+      const output = fs.createWriteStream(tmpFileName);
+      const archive = archiver('zip', {
+        zlib: { level: 1 }
+      });
+
+      output.on('close', () => {
+        console.log(archive.pointer() + ' total bytes');
+        console.log('Zip archive created successfully');
+
+        res.download(tmpFileName, 'files.zip', (err) => {
+          if (err) {
+            console.error('Error sending zip file:', err);
+          }
+
+          fs.unlinkSync(tmpFileName);
+        });
+      });
+
+      archive.pipe(output);
+
+      files.forEach(file => {
+        console.log('Original Name:', file.originalName);
+        console.log('Path:', file.path);
+        archive.file(file.path, { name: file.originalName });
+      });
+
+      archive.finalize();
+      return;
+    }else if (files.length < 1) {
+      const error = "couldn't  retrieve files :(";
+      res.render('error_msg.ejs', { error })
+      return;
+    }
+
+    console.log('No files found with the specified URL');
+  } catch (err) {
+    console.error('Error:', err);
+  }
+
 });
 
 
@@ -488,7 +554,7 @@ const upload = multer({ storage: storage })
 app.post("/uploads", upload.array("files"),async (req, res) => {
 
   var shareLink = randomString(30, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
-  var urlShareLink =`http://${getIP()}:${port}/share?link=${shareLink}`; //Localhost: req.headers.origin
+  var urlShareLink =`${getDomain()}/share?link=${shareLink}`; //Localhost: req.headers.origin
   await client.connect();
     console.log('client connected');
     const db = client.db(dbName);
@@ -530,6 +596,12 @@ function getIP(){
  return localIP; 
 };
 
+function getDomain(){
+  const domain =`http://${getIP()}:${port}`;
+  // const domain = 'https://aether.serveo.net';
+  return domain;
+}
+
 module.exports = {
   randomString,
 };
@@ -538,6 +610,6 @@ module.exports = {
 app.listen(port,() => {
   connectDB();
   console.log('Running at Port', port);
-  console.log(`server-adress: http//${getIP()}:${port}/`);
+  console.log(`server-adress: ${getDomain()}/`);
   
 });
