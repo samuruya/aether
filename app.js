@@ -576,13 +576,14 @@ res.json({ variable: urlShareLink });
 });
 
 async function deleteOldFiles() {
+  console.log("time --> 10 sec")
   try {
     await client.connect();
     const db = client.db(dbName);
     const collection = db.collection('files');
 
     
-    const thirtyMinutesAgo = new Date(Date.now() - 30 * 1000);
+    const thirtyMinutesAgo = new Date(Date.now() - 10 * 60* 1000);
 
     
     const filesToDelete = await collection.find({
@@ -591,7 +592,7 @@ async function deleteOldFiles() {
 
     
     for (const file of filesToDelete) {
-      fs.unlink(file.filePath, (error) => {
+      fs.unlink(file.path, (error) => {
         if (error) {
           console.error('Error deleting file:', error);
         } else {
@@ -606,12 +607,14 @@ async function deleteOldFiles() {
     });
   } catch (error) {
     console.error('Error deleting old files:', error);
-  } finally {
-    await client.close();
   }
 };
 
-setInterval(deleteOldFiles, 30 * 1000);
+function del (){
+  console.log("time -->  sec")
+}
+
+setInterval(deleteOldFiles, 60 * 1000);
 
 
 
