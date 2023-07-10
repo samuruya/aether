@@ -1247,6 +1247,19 @@ background-color: #fff;
     display: none;
 }
 
+
+
+
+.filesShow {
+    margin: 0 auto;
+    margin-top: 25px;
+    width: 100%;
+    max-width: 680px;
+    background-color: #c8dadf;
+    height: 80px;
+
+}
+
 /*--qr-code--*/
 .qr_popup {
     position: fixed;

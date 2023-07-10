@@ -19,7 +19,7 @@ var favicon = require('serve-favicon');
 var path = require('path');
 const http = require('http').createServer(app);
 
-const { MongoClient } = require("mongodb");
+const { MongoClient, Timestamp } = require("mongodb");
 const { log } = require('console');
 const uri = process.env.MDB_HOSTED_KEY;
 
@@ -206,7 +206,7 @@ app.get('/share', (req, res) => {
   res.render('download.ejs', { link })
 });
 
-app.get('/d-share', async (req, res) => {
+app.get('/share/d', async (req, res) => {
   const link = req.query.link;
   console.log('link: ' + link);
 
@@ -565,8 +565,8 @@ app.post("/uploads", upload.array("files"),async (req, res) => {
     collection.insertOne({
       path: req.files[i].path,
       originalName: req.files[i].originalname,
-      url: shareLink
-
+      url: shareLink,
+      uploadTime: new Date()
     })
     
 }
@@ -574,6 +574,45 @@ app.post("/uploads", upload.array("files"),async (req, res) => {
 res.json({ variable: urlShareLink });
     
 });
+
+async function deleteOldFiles() {
+  try {
+    await client.connect();
+    const db = client.db(dbName);
+    const collection = db.collection('files');
+
+    
+    const thirtyMinutesAgo = new Date(Date.now() - 30 * 1000);
+
+    
+    const filesToDelete = await collection.find({
+      uploadTime: { $lt: thirtyMinutesAgo }
+    }).toArray();
+
+    
+    for (const file of filesToDelete) {
+      fs.unlink(file.filePath, (error) => {
+        if (error) {
+          console.error('Error deleting file:', error);
+        } else {
+          console.log('File deleted:', file.filePath);
+        }
+      });
+    }
+
+   
+    await collection.deleteMany({
+      uploadTime: { $lt: thirtyMinutesAgo }
+    });
+  } catch (error) {
+    console.error('Error deleting old files:', error);
+  } finally {
+    await client.close();
+  }
+};
+
+setInterval(deleteOldFiles, 30 * 1000);
+
 
 
 function randomString(length, characters) {
@@ -586,7 +625,7 @@ function randomString(length, characters) {
   }
   
   return result;
-}
+};
 function getIP(){
   const networkInterfaces = os.networkInterfaces();
   const localIP = Object.values(networkInterfaces)
