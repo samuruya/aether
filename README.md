@@ -29,12 +29,12 @@ Feel free to contribute to the project or provide suggestions for improvement.
 ## Additional Setup
 **Linux:**
 ```bash
-mkdir -p ./public/temp ./public/img_pfp ./public/uploads
+mkdir -p ./public/temp ./public/pfp_img ./public/uploads
 ```
 
 **Windows:**
 ```batch
 mkdir ".\public\temp"
-mkdir ".\public\img_pfp"
+mkdir ".\public\pfp_img"
 mkdir ".\public\uploads"
 ```

@@ -61,7 +61,7 @@
                 <span class="material-symbols-outlined">close</span>
             </button>
             <img src="<%= user.pfp %>" alt="">
-            <form action="/user/pfp" method="POST">
+            <form class="img">
                 <div>
                     <label for="newpfp">Enter your picture url                             
                         <span class="tooltip">
@@ -69,7 +69,8 @@
                             <span class="material-symbols-outlined smoll">info</span>
                         </span>:
                     </label>
-                    <input type="text" name="newpfp" id="newpfp" required>
+                    <input type="text" name="newpfp" id="newpfp">
+                    <input type="file" id="pfpImg" name="image" accept="image/*">
                 </div>
                 <button type="submit">Submit</button>
             </form>
@@ -86,6 +87,51 @@
         function xpfpPop() {
             document.getElementById('pfpPop').style.display = 'none';
         }
+
+
+        
+        document.querySelector('.img').addEventListener('submit', (e) => {
+            
+            e.preventDefault();
+            
+            const imgFile = document.getElementById('pfpImg').files[0];
+            const formData = new FormData();
+            
+            console.log(imgFile)
+
+            const newpfp = document.getElementById('newpfp').value;
+
+            if(newpfp && newpfp.trim() !== ''){
+                console.log("new pfp string ready to fetch")
+
+                fetch('/user/pfp', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ newpfp: newpfp})
+                }) 
+                .then(res => res.json())
+                .then(data => {
+                })
+                return;
+            }else if(imgFile != null){
+                console.log("img file ready to fetch")
+
+                
+                formData.append('image', imgFile);
+
+                fetch('/user/pfp/upload', {
+                    method: 'POST',
+                    body: formData,
+                }) 
+                .then(res => res.json())
+                .then(data => {
+              })
+                return;
+
+            }
+
+            
+        });
 
 
     </script>

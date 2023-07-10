@@ -12,7 +12,6 @@ const initPass = require('./passport-config');
 const flash = require('express-flash');
 const multer = require('multer');
 const cors = require('cors');
-const db = require('./db.js');
 const archiver = require('archiver');
 const os = require('os');
 var favicon = require('serve-favicon');
@@ -25,6 +24,11 @@ const uri = process.env.MDB_HOSTED_KEY;
 
 const dbName = 'aether';
 const client = new MongoClient(uri);
+
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+app.use(cors());
+app.use('/public/pfp_img', express.static(path.join(__dirname, 'public/pfp_img')));
 
 var users = []
 
@@ -349,6 +353,10 @@ app.post('/space', async (req, res) => {
 app.post('/user/pfp', async (req, res) => {
   for(let i in users) {
     if(req.user.Uid == users[i].Uid) {
+      
+      if(fs.existsSync(users[i].pfp)){
+        fs.unlinkSync(users[i].pfp)
+      }
       users[i].pfp = req.body.newpfp;
     }
   }
@@ -363,6 +371,44 @@ app.post('/user/pfp', async (req, res) => {
   }
   res.redirect('/user')
 })
+
+
+const upStorage = multer.diskStorage({
+  destination: function (req, file, callback) {
+    callback(null, './public/pfp_img')
+  }
+});
+const uplouadPfp = multer({ storage:  upStorage });
+
+app.post('/user/pfp/upload', uplouadPfp.single('image'), async(req, res)=>{
+  console.log("img upload--> post")
+
+  
+  for(let i in users) {
+    if(req.user.Uid == users[i].Uid) {
+      console.log(users[i].pfp);
+
+      if(fs.existsSync(users[i].pfp)){
+        fs.unlinkSync(users[i].pfp)
+      }
+      users[i].pfp = req.file.path;
+    }
+  }
+
+  try{
+    await client.connect();
+    const db = client.db(dbName);
+    const collection = db.collection('users')
+    const updatedResult = await collection.updateOne({Uid: req.user.Uid}, {$set: {pfp: req.file.path}})
+    console.log(updatedResult)
+  } catch (error){
+    console.error(error);
+  }
+  res.redirect('/user')
+
+});
+
+
 app.post('/user/disc', async (req, res) => {
   for(let i in users) {
     if(req.user.Uid == users[i].Uid) {
@@ -384,7 +430,7 @@ app.post('/login', passport.authenticate('local', {
   successRedirect: '/hub',
   failureRedirect: '/login',
   failureFlash: true
-}))
+}));
 app.post('/register', async (req, res) => {
   try {
     await client.connect();
@@ -535,11 +581,10 @@ function makeid(length) {
 
 
 //upload_stuff
-app.use(cors());
 
 const storage = multer.diskStorage({
     destination: function (req, file, callback) {
-        callback(null, __dirname + '/public/uploads');
+        callback(null, './public/uploads');
     },
 
     // filename: function (req, file, callback) {
