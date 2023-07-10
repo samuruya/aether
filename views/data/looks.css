@@ -107,7 +107,7 @@ body {
 }
 
 .read-nav-nav {
-    margin-top: 40px;
+    margin-top: 0px; /*40px*/
     font-size: 2em;
     display: flex;
     gap: 20px;
@@ -153,6 +153,29 @@ body {
 }
 
 .read-nav-btn button:hover{
+    transform: scale(1.1);
+    transition: ease-in 50ms;
+}
+
+.hubShare {
+    top: -5px;
+    text-decoration: none;
+    background-color: #3561c0;
+    border: none;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: baseline;
+    text-align: center;
+    padding: 15px;
+    width: 150px;
+    font-size: 20px;
+    font-family: 'Josefin Sans', sans-serif;
+    color: white;
+}
+
+.hubShare:hover{
     transform: scale(1.1);
     transition: ease-in 50ms;
 }

@@ -140,9 +140,20 @@ app.get('/user', checkAuth, (req, res) => {
     user: req.user,
   })
 });
-app.get('/upload', (req, res) => {
+app.get('/upload',checkAuth , async (req, res) => {
   const urlString = `${getDomain()}/uploads`;
-  res.render('upload.ejs', { urlString })
+
+  refreshUser();
+  const updatedUser = await getUsrById(req.user.Uid)
+  var splength = 0
+  if(updatedUser[0].spaces != []) {
+    splength = updatedUser[0].spaces.length
+  }
+
+  res.render('upload.ejs', { 
+    urlString : urlString,
+    user: updatedUser[0]
+  })
 });
 app.get('/hub', checkAuth, async (req, res) => {
   refreshUser();
@@ -620,8 +631,18 @@ res.json({ variable: urlShareLink });
     
 });
 
+function getTime(){
+  const now = new Date();
+  const hours = now.getHours().toString();
+  const minutes = now.getMinutes().toString();
+  const seconds = now.getSeconds().toString();
+
+  const currentTime = `${hours}:${minutes}:${seconds}`;
+  return currentTime;
+}
+
 async function deleteOldFiles() {
-  console.log("time --> 10 sec")
+  console.log("refresh --> "+getTime())
   try {
     await client.connect();
     const db = client.db(dbName);
