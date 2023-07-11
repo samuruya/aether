@@ -216,9 +216,33 @@ app.post('/hub/delspace', checkAuth, async (req, res) => {
   res.redirect('/hub')
 })
 
-app.get('/share', (req, res) => {
+app.get('/share', async(req, res) => {
   const link = req.query.link;
-  res.render('download.ejs', { link })
+
+  try{
+  
+    await client.connect();
+    console.log('client connected');
+
+    const db = client.db(dbName);
+    const collection = db.collection('files');
+    const files = await collection.find({ url: link }).toArray();
+
+    files.forEach(file => {
+      console.log('Original Name:', file.originalName);
+    });
+
+
+    const filesData = JSON.stringify(files);
+
+    res.render('download.ejs', { link, files: files });
+
+  }catch (error) {
+    console.error('Error:', error);
+    res.render('download.ejs', { link, files: [] });
+  }
+
+ 
 });
 
 app.get('/share/d', async (req, res) => {
@@ -680,7 +704,7 @@ function del (){
   console.log("time -->  sec")
 }
 
-setInterval(deleteOldFiles, 60 * 1000);
+// setInterval(deleteOldFiles, 60 * 1000);
 
 
 

@@ -1271,15 +1271,24 @@ background-color: #fff;
 }
 
 
-
-
-.filesShow {
+#outputDiv{
     margin: 0 auto;
     margin-top: 25px;
     width: 100%;
     max-width: 680px;
+}
+
+
+.showFile {
     background-color: #c8dadf;
-    height: 80px;
+    padding-top: 10px;
+    padding-left: 20px;
+    /* padding-bottom: 10px; */
+    width: 100%;
+    max-width: 660px;
+    /* height: 80px; */
+    color: gray;
+    border-top: black, 20px;
 
 }
 

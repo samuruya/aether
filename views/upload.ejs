@@ -69,6 +69,8 @@
         // const qrCodeFilePath = './views/data/';
         const urlString = '<%= urlString %>';
         console.log(urlString);
+        const formData = new FormData();
+        const allFiles = [];
 
         var shareLink = 'unableToLoad';
         droppedFiles = null;
@@ -133,7 +135,14 @@
               form.addEventListener( 'drop', function( e )
               {
                 droppedFiles = e.dataTransfer.files; 
-                showFiles( droppedFiles );
+                addShowFiles( droppedFiles );
+
+                if (droppedFiles != null) {
+                for (let i = 0; i < droppedFiles.length; i++) {
+                    formData.append("files", droppedFiles[i]);
+                }
+            }
+
         
                 });
             }
@@ -141,6 +150,17 @@
         });
         
         //Show_Selected_Files
+        const fileInput = document.getElementById('files');
+
+        fileInput.addEventListener('change', function(event) {
+
+          for(let i =0; i < fileInput.files.length; i++) {
+            addShowFiles(fileInput.files[i]);
+            formData.append("files", fileInput.files[i]);
+            }
+
+            console.log(fileInput.files.length)
+        });
         
         
         //upload_at_submit---------------
@@ -149,21 +169,19 @@
             e.preventDefault();
          
             const files = document.getElementById("files");
-            const formData = new FormData();
+            // const formData = new FormData();
             
-            formData.append("name", name.value);
+            // formData.append("name", name.value);
             
-            for(let i =0; i < files.files.length; i++) {
-                formData.append("files", files.files[i]);
-            }
-            if (droppedFiles != null) {
-                for (let i = 0; i < droppedFiles.length; i++) {
-                    formData.append("files", droppedFiles[i]);
-                }
-            }
+            // for(let i =0; i < files.files.length; i++) {
+            //     formData.append("files", files.files[i]);
+            // }
+            //
+            
+            //
             console.log(getLength(formData));
 
-            if (getLength(formData) > 1) {
+            if (getLength(formData) > 0) {
               console.log("Files were appended");
 
                   fetch('/uploads', {
@@ -260,6 +278,38 @@
           }
           return count;
         }
+
+
+        // show files:
+
+        var outputDiv = document.getElementById('outputDiv');
+
+          createDiv();
+
+          function refresh(){
+            files.forEach(file => {
+                  console.log('Original Name:', file.originalName);
+                  createDiv(file.originalName);
+                });
+
+                createDiv();
+                createDiv();
+          }
+                
+
+
+          function createDiv(text) {
+
+              const div = document.createElement('div');
+              div.classList.add('showFile');
+              div.textContent = text;
+              outputDiv.appendChild(div);
+
+          }
+
+          function addShowFiles(file){
+            allFiles.push(file);
+          }
 
         
         
