@@ -704,7 +704,7 @@ function del (){
   console.log("time -->  sec")
 }
 
-// setInterval(deleteOldFiles, 60 * 1000);
+setInterval(deleteOldFiles, 60 * 1000);
 
 
 

@@ -48,8 +48,8 @@
           
         </form>
       </div>
-      <div class="filesShow">
-
+      <div id="outputDiv">
+            
       </div>
 
       <div class="qr_popup">
@@ -141,6 +141,7 @@
                 for (let i = 0; i < droppedFiles.length; i++) {
                     formData.append("files", droppedFiles[i]);
                 }
+                refresh()
             }
 
         
@@ -160,6 +161,7 @@
             }
 
             console.log(fileInput.files.length)
+            refresh();
         });
         
         
@@ -168,7 +170,7 @@
             
             e.preventDefault();
          
-            const files = document.getElementById("files");
+            // const files = document.getElementById("files");
             // const formData = new FormData();
             
             // formData.append("name", name.value);
@@ -240,7 +242,7 @@
             value: shareLink,
             size: 350
           });
-          console.log("worked")
+ 
           const qrCodeImage = document.createElement('img');
           qrCodeImage.src = qr.toDataURL();
           // qrCodeImage.style.borderRadius = '10px';
@@ -284,16 +286,18 @@
 
         var outputDiv = document.getElementById('outputDiv');
 
-          createDiv();
+          
 
           function refresh(){
-            files.forEach(file => {
-                  console.log('Original Name:', file.originalName);
-                  createDiv(file.originalName);
-                });
+            outputDiv.innerHTML = '';
+            createDiv();
+            for(var file of formData.entries()) {
+                  console.log('Original Name:', file[1].name);
+                  createDiv(file[1].name);
+                };
 
                 createDiv();
-                createDiv();
+                
           }
                 
 
