@@ -289,25 +289,55 @@
           
 
           function refresh(){
-            outputDiv.innerHTML = '';
-            createDiv();
-            for(var file of formData.entries()) {
-                  console.log('Original Name:', file[1].name);
-                  createDiv(file[1].name);
-                };
 
+            outputDiv.innerHTML = '';
+            
+            if(getLength(formData) > 0){
+              console.log("bigger than 0")
+
+              createDiv();
+              formData.forEach((file) => {
+                console.log('File:', file);
+                console.log('Original Name:', file.name);
+                createDiv(file.name);
+              });
                 createDiv();
-                
+
+            }
+            
           }
                 
 
 
-          function createDiv(text) {
+          function createDiv(name) {
 
               const div = document.createElement('div');
               div.classList.add('showFile');
-              div.textContent = text;
+              div.textContent = name;
               outputDiv.appendChild(div);
+
+              if(name != null){
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                
+                deleteButton.addEventListener('click', function() {
+                  // div.remove();
+                  // formData.delete(name: name);
+
+                 
+                  for (let [key, value] of formData.entries()) {
+                      if (value instanceof File && value.name === name) {
+                          formData.delete(key);
+                          console.log("success delete");
+                      }
+                  }
+
+                  refresh();
+                  })
+                div.appendChild(deleteButton);
+              }
+  
+              
 
           }
 

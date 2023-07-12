@@ -1291,7 +1291,22 @@ background-color: #fff;
     max-width: 660px;
     /* height: 80px; */
     color: gray;
+    
+}
 
+.showFile button{
+    border: none;
+    background-color: #aeaead;
+    width: 80px;
+    height: 30px;
+    margin-left: 50%;
+    cursor: pointer;
+    transition: ease-out 50ms;
+}
+.showFile button:hover{
+    background-color: #b8c8cc;
+    background-color: white;
+    transition: ease-in 50ms;
 }
 
 /*--qr-code--*/
