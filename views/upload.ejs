@@ -70,7 +70,7 @@
         const urlString = '<%= urlString %>';
         console.log(urlString);
         const formData = new FormData();
-        const allFiles = [];
+        allFiles = [];
 
         var shareLink = 'unableToLoad';
         droppedFiles = null;
@@ -135,11 +135,11 @@
               form.addEventListener( 'drop', function( e )
               {
                 droppedFiles = e.dataTransfer.files; 
-                addShowFiles( droppedFiles );
 
                 if (droppedFiles != null) {
                 for (let i = 0; i < droppedFiles.length; i++) {
-                    formData.append("files", droppedFiles[i]);
+                    // formData.append("files", droppedFiles[i]);
+                    allFiles.push(droppedFiles[i]);
                 }
                 refresh()
             }
@@ -156,8 +156,8 @@
         fileInput.addEventListener('change', function(event) {
 
           for(let i =0; i < fileInput.files.length; i++) {
-            addShowFiles(fileInput.files[i]);
-            formData.append("files", fileInput.files[i]);
+            allFiles.push(fileInput.files[i]);
+            // formData.append("files", fileInput.files[i]);
             }
 
             console.log(fileInput.files.length)
@@ -178,10 +178,10 @@
             // for(let i =0; i < files.files.length; i++) {
             //     formData.append("files", files.files[i]);
             // }
-            //
-            
-            //
-            console.log(getLength(formData));
+
+            for(let i =0; i < allFiles.length; i++) {
+              formData.append("files", allFiles[i]);
+            }
 
             if (getLength(formData) > 0) {
               console.log("Files were appended");
@@ -193,6 +193,7 @@
                 .then(res => res.json())
                 .then(data => {
                 setShareLink(data.variable);
+                resetVariables();
               })
             }else{
               console.log("no files appended")
@@ -292,11 +293,11 @@
 
             outputDiv.innerHTML = '';
             
-            if(getLength(formData) > 0){
+            if(allFiles.length > 0){
               console.log("bigger than 0")
 
               createDiv();
-              formData.forEach((file) => {
+              allFiles.forEach((file) => {
                 console.log('File:', file);
                 console.log('Original Name:', file.name);
                 createDiv(file.name);
@@ -325,11 +326,9 @@
                   // formData.delete(name: name);
 
                  
-                  for (let [key, value] of formData.entries()) {
-                      if (value instanceof File && value.name === name) {
-                          formData.delete(key);
-                          console.log("success delete");
-                      }
+                  const fileIndex = allFiles.findIndex((file) => file.name === name);
+                  if (fileIndex !== -1) {
+                    allFiles.splice(fileIndex, 1);
                   }
 
                   refresh();
@@ -341,8 +340,16 @@
 
           }
 
-          function addShowFiles(file){
-            allFiles.push(file);
+          function resetVariables() {
+            
+            allFiles = [];
+            droppedFiles = [];
+            for (let key of formData.keys()) {
+                formData.delete(key);
+              }
+            console.log("-----------vars clearde----------")
+            
+            refresh();
           }
 
         

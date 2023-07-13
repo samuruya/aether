@@ -673,7 +673,7 @@ async function deleteOldFiles() {
     const collection = db.collection('files');
 
     
-    const thirtyMinutesAgo = new Date(Date.now() - 10 * 60* 1000);
+    const thirtyMinutesAgo = new Date(Date.now() - 1 * 60* 1000);
 
     
     const filesToDelete = await collection.find({
