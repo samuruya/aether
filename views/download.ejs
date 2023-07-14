@@ -33,7 +33,7 @@
             
             </div>
         </div>
-        <div id="outputDiv">
+        <div id="outputDiv-down">
             
         </div>
   
@@ -45,7 +45,7 @@
           console.log(files);
 
 
-          var outputDiv = document.getElementById('outputDiv');
+          var outputDiv = document.getElementById('outputDiv-down');
 
           createDiv();
 
@@ -62,7 +62,7 @@
           function createDiv(text) {
 
               const div = document.createElement('div');
-              div.classList.add('showFile');
+              div.classList.add('showFile-down');
               div.textContent = text;
               outputDiv.appendChild(div);
 
