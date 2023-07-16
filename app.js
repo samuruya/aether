@@ -235,11 +235,18 @@ app.get('/share', async(req, res) => {
 
     const filesData = JSON.stringify(files);
 
-    res.render('download.ejs', { link, files: files });
+    const error = "couldn't  retrieve files :(";
+
+    if(files.length > 0){
+      res.render('download.ejs', { link, files: files });
+    }else{
+      res.render('error_msg.ejs', { error });
+    }
+
 
   }catch (error) {
     console.error('Error:', error);
-    res.render('download.ejs', { link, files: [] });
+    res.render('error_msg.ejs', { error });
   }
 
  

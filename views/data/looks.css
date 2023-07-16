@@ -4,7 +4,8 @@
 * {
     margin: 0;
     padding: 0;
-    scrollbar-width: none;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(168, 187, 191, 0.2) transparent;
     -ms-overflow-style: none;
     /*outline: solid #f00 1px !important;*/ /*thos is a dev tool*/
 }
@@ -19,7 +20,7 @@ html,body
 }
 
 body::-webkit-scrollbar {
-    display: none; /* for Chrome, Safari, and Opera */
+    /* display: none; */
 }
 
 a {
@@ -75,6 +76,9 @@ body {
 }
 
 .mobile-menu {
+    display: none;
+}
+.upl_input_btn{
     display: none;
 }
 
@@ -972,45 +976,6 @@ body {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 .tooltip {
     position: relative;
     display: inline-block;
@@ -1111,7 +1076,16 @@ body {
     }
   }
 
+
+
+
+
+
+
+
+
 /*---Upload_page--*/
+
 .upl_container{
     width: 100%;
 	max-width: 680px;
@@ -1126,6 +1100,7 @@ body {
     height: 100%;
     max-height: 150px;
     align-items: center;
+    border-radius: 5px 5px 5px 5px;
 }
 .box_button {
     display: inline-block;
@@ -1142,7 +1117,7 @@ body {
     margin: 25px;
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
   }
-  .box__file{
+  .box_file{
     display: none;
   }
 
@@ -1273,10 +1248,10 @@ background-color: #fff;
 
 #outputDiv{
     margin: 0 auto;
-    /* margin-top: 25px; */
     margin-bottom: 40px;
-    width: 100%;
+    /* width: 100%; */
     max-width: 680px;
+    transition:  50ms;
 }
 
 
@@ -1308,7 +1283,13 @@ background-color: #fff;
     font-size: 20px;
     transition: ease-out 50ms;
   }
+
+  .showFile.hoverable:hover {
+    background-color: #b4c4c8;
+  }
   
+
+
 
 /*--qr-code--*/
 .qr_popup {
@@ -1318,8 +1299,6 @@ background-color: #fff;
     width: 100%;
     height: 100%;
     display: flex;
-    /* justify-content: center; */
-    /* align-items: center; */
     z-index: 1;
     text-align: center;
 	margin: 0 auto;
@@ -1344,12 +1323,10 @@ background-color: #fff;
     font-size: 20px;
     background-color: grey;
     position: relative;
-    /* padding: 100px 20px; */
     height: 100%;
     width: 100%;
     max-height: 350px;
     max-width: 350px;
-    /* align-items: center; */
     display: flex;
     top: 0;
     justify-content: center;
@@ -1391,7 +1368,10 @@ background-color: #fff;
     z-index: 2;
   }
 
-  /* Download */
+
+
+
+  /* Download.ejs */
 .down_container{
     width: 100%;
     max-width: 680px;
@@ -1630,7 +1610,8 @@ footer nav {
     }
 
     .reg-part2,
-    .login-part2 {
+    .login-part2,
+    .box_button {
         display: none;
     }
 
@@ -1649,16 +1630,122 @@ footer nav {
     /*upload.ejs */
     .upl_container,
     .box{
-        width: 100%;
+        
         min-width: 100px;
     }
     .upload_page{
-        background-color: whitesmoke;
+        background-color: #1b1e2e;
         
     }
+    .upl-nav{
+        z-index: 0;
+    }
+    .box_button-nav{
+        background-color: #2ecc71;
+        border: none;
+        height: 64px;
+        width: 80px;
+        border-radius: 15px;
+        color: white;
+        font-size: 15px;
+        font-family: 'Josefin Sans', sans-serif;
+        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        margin-right: 5px;
+        margin-left: 5px;
+    }
+    .upl_container{
+        background-color: transparent;
+        position: fixed;
+        bottom: 135px;
+        display: none;  
+    }
+    .box{
+        background-color: transparent;
+        height: -100px;
+        /* display: none;   */
+    }
+    .box.is-dragover,
+    .box.has-advanced-upload{
+        outline: 1;
+        height: -100px;
+    }
+
+    .box_input{
+        display: none;
+        height: -100px;
+    }
     
-    
+    .upl-footer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      
+      
+      .upl_input_btn {
+        display: block;
+        position: fixed;
+        bottom: 115px;
+        border: none;
+        height: 25px;
+        width: 80px;
+        border-radius: 10px;
+      }
+      
+    .showFile{
+        display: none;
+    }
+    .showFile.hoverable{
+        display: flex;
+        margin-bottom: 20px;
+        border-radius: 20px;
+        width: calc(100% - 40px)
+    }
+    .showFile button {
+        margin-right: 0px;
+      }
+    #outputDiv{
+        width: calc(100% - 40px)
+    }
+
+    .qr_box{
+        margin-top: 50px;
+    }
+    .qr_link{
+        margin-top: 420px;
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+
+
 
 }
 
 
+
+
+
+/*Custome-Scrollbar*/
+::-webkit-scrollbar {
+    width: 18px;
+    margin-right: 50px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+/*    background-color: #d6dee1;*/
+/*    background-color: #3b4452;*/
+    background-color: #232b36;
+    border-radius: 20px;
+    border: 6px solid transparent;
+    background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+/*    background-color: #a8bbbf;*/
+    background-color: rgba(168, 187, 191, 0.3);
+}
