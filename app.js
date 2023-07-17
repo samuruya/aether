@@ -12,19 +12,23 @@ const initPass = require('./passport-config');
 const flash = require('express-flash');
 const multer = require('multer');
 const cors = require('cors');
-const db = require('./db.js');
 const archiver = require('archiver');
 const os = require('os');
 var favicon = require('serve-favicon');
 var path = require('path');
 const http = require('http').createServer(app);
 
-const { MongoClient } = require("mongodb");
+const { MongoClient, Timestamp } = require("mongodb");
 const { log } = require('console');
 const uri = process.env.MDB_HOSTED_KEY;
 
 const dbName = 'aether';
 const client = new MongoClient(uri);
+
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+app.use(cors());
+app.use('/public/pfp_img', express.static(path.join(__dirname, 'public/pfp_img')));
 
 var users = []
 
@@ -87,6 +91,7 @@ app.use(passport.session())
 app.use(favicon(path.join(__dirname, 'views', 'data', 'favicon.ico')));
 
 
+
 app.get('/', (req, res) => {
       if (req.isAuthenticated()) {
         res.render('index.ejs', {
@@ -135,9 +140,20 @@ app.get('/user', checkAuth, (req, res) => {
     user: req.user,
   })
 });
-app.get('/upload', (req, res) => {
-  const urlString = `http://${getIP()}:${port}/uploads`;
-  res.render('upload.ejs', { urlString })
+app.get('/upload',checkAuth , async (req, res) => {
+  const urlString = `${getDomain()}/uploads`;
+
+  refreshUser();
+  const updatedUser = await getUsrById(req.user.Uid)
+  var splength = 0
+  if(updatedUser[0].spaces != []) {
+    splength = updatedUser[0].spaces.length
+  }
+
+  res.render('upload.ejs', { 
+    urlString : urlString,
+    user: updatedUser[0]
+  })
 });
 app.get('/hub', checkAuth, async (req, res) => {
   const updatedUser = await getUsrById(req.user.Uid)
@@ -200,7 +216,43 @@ app.post('/hub/delspace', checkAuth, async (req, res) => {
   res.redirect('/hub')
 })
 
-app.get('/share', async (req, res) => {
+app.get('/share', async(req, res) => {
+  const link = req.query.link;
+
+  try{
+  
+    await client.connect();
+    console.log('client connected');
+
+    const db = client.db(dbName);
+    const collection = db.collection('files');
+    const files = await collection.find({ url: link }).toArray();
+
+    files.forEach(file => {
+      console.log('Original Name:', file.originalName);
+    });
+
+
+    const filesData = JSON.stringify(files);
+
+    const error = "couldn't  retrieve files :(";
+
+    if(files.length > 0){
+      res.render('download.ejs', { link, files: files });
+    }else{
+      res.render('error_msg.ejs', { error });
+    }
+
+
+  }catch (error) {
+    console.error('Error:', error);
+    res.render('error_msg.ejs', { error });
+  }
+
+ 
+});
+
+app.get('/share/d', async (req, res) => {
   const link = req.query.link;
   console.log('link: ' + link);
 
@@ -261,6 +313,66 @@ app.get('/share', async (req, res) => {
   res.render('download.ejs');
 });
 
+app.post('/download', async (req, res) => {
+  const link = req.body.link;
+  console.log("download:" + link);
+
+  try {
+    await client.connect();
+    console.log('client connected');
+
+    const db = client.db(dbName);
+    const collection = db.collection('files');
+    const files = await collection.find({ url: link }).toArray();
+
+    if (files.length === 1) {
+      console.log('Original Name:', files[0].originalName);
+      console.log('Path:', files[0].path);
+      res.download(files[0].path, files[0].originalName);
+      return;
+    } else if (files.length > 1) {
+      const tmpFileName = './public/temp/files.zip';
+      const output = fs.createWriteStream(tmpFileName);
+      const archive = archiver('zip', {
+        zlib: { level: 1 }
+      });
+
+      output.on('close', () => {
+        console.log(archive.pointer() + ' total bytes');
+        console.log('Zip archive created successfully');
+
+        res.download(tmpFileName, 'files.zip', (err) => {
+          if (err) {
+            console.error('Error sending zip file:', err);
+          }
+
+          fs.unlinkSync(tmpFileName);
+        });
+      });
+
+      archive.pipe(output);
+
+      files.forEach(file => {
+        console.log('Original Name:', file.originalName);
+        console.log('Path:', file.path);
+        archive.file(file.path, { name: file.originalName });
+      });
+
+      archive.finalize();
+      return;
+    }else if (files.length < 1) {
+      const error = "couldn't  retrieve files :(";
+      res.render('error_msg.ejs', { error })
+      return;
+    }
+
+    console.log('No files found with the specified URL');
+  } catch (err) {
+    console.error('Error:', err);
+  }
+
+});
+
 
 app.post('/space', async (req, res) => {
   const tempUser = await getUsrById(req.user.Uid)
@@ -283,6 +395,10 @@ app.post('/space', async (req, res) => {
 app.post('/user/pfp', async (req, res) => {
   for(let i in users) {
     if(req.user.Uid == users[i].Uid) {
+      
+      if(fs.existsSync(users[i].pfp)){
+        fs.unlinkSync(users[i].pfp)
+      }
       users[i].pfp = req.body.newpfp;
     }
   }
@@ -297,6 +413,44 @@ app.post('/user/pfp', async (req, res) => {
   }
   res.redirect('/user')
 })
+
+
+const upStorage = multer.diskStorage({
+  destination: function (req, file, callback) {
+    callback(null, './public/pfp_img')
+  }
+});
+const uplouadPfp = multer({ storage:  upStorage });
+
+app.post('/user/pfp/upload', uplouadPfp.single('image'), async(req, res)=>{
+  console.log("img upload--> post")
+
+  
+  for(let i in users) {
+    if(req.user.Uid == users[i].Uid) {
+      console.log(users[i].pfp);
+
+      if(fs.existsSync(users[i].pfp)){
+        fs.unlinkSync(users[i].pfp)
+      }
+      users[i].pfp = req.file.path;
+    }
+  }
+
+  try{
+    await client.connect();
+    const db = client.db(dbName);
+    const collection = db.collection('users')
+    const updatedResult = await collection.updateOne({Uid: req.user.Uid}, {$set: {pfp: req.file.path}})
+    console.log(updatedResult)
+  } catch (error){
+    console.error(error);
+  }
+  res.redirect('/user')
+
+});
+
+
 app.post('/user/disc', async (req, res) => {
   for(let i in users) {
     if(req.user.Uid == users[i].Uid) {
@@ -318,7 +472,7 @@ app.post('/login', passport.authenticate('local', {
   successRedirect: '/hub',
   failureRedirect: '/login',
   failureFlash: true
-}))
+}));
 app.post('/register', async (req, res) => {
   try {
     await client.connect();
@@ -463,11 +617,10 @@ function makeid(length) {
 
 
 //upload_stuff
-app.use(cors());
 
 const storage = multer.diskStorage({
     destination: function (req, file, callback) {
-        callback(null, __dirname + '/public/uploads');
+        callback(null, './public/uploads');
     },
     // filename: function (req, file, callback) {
     //     callback(null, file.originalname);
@@ -479,7 +632,7 @@ const upload = multer({ storage: storage })
 app.post("/uploads", upload.array("files"),async (req, res) => {
 
   var shareLink = randomString(30, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
-  var urlShareLink =`http://${getIP()}:${port}/share?link=${shareLink}`; //Localhost: req.headers.origin
+  var urlShareLink =`${getDomain()}/share?link=${shareLink}`; //Localhost: req.headers.origin
   await client.connect();
     console.log('client connected');
     const db = client.db(dbName);
@@ -490,8 +643,8 @@ app.post("/uploads", upload.array("files"),async (req, res) => {
     collection.insertOne({
       path: req.files[i].path,
       originalName: req.files[i].originalname,
-      url: shareLink
-
+      url: shareLink,
+      uploadTime: new Date()
     })
     
 }
@@ -499,6 +652,58 @@ app.post("/uploads", upload.array("files"),async (req, res) => {
 res.json({ variable: urlShareLink });
     
 });
+
+function getTime(){
+  const now = new Date();
+  const hours = now.getHours().toString();
+  const minutes = now.getMinutes().toString();
+  const seconds = now.getSeconds().toString();
+
+  const currentTime = `${hours}:${minutes}:${seconds}`;
+  return currentTime;
+}
+
+async function deleteOldFiles() {
+  console.log("refresh --> "+getTime())
+  try {
+    await client.connect();
+    const db = client.db(dbName);
+    const collection = db.collection('files');
+
+    
+    const thirtyMinutesAgo = new Date(Date.now() - 1 * 60* 1000);
+
+    
+    const filesToDelete = await collection.find({
+      uploadTime: { $lt: thirtyMinutesAgo }
+    }).toArray();
+
+    
+    for (const file of filesToDelete) {
+      fs.unlink(file.path, (error) => {
+        if (error) {
+          console.error('Error deleting file:', error);
+        } else {
+          console.log('File deleted:', file.filePath);
+        }
+      });
+    }
+
+   
+    await collection.deleteMany({
+      uploadTime: { $lt: thirtyMinutesAgo }
+    });
+  } catch (error) {
+    console.error('Error deleting old files:', error);
+  }
+};
+
+function del (){
+  console.log("time -->  sec")
+}
+
+setInterval(deleteOldFiles, 60 * 1000);
+
 
 
 function randomString(length, characters) {
@@ -511,7 +716,7 @@ function randomString(length, characters) {
   }
   
   return result;
-}
+};
 function getIP(){
   const networkInterfaces = os.networkInterfaces();
   const localIP = Object.values(networkInterfaces)
@@ -521,6 +726,12 @@ function getIP(){
  return localIP; 
 };
 
+function getDomain(){
+  const domain =`http://${getIP()}:${port}`;
+  // const domain = 'https://aether.serveo.net';
+  return domain;
+}
+
 module.exports = {
   randomString,
 };
@@ -529,6 +740,6 @@ module.exports = {
 app.listen(port,() => {
   connectDB();
   console.log('Running at Port', port);
-  console.log(`server-adress: http//${getIP()}:${port}/`);
+  console.log(`server-adress: ${getDomain()}/`);
   
 });

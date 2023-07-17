@@ -112,5 +112,50 @@
         }
 
 
+        
+        document.querySelector('.img').addEventListener('submit', (e) => {
+            
+            e.preventDefault();
+            
+            const imgFile = document.getElementById('pfpImg').files[0];
+            const formData = new FormData();
+            
+            console.log(imgFile)
+
+            const newpfp = document.getElementById('newpfp').value;
+
+            if(newpfp && newpfp.trim() !== ''){
+                console.log("new pfp string ready to fetch")
+
+                fetch('/user/pfp', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ newpfp: newpfp})
+                }) 
+                .then(res => res.json())
+                .then(data => {
+                })
+                return;
+            }else if(imgFile != null){
+                console.log("img file ready to fetch")
+
+                
+                formData.append('image', imgFile);
+
+                fetch('/user/pfp/upload', {
+                    method: 'POST',
+                    body: formData,
+                }) 
+                .then(res => res.json())
+                .then(data => {
+              })
+                return;
+
+            }
+
+            
+        });
+
+
     </script>
 </body>
