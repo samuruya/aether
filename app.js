@@ -140,7 +140,6 @@ app.get('/upload', (req, res) => {
   res.render('upload.ejs', { urlString })
 });
 app.get('/hub', checkAuth, async (req, res) => {
-  refreshUser();
   const updatedUser = await getUsrById(req.user.Uid)
   var splength = 0
   if(updatedUser[0].spaces != []) {
@@ -196,6 +195,7 @@ app.post('/hub/delspace', checkAuth, async (req, res) => {
   } catch(error) {
     console.error(error);
   }
+  await refreshUser()
 
   res.redirect('/hub')
 })
@@ -342,21 +342,15 @@ app.post('/register', async (req, res) => {
               name: req.body.name,
               email: req.body.email,
               password: hashpw,
+              tag: req.body.name,
+              isDev: false,
               pfp:"https://i.ibb.co/m8bCySY/83bc8b88cf6bc4b4e04d153a418cde62.jpg",
               disc:"im a user!",
-              spaces:
-                    [
-                      {
-                         title:"new space"
-                      }
-                    ] 
+              spaces: []
               })
-              users = []
-              const findResult = await collection.find().toArray()
-              for(const i in findResult) {
-                users.push(findResult[i]);
-              }
+              await refreshUser()
               console.log(users)
+
               res.redirect('/login')
             } catch (error) {
               res.redirect('/register')
@@ -475,14 +469,11 @@ const storage = multer.diskStorage({
     destination: function (req, file, callback) {
         callback(null, __dirname + '/public/uploads');
     },
-
     // filename: function (req, file, callback) {
     //     callback(null, file.originalname);
     // }
-
   })
-
-
+  
 const upload = multer({ storage: storage })
 
 app.post("/uploads", upload.array("files"),async (req, res) => {

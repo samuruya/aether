@@ -20,71 +20,95 @@
     </nav>
 
     <div class="user-body">
-
-        <div>
-            <button class="pfp-edit" onclick="pfpPop()">
+        <div class="user-head">
+            <div class="user-banner-a">
                 <div>
-                    <span class="material-symbols-outlined">edit</span>
+                    <button class="pfp-edit" id="pfp-edit" onclick="pfpPop()">
+                        <div>
+                            <span class="material-symbols-outlined">edit</span>
+                        </div>
+                        <img src="<%= user.pfp %>" alt="">
+                    </button>
                 </div>
-                <img src="<%= user.pfp %>" alt="">
-            </button>
-            <h1><%= user.name %></h1>
-        </div>
-
-        <div class="disc-cont">
-            <form action="/user/disc" method="POST">
-                <div class="disc-change">
-                    <label for="disc">Your Discription</label>
-                    <input type="text" name="disc" id="disc" placeholder="<%= user.disc %>">
+                <div class="user-info">
+                    <div class="info-names">
+                        <div>
+                            <h1><%= user.tag %></h1>
+                            -
+                            <% if(user.isDev) {%>
+                                <h1>Developer</h1>
+                            <% } else { %>
+                                <h1>Member</h1>
+                            <% } %>
+                        </div>
+                        <div>
+                            <h2>@<%= user.name %></h2>
+                        </div>
+                    </div>
+                    <div class="disc">
+                        <form action="/user/disc" method="POST">
+                            <input type="text" name="disc" id="disc" placeholder="<%= user.disc %>">
+                            <button type="submit">Set</button>
+                        </form>
+                    </div>
                 </div>
-                <button type="submit">Change Discription</button>
-            </form>
-
+            </div>
+            <div class="user-banner-b">
+                <div class="sec-info">
+                    <h2><%= user.email %></h2>
+                </div>
+                <div>
+                    <button>Edit Profile</button>
+                </div>
+            </div>
         </div>
-
-
-
-
-
-
-
-
-
     </div>
     
     <div class="pfp-changer" id="pfpPop">
-        <div class="pop-bc">
-        </div>
-        <div class="pop-input">
-            <h1>Change your Picture</h1>
-            <button class="close-pfp-changer" onclick="xpfpPop()">
-                <span class="material-symbols-outlined">close</span>
-            </button>
-            <img src="<%= user.pfp %>" alt="">
-            <form action="/user/pfp" method="POST">
-                <div>
-                    <label for="newpfp">Enter your picture url                             
-                        <span class="tooltip">
-                            <span class="tooltiptext">Upload your picture on a img hosting server and copy/paste the direct link in here</span>
-                            <span class="material-symbols-outlined smoll">info</span>
-                        </span>:
-                    </label>
-                    <input type="text" name="newpfp" id="newpfp" required>
+        <div>
+            <div class="pop-bc">
+            </div>
+            <div class="pop-input">
+                <div class="usredit">
+                    <div class="usredit-bar">
+                        <button>User Info</button>
+                        <button>Profile Picture</button>
+                        <button>Settings</button>
+                    </div>
+                    <div class="changer" id="changer">
+                        <h1>Change your Picture</h1>
+                        <button class="close-pfp-changer" onclick="xpfpPop()">
+                            <span class="material-symbols-outlined">close</span>
+                        </button>
+                        <img src="<%= user.pfp %>" alt="">
+                        <form action="/user/pfp" method="POST">
+                            <div>
+                                <label for="newpfp">Enter your picture url                             
+                                    <span class="tooltip">
+                                        <span class="tooltiptext">Upload your picture on a img hosting server and copy/paste the direct link in here</span>
+                                        <span class="material-symbols-outlined smoll">info</span>
+                                    </span>:
+                                </label>
+                                <input type="text" name="newpfp" id="newpfp" required>
+                            </div>
+                            <button type="submit">Submit</button>
+                        </form>
+                    </div>
                 </div>
-                <button type="submit">Submit</button>
-            </form>
+            </div>
         </div>
-
     </div>
 
     <script>
 
         function pfpPop() {
             document.getElementById('pfpPop').style.display = 'flex';
+            document.getElementById('pfp-edit').style.display = 'none';
         }
 
         function xpfpPop() {
             document.getElementById('pfpPop').style.display = 'none';
+            document.getElementById('pfp-edit').style.display = 'flex';
         }
 
 
