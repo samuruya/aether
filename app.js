@@ -425,18 +425,18 @@ const uplouadPfp = multer({ storage:  upStorage });
 app.post('/user/pfp/upload', uplouadPfp.single('image'), async(req, res)=>{
   console.log("img upload--> post")
 
-  
   for(let i in users) {
     if(req.user.Uid == users[i].Uid) {
       console.log(users[i].pfp);
-
       if(fs.existsSync(users[i].pfp)){
         fs.unlinkSync(users[i].pfp)
       }
       users[i].pfp = req.file.path;
+      console.log(users[i].pfp);
     }
   }
 
+  console.log(users[0]);
   try{
     await client.connect();
     const db = client.db(dbName);
@@ -446,10 +446,18 @@ app.post('/user/pfp/upload', uplouadPfp.single('image'), async(req, res)=>{
   } catch (error){
     console.error(error);
   }
-  res.redirect('/user')
-
+  res.end();
 });
 
+app.post('/user/pfp/altUpload', uplouadPfp.single('image'), async(req, res) => {
+  console.log('using alt upload --> post');
+
+  const tempUser = await getUsrById(req.user.Uid)
+
+  tempo = users.findIndex((obj => obj.Uid == req.user.Uid))
+  users[tempo].pfp = req.file.path
+
+})
 
 app.post('/user/disc', async (req, res) => {
   for(let i in users) {
