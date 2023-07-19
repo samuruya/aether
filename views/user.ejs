@@ -34,12 +34,6 @@
                     <div class="info-names">
                         <div>
                             <h1><%= user.tag %></h1>
-                            -
-                            <% if(user.isDev) {%>
-                                <h1>Developer</h1>
-                            <% } else { %>
-                                <h1>Member</h1>
-                            <% } %>
                         </div>
                         <div>
                             <h2>@<%= user.name %></h2>
@@ -56,9 +50,14 @@
             <div class="user-banner-b">
                 <div class="sec-info">
                     <h2><%= user.email %></h2>
+                    <% if(user.isDev) {%>
+                        <h1>Developer</h1>
+                    <% } else { %>
+                        <h1>Member</h1>
+                    <% } %>
                 </div>
                 <div>
-                    <button>Edit Profile</button>
+                    <button onclick="Pop()">Edit Profile</button>
                 </div>
             </div>
         </div>
@@ -68,18 +67,19 @@
         <div>
             <div class="pop-bc">
             </div>
+            
             <div class="pop-input">
                 <div class="usredit">
                     <div class="usredit-bar">
-                        <button>User Info</button>
-                        <button>Profile Picture</button>
-                        <button>Settings</button>
+                        <button onclick="showSnip(0)">User Info</button>
+                        <button onclick="showSnip(1)">Picture</button>
+                        <button onclick="showSnip(2)">Membership</button>
+                        <button onclick="showSnip(3)">Settings</button>
+                        <button onclick="showSnip(4)">Account</button>
+                        <p id="editOn" style=" display: none;">0</p>
                     </div>
-                    <div class="changer" id="changer">
+                    <div class="usredit-right changer" id="changer">
                         <h1>Change your Picture</h1>
-                        <button class="close-pfp-changer" onclick="xpfpPop()">
-                            <span class="material-symbols-outlined">close</span>
-                        </button>
                         <img src="<%= user.pfp %>" alt="">
                         <form class="img">
                             <div>
@@ -95,6 +95,29 @@
                             <button type="submit">Submit</button>
                         </form>
                     </div>
+                    <div class="usredit-right edit-info" id="editInfo">
+                        <h1>Edit your Account Info</h1>
+                    </div>
+                    <div class="usredit-right edit-memb" id="editMemb">
+                            <h1>change your member Status</h1>
+                            <% if(user.isDev) {%>
+                                <h1>Status: Developer</h1>
+                            <% } else { %>
+                                <h1>Status: Member</h1>
+                            <% } %>
+                    </div>
+                    <div class="usredit-right edit-sett" id="editSett">
+                        <h1>Your Settings</h1>
+                    </div>
+                    <div class="usredit-right edit-acc" id="editAcc">
+                        <h1>Your Account</h1>
+                    </div>
+
+
+
+                    <button class="close-pfp-changer" onclick="xPop()">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -102,22 +125,40 @@
 
     <script>
 
+
+        function Pop() {
+            document.getElementById('pfpPop').style.display = 'flex';
+            document.getElementById('pfp-edit').style.display = 'none';
+            showSnip(0);
+        }
+
         function pfpPop() {
             document.getElementById('pfpPop').style.display = 'flex';
             document.getElementById('pfp-edit').style.display = 'none';
+            showSnip(1);
         }
 
-        function xpfpPop() {
+        function xPop() {
             document.getElementById('pfpPop').style.display = 'none';
             document.getElementById('pfp-edit').style.display = 'flex';
         }
 
+        function showSnip(vel) {
+            const pages = [ "editInfo", "changer", "editMemb", "editSett", "editAcc"]
+            const pageRn = document.getElementById('editOn').innerHTML
 
+            console.log(pages[pageRn]);
+            document.getElementById(pages[pageRn]).style.display = 'none'
+            document.getElementById(pages[vel]).style.display = 'flex'
+            document.getElementById('editOn').innerHTML = vel
+        }
         
-        document.querySelector('.img').addEventListener('submit', (e) => {
+        document.querySelector('.img').addEventListener('submit', async (e) => {
             
             e.preventDefault();
-            
+
+
+            console.log(document.getElementById('pfpImg').files[0]);
             const imgFile = document.getElementById('pfpImg').files[0];
             const formData = new FormData();
             
@@ -127,7 +168,6 @@
 
             if(newpfp && newpfp.trim() !== ''){
                 console.log("new pfp string ready to fetch")
-
                 fetch('/user/pfp', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
@@ -136,27 +176,36 @@
                 .then(res => res.json())
                 .then(data => {
                 })
-                return;
+
+
             }else if(imgFile != null){
-                console.log("img file ready to fetch")
-
-                
-                formData.append('image', imgFile);
-
-                fetch('/user/pfp/upload', {
-                    method: 'POST',
-                    body: formData,
-                }) 
-                .then(res => res.json())
-                .then(data => {
-              })
-                return;
+            console.log("img file ready to fetch")    
+            formData.append('image', imgFile);
+            await fastFatch(formData)
 
             }
 
-            
+            await delay(50)
+            xPop()
+            await location.reload()
         });
 
+        function fastFatch(data) {
+            fetch('/user/pfp/upload', {
+                method: 'POST',
+                body: data,
+            }) 
+                .then(res => res.json())
+                .then(data => {
+            })
+        }
+
+        function delay(milliseconds){
+            return new Promise(resolve => {
+            setTimeout(resolve, milliseconds);
+        });
+}
+        
 
     </script>
 </body>

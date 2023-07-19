@@ -42,6 +42,7 @@ a {
     --acc-2: #1c0df8;
     --ant: #050236;
     --pur: #9088fb;
+    --rpur: 144, 136, 251;
     --alt: #aeaead;
     --gre: #82fc86;
     --yel: #d7e236;
@@ -727,6 +728,8 @@ body {
     border-radius: 5px;
 }
 
+.user-banner-b div button:hover
+
 .user-info {
     display: flex;
     flex-direction: column;
@@ -762,7 +765,8 @@ body {
     background-color: var(--ant);
     color: var(--pur);
     border-radius: 10px;
-    height: 80%;
+    min-height: fit-content;
+    height: 50%;
 }
 
 
@@ -835,7 +839,7 @@ body {
 
 
 .pfp-changer {
-    display: flex;
+    display: none;
     width: 100%;
     height: 100%;
     position: absolute;
@@ -889,21 +893,24 @@ body {
     padding: 10px;
     border: none;
     border-radius: 5px;
-    background-color: var(--acc);
+    background-color: var(--acc-2);
     font-family: 'Josefin Sans', sans-serif;
     text-transform: uppercase;
     color: var(--sec);
     transition: ease-out 50ms;
 }
 
+.pfp-changer form button:hover {
+    transform: scale(1.05);
+    transition: ease-in 50ms;
+    background-color: var(--pur);
+}
+
 .del-btn form button{
     background-color: var(--main);
 }
 
-.pfp-changer form button:hover {
-    transform: scale(1.05);
-    transition: ease-in 50ms;
-}
+
 
 .pop-bc {
     position: absolute;
@@ -932,7 +939,7 @@ body {
     margin-top: 3%;
     width: 26%;
     height: 10%;
-    background-color: var(--alt);
+    background-color: var(--ant);
     border-radius: 20px;
 }
 
@@ -975,26 +982,49 @@ body {
     justify-content: center;
     align-items: center;
     height: 100%;
-    width: 30%;
+    min-width: fit-content;
+    width: 15%;
     justify-content: space-around;
+    background-color: rgba(var(--rpur), 0.3);
+    border-radius: 15px 0 0 15px;
+    padding: 0 20px;
 }
 
 .usredit-bar button {
     width: 90%;
     margin: 5% 0;
     height: 10%;
+    background: none;
+    border: none;
+    color: var(--pur);
+    font-size: 2em;
+    text-align: right;
 }
 
-.changer {
+.usredit-bar button:hover {
+    color: var(--sec);
+}
+
+
+
+.usredit-right {
+    display: none;
     width: 70%;
-    display: flex;
     flex-direction: column;
-    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+
+.changer {
+    justify-content: space-around;
     align-items: center;
 }
 
 
-
+.edit-info {
+    display: none;
+}
 
 
 .pop-smoll-input {
@@ -1002,17 +1032,17 @@ body {
     opacity: 2;
     width: 60%;
     height: 10%;
-
     border-radius: 50px;
     position:absolute;
     top:50%;
     left:50%;
     transform:translate(-50%, -50%);
-    display: none;
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 20px;
+    color: var(--pur);
 }
 
 .pop-smoll-input form {
@@ -1021,6 +1051,7 @@ body {
 
 .pop-smoll-input button {
     width: 100%;
+    background-color: var(--acc-2);
 }
 
 
