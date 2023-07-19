@@ -1,0 +1,28 @@
+<form action="/hss" method="POST">
+    <input type="text" name="link">
+    <input type="file" name="file" multiple />
+    <button type="submit">Submit</button>
+
+</form>
+
+
+<button onclick="push()">Push</button>
+
+<script>
+
+function push(){
+        const link = 'Crossbow'; // The string you want to send
+
+        const formData = new FormData();
+        formData.append('link', link);
+
+        fetch('/hss', {
+        method: 'POST',
+        body: formData,
+        })
+        .then(res => res.json())
+        .then(data => console.log(data))
+        .catch(err => console.log(err))
+}
+
+</script>

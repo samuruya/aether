@@ -1441,7 +1441,7 @@ background-color: #fff;
     max-height: 350px;
     max-width: 350px;
     display: flex;
-    top: 0;
+    margin-top: 10px;
     justify-content: center;
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
     border-radius: 12px;
@@ -1449,7 +1449,7 @@ background-color: #fff;
 .qr_link{
     position: fixed;
     text-align: center;
-    margin-top: 400px;
+    margin-top: 410px;
     cursor: pointer;
     background-color: #b8c8cc;
     padding: 3px;

@@ -81,7 +81,7 @@
                             <span class="material-symbols-outlined">close</span>
                         </button>
                         <img src="<%= user.pfp %>" alt="">
-                        <form action="/user/pfp" method="POST">
+                        <form class="img">
                             <div>
                                 <label for="newpfp">Enter your picture url                             
                                     <span class="tooltip">
@@ -89,7 +89,8 @@
                                         <span class="material-symbols-outlined smoll">info</span>
                                     </span>:
                                 </label>
-                                <input type="text" name="newpfp" id="newpfp" required>
+                                <input type="text" name="newpfp" id="newpfp">
+                                <input type="file" id="pfpImg" name="image" accept="image/*">
                             </div>
                             <button type="submit">Submit</button>
                         </form>

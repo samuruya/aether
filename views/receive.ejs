@@ -1,0 +1,222 @@
+
+
+
+<head>
+
+  <title>AetherHub</title>
+  <meta name="viewport" content="width=device-width" />
+  <link rel="stylesheet" type="text/css" href="looks.css">
+  <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
+  <script src="/socket/socket.io.js"></script>
+  <link rel="icon" href="favicon.ico?v=1.1">
+</head>
+
+
+
+<body class="upload_page">
+  <nav class="read-nav">
+    <a href="/" class="read-nav-logo">                    
+            <img src="https://i.ibb.co/4ZcLKjY/borderless.png" alt="">
+    </a>
+
+    <div class="read-nav-nav" id="nav">
+  </div>
+
+</nav>
+    <div class="bc">
+
+        <div id='stars2'></div>
+        <div id='stars3'></div>
+    </div>
+
+      <div id="outputDiv">
+            
+      </div>
+
+        <div class="qr_window">
+          <button type="back" id="qr_back">&ltBack</button>
+        <div class="qr_box" >
+          
+        </div>
+        <lable class="qr_link" onclick="copyToClipboard(event)">link</lable>
+      </div>
+
+
+      <div class="copyLinkMessage" id="copyMessage">Link copied to clipboard</div>
+
+
+      
+
+      <script>
+
+        const socket = io();
+
+        
+        console.log("***")
+        const urlString = '<%= urlLink %>';
+        const linkID = '<%= link %>';
+        setShareLink(urlString);
+        console.log(urlString);
+        console.log(linkID);
+        
+        
+        function setShareLink(sLink){
+          shareLink = sLink;
+          
+          document.querySelector('.qr_link').textContent = shareLink;
+          
+          // qrcode.toFile(qrCodeFilePath, shareLink, (error) => {
+          //   if (error) {
+          //     console.error('Error generating QR code:', error);
+          //     return;
+          //  }
+          // });
+          generateQRCode(shareLink);
+          
+        }
+
+        function generateQRCode(link) {
+          const qrCodeContainer = document.querySelector('.qr_box');
+          console.log(qrCodeContainer)
+          qrCodeContainer.innerHTML = ''; 
+
+          const qr = new QRious({
+            element: qrCodeContainer,
+            value: shareLink,
+            size: 350
+          });
+ 
+          const qrCodeImage = document.createElement('img');
+          qrCodeImage.src = qr.toDataURL();
+          qrCodeImage.style.borderRadius = '10px';
+          qrCodeContainer.appendChild(qrCodeImage);
+        }
+
+        function copyToClipboard(event) {
+          const linkText = event.target.innerText;
+
+          navigator.clipboard.writeText(linkText)
+            .then(() => {
+              console.log('Text copied to clipboard:', linkText);
+              
+            })
+            .catch((error) => {
+              console.error('Unable to copy text to clipboard:', error);
+              
+            });
+
+            const messageElement = document.querySelector('.copyLinkMessage');
+            messageElement.textContent = 'Link copied to clipboard';
+            
+            messageElement.style.opacity = 0.8;
+
+            setTimeout(() => {
+              
+              messageElement.style.opacity = 0;
+            }, 1500);
+        }
+
+        function getLength(formData){
+          var count = 0;
+          for (const value of formData.values()) {
+            count++;
+          }
+          return count;
+        }
+
+
+        // show files:
+
+        var outputDiv = document.getElementById('outputDiv');
+
+          
+
+          function refresh(){
+
+            outputDiv.innerHTML = '';
+            const box = document.querySelector(".box");
+            box.style.borderRadius = '5px';
+            
+            if(allFiles.length > 0){
+              console.log("bigger than 0")
+              box.style.borderRadius = '5px 5px 0px 0px';
+
+              createDiv();
+              allFiles.forEach((file) => {
+                console.log('File:', file);
+                console.log('Original Name:', file.name);
+                createDiv(file.name);
+              });
+                div = createDiv();
+                div.style.borderRadius = '0px 0px 5px 5px';
+
+            }
+            
+          }
+                
+
+
+          function createDiv(name) {
+
+              const div = document.createElement('div');
+              div.classList.add('showFile');
+              // div.textContent = name;
+              const content = document.createElement('span');
+              content.textContent = name;
+              div.appendChild(content);
+              outputDiv.appendChild(div);
+
+              if(name != null){
+                div.classList.add('hoverable');
+                const deleteButton = document.createElement('button');
+                deleteButton.innerHTML = '&#x2715';
+                
+                deleteButton.addEventListener('click', function() {
+
+                  const fileIndex = allFiles.findIndex((file) => file.name === name);
+                  if (fileIndex !== -1) {
+                    allFiles.splice(fileIndex, 1);
+                  }
+
+                  refresh();
+                  })
+                div.appendChild(deleteButton);
+              }
+  
+              return div;
+
+          }
+
+          //-----------------socket---------//
+          
+          socket.emit('sendLink', linkID);
+
+
+
+          socket.on('stringTransfer', data => {
+
+            console.log('Received String:', data)
+            alert(data);
+
+          });
+
+
+          socket.on('downloadTransfer', data => {
+
+            console.log('downloadTransfer:', data);
+            fetch('/download', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ link: data }),
+            })
+
+          });
+
+
+          
+        
+        </script>
+
+</body>
