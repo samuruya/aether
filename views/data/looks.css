@@ -1589,6 +1589,111 @@ background-color: #fff;
     align-items: center;
   }
   
+  /* recive.ejs */
+
+  .rec_popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    z-index: 1;
+    text-align: center;
+	margin: 0 auto;
+    display: none;
+}
+
+  .rec_msg{
+    display: none;
+    margin: 0 auto;
+    position: relative;
+    width: 100%;
+    /* height: 100%; */
+	max-width: 680px;
+    max-height: 500px;
+    font-size: 20px;
+    background-color: #c8dadf;
+    position: relative;
+    padding: 20px;
+    align-items: center;
+    border-radius: 5px 5px 5px 5px;
+    margin-top: 20px;
+}
+.rec_down{
+    /* display: none; */
+    margin: 0 auto;
+    position: relative;
+    width: 100%;
+    height: 100%;
+	max-width: 680px;
+    max-height: 100px;
+    margin-top: 20px;   
+    font-size: 20px;
+    background-color: #c8dadf;
+    position: relative;
+    border-radius: 5px 5px 0 0;
+    text-align: center;
+}
+
+
+
+/* sendData.ejs */
+.send_msg {
+    max-height: 500px;
+    font-size: 20px;
+    background-color: #c8dadf;
+    padding: 20px;
+    align-items: center;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column; /* To stack the label and input vertically */
+    justify-content: center; /* To center content vertically */
+  }
+  
+  .send_msg label {
+    margin-bottom: 10px;
+    font-size: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: lightslategray;
+  }
+
+#inputTransfer{
+    width: 50%;
+    height: 40px;
+    align-items: center;
+    border: none;
+    border-color: #39bfd3;
+    border-radius: 5px;
+    box-shadow: 0 0 5px 0 rgba(0,0,0,0.2);
+    background-color: #a0aeb2;
+    color: #333333;
+    padding: 20px 32px 20px;
+    box-shadow: 0 0 0 2px transparent; /* Transparent outline to start */
+    transition: box-shadow 0.3s ease;
+    
+
+}
+#inputTransfer:focus{
+    outline: none;
+    /* box-shadow: 0 0 0 2px transparent, 0 0 0 4px #B294FF; */
+    animation: animateBoxShadow 10s infinite alternate;
+}
+@keyframes animateBoxShadow {
+    from { box-shadow: 0 0 0 3px rgb(135, 206, 235); }
+        15% { box-shadow: 0 0 0 3px rgb(135, 206, 235); }
+        31% { box-shadow: 0 0 0 3px rgb(64, 224, 208); }
+        46% { box-shadow: 0 0 0 3px rgb(152, 251, 152); }
+        61% { box-shadow: 0 0 0 3px rgb(64, 224, 208); }
+        76% { box-shadow: 0 0 0 3px rgb(135, 206, 235); }
+        92% { box-shadow: 0 0 0 3px rgb(64, 224, 208); }
+    to { box-shadow: 0 0 0 3px rgb(152, 251, 152); }
+  }
+  
+  
+  
   
 
 

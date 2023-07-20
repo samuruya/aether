@@ -694,6 +694,7 @@ app.post('/transfer', upload.array("files"), async(req, res) => {
   const collection = db.collection('files')
 
 for(let i =0; i < req.files.length; i++) {
+  // db.fileUp(req.files[i].path, req.files[i].originalname, shareLink);
   collection.insertOne({
     path: req.files[i].path,
     originalName: req.files[i].originalname,
@@ -709,7 +710,7 @@ for(let i =0; i < req.files.length; i++) {
         activeClients[link].emit('stringTransfer', msg);
       }
       if(files){
-        activeClients[link].emit('downloadTransfer', link);
+        activeClients[link].emit('downloadTransfer', { link, files });
       }
 
   }else{
@@ -784,7 +785,7 @@ async function deleteOldFiles() {
     const collection = db.collection('files');
 
     
-    const thirtyMinutesAgo = new Date(Date.now() - 1 * 60* 1000);
+    const thirtyMinutesAgo = new Date(Date.now() - 10 * 60* 1000);
 
     
     const filesToDelete = await collection.find({
