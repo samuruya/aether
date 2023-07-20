@@ -55,7 +55,8 @@
                   createDiv(file.originalName);
                 });
 
-                createDiv();
+                let div = createDiv();
+                div.style.borderRadius = '0px 0px 5px 5px';
                 
                 
 
@@ -66,7 +67,7 @@
               div.classList.add('showFile-down');
               div.textContent = text;
               outputDiv.appendChild(div);
-
+            return div;
           }
 
         </script>

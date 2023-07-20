@@ -1534,6 +1534,7 @@ background-color: #fff;
     align-items: center;
     justify-content: center;
     display: flex;
+    border-radius: 5px 5px 0 0;
 }
 .down_box_button {
     border-radius: 4px;
@@ -1610,7 +1611,7 @@ background-color: #fff;
     position: relative;
     width: 100%;
     /* height: 100%; */
-	max-width: 680px;
+	max-width: 640px;
     max-height: 500px;
     font-size: 20px;
     background-color: #c8dadf;
@@ -1621,7 +1622,7 @@ background-color: #fff;
     margin-top: 20px;
 }
 .rec_down{
-    /* display: none; */
+    display: none;
     margin: 0 auto;
     position: relative;
     width: 100%;
@@ -1714,6 +1715,7 @@ background-color: #fff;
     align-items: center;
     justify-content: center;
     display: flex;
+    border-radius: 5px;
 }
 .msg_img{
     background-image: url("page_error.png");

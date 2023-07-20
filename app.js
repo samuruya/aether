@@ -664,17 +664,16 @@ res.json({ variable: urlShareLink });
 });
 
 
-//-------------------------------------------------
-const activeClients = {};
-const upload3 = multer({ dest: 'public/temp/' });
 
-app.get('/transfer', (req, res) => {
+const activeClients = {};
+
+app.get('/transfer', checkIOclients, (req, res) => {
   const link = req.query.link;
 
   res.render('sendData.ejs', { link })
 });
 
-app.get('/request', (req, res) => {
+app.get('/request',  (req, res) => {
   const link = randomString(30, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
   const urlLink =`${getDomain()}/transfer?link=${link}`;
 
@@ -688,39 +687,47 @@ app.post('/transfer', upload.array("files"), async(req, res) => {
   const msg = req.body.msg;
   const files = req.files;
   
-  await client.connect();
-  console.log('client connected');
-  const db = client.db(dbName);
-  const collection = db.collection('files')
+  if(activeClients.hasOwnProperty(link) && activeClients[link]){
+      await client.connect();
+      console.log('client connected');
+      const db = client.db(dbName);
+      const collection = db.collection('files')
 
-for(let i =0; i < req.files.length; i++) {
-  // db.fileUp(req.files[i].path, req.files[i].originalname, shareLink);
-  collection.insertOne({
-    path: req.files[i].path,
-    originalName: req.files[i].originalname,
-    url: link,
-    uploadTime: new Date()
-  })
-  
-}
+      for(let i =0; i < req.files.length; i++) {
+        collection.insertOne({
+          path: req.files[i].path,
+          originalName: req.files[i].originalname,
+          url: link,
+          uploadTime: new Date()
+        })
+    }
 
-  
-  if (activeClients.hasOwnProperty(link) && activeClients[link]) {
+
       if(msg){
-        activeClients[link].emit('stringTransfer', msg);
-      }
+        activeClients[link].emit('stringTransfer', msg);}
       if(files){
         activeClients[link].emit('downloadTransfer', { link, files });
       }
+      activeClients[link].disconnect(true);
+  
 
+      console.log('Link:', link);
+      console.log('Message:', msg);
+      console.log('Files:', files);
   }else{
 
-  }
+    for (const file of files) {
+      fs.unlink(file.path, (error) => {
+        if (error) {
+          console.error('Error deleting file:', error);
+        } else {
+          console.log('File deleted:', file.originalname);
+        }
+      });
+    }
 
-  console.log('Link:', link);
-  console.log('Message:', msg);
-  console.log('Files:', files);
-  // console.log('FilesArray:', filesArray);
+    res.render('error_msg.ejs', { error: 'Client is not connected ):' })
+  }
 
 });
 
@@ -746,26 +753,23 @@ io.on('connection', (socket) => {
 
 });
 
-function decodeFilesFromBase64(encodedFiles) {
-  return new Promise((resolve, reject) => {
-    try {
-      const decodedFiles = [];
-
-      for (let i = 0; i < encodedFiles.length; i++) {
-        const decodedData = Buffer.from(encodedFiles[i], 'base64');
-        decodedFiles.push(decodedData);
-      }
-
-      resolve(decodedFiles);
-    } catch (error) {
-      reject(error);
-    }
-  });
+function checkIOclients(req, res, next){
+  let link = req.query.link;
+  if(link === undefined || link === null){
+    link = req.body.link;
+  }
+  console.log(link)
+  if (activeClients.hasOwnProperty(link) && activeClients[link]) {
+    next();
+  } else {
+    res.render('error_msg.ejs', { error: 'Client is not connected ):' })
+  }
 }
 
 
 
-//--------------------------------------------------
+
+
 
 function getTime(){
   const now = new Date();
@@ -785,7 +789,7 @@ async function deleteOldFiles() {
     const collection = db.collection('files');
 
     
-    const thirtyMinutesAgo = new Date(Date.now() - 10 * 60* 1000);
+    const thirtyMinutesAgo = new Date(Date.now() - 5 * 60* 1000);
 
     
     const filesToDelete = await collection.find({
@@ -798,7 +802,7 @@ async function deleteOldFiles() {
         if (error) {
           console.error('Error deleting file:', error);
         } else {
-          console.log('File deleted:', file.filePath);
+          console.log('File deleted:', file.originalname);
         }
       });
     }

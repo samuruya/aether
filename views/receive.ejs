@@ -31,7 +31,7 @@
 
 
         <div class="qr_window" style="display: flex;">
-          <button type="back" id="qr_back">&ltBack</button>
+          <!-- <button type="back" id="qr_back">&ltBack</button> -->
         <div class="qr_box" >
           
         </div>
@@ -52,10 +52,9 @@
             <input type="hidden" name="link" id="postToLink" value="null">
             <button type="submit" class="down_box_button"><span>Download</span></button>
           </form>
-        <div id="outputDiv">   
-        </div>
       </div>
-
+      <div id="outputDiv">   
+        </div>
 
       
 
@@ -135,28 +134,16 @@
         var outputDiv = document.getElementById('outputDiv');
 
           
-
-          function refresh(){
-
-            outputDiv.innerHTML = '';
-            
-            if(allFiles.length > 0){
-              console.log("bigger than 0")
-
-              createDiv();
-              allFiles.forEach((file) => {
-                console.log('File:', file);
-                console.log('Original Name:', file.name);
-                createDiv(file.name);
-              });
-                div = createDiv();
-                div.style.borderRadius = '0px 0px 5px 5px';
-
-            }
-            
+          function showFiles(files){
+            createDiv();
+            files.forEach((file) => {
+              console.log('File:', file);
+              console.log('Original Name:', file.originalname);
+              createDiv(file.originalname);
+            });
+              div = createDiv();
+              div.style.borderRadius = '0px 0px 5px 5px';
           }
-                
-
 
           function createDiv(name) {
 
@@ -194,9 +181,8 @@
             linkOpen = data;
             console.log('Received String:', data)
             document.getElementById('rec_msg_text').innerHTML = data;
-            document.querySelector('.rec_msg').style.display = 'flex';
+            document.querySelector('.rec_msg').style.display = 'block';
             document.querySelector('.qr_window').style.display = 'none';
-
           });
 
 
@@ -204,12 +190,11 @@
 
             downloadLink = link;
             console.log('***Making post to:', link);
-            document.querySelector('.rec_down').style.display = 'flex';
+            console.log('FILES:', files)
+            document.querySelector('.rec_down').style.display = 'block';
             document.querySelector('.qr_window').style.display = 'none';
             document.getElementById('postToLink').value = link;
-            allFiles = files;
-            refresh();
-            
+            showFiles(files);
           });
 
 
