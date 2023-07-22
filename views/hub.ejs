@@ -1,3 +1,7 @@
+<html>
+    
+
+
 <title>Aether/Hub</title>
 <meta name="viewport" content="width=device-width" />
 <link rel="stylesheet" type="text/css" href="looks.css">
@@ -6,39 +10,88 @@
 <link rel="icon" href="favicon.ico?v=1.1">
 
 <body>
-    <nav class="read-nav">
-        <a href="/" class="read-nav-logo">                    
-            <img src="https://i.ibb.co/4ZcLKjY/borderless.png" alt="">
-        </a>
-
-        <div class="read-nav-nav" id="nav">
-            <a href="/upload">Upload</a>
-            <a href="/share">Share</a>
-        </div>
-
-        <a href="/user" class="read-nav-btn usr">
-            <button><%= user.name %> <img src="<%= user.pfp %>" alt=""></button>
-        </a>
-    </nav>
-
-
     
-    <div class="space-bar">
-        <h1><%= user.name %>'s spaces</h1>
-        <div class="list-wrapper">
-            <div class="user-space-list">
-                <% if(spaces.length != null) { %>
-                    <% for (let i = 0; i < spaces.length; i++) { %>
-                        <form action="/space" method="POST" name="space_name">
-                        <input type = "hidden" name = "spaceid" value = "<%= spaces[i].Sid %>" />
-                        <input type="submit" value="<%= spaces[i].title %>" name="openSpace">
-                        </form>
-                    <% } %>
-                <% } %>
+
+    <div class="hub-body" id="hub-body">
+        <div class="hub-bar">
+            <div>
+                <a href="/user" id="abc">
+                    <span class="material-symbols-outlined">account_circle</span>
+                    <p class="hide">@<%= user.name %></p>
+                </a>
+                <button>
+                    <span class="material-symbols-outlined">supervised_user_circle</span>
+                    <p class="hide">Friends</p>
+                </button>
+                <button onclick="openSpaceList()">
+                    <span class="material-symbols-outlined">dynamic_feed</span>
+                    <p class="hide">Spaces</p>
+                </button>
+                <a href="/upload">
+                    <span class="material-symbols-outlined">upload</span>
+                    <p class="hide">Upload</p>
+                </a>
+                <a href="">
+                    <span class="material-symbols-outlined">bookmark</span>
+                    <p class="hide">Saved</p>
+                </a>
+    
             </div>
         </div>
-        <input class="addsp" type="submit" value="Add Space" onclick="pfpPop()">
+        
+        
+    
+        <div class="hub-shape">
+            <div class="t">
+                <h1>Welcome <%= user.tag %></h1>
+            </div>
+    
+        </div>
     </div>
+
+    <div class="Space-body" id="space-body">
+        <div class="hub-bar">
+            <div>
+                <a href="/user" id="abc">
+                    <span class="material-symbols-outlined">account_circle</span>
+                    <p class="hide">@<%= user.name %></p>
+                </a>
+                <button onclick="openHub()">
+                    <span class="material-symbols-outlined">home</span>
+                    <p class="hide">Hub</p>
+                </button>
+                <a href="/upload">
+                    <span class="material-symbols-outlined">upload</span>
+                    <p class="hide">Upload</p>
+                </a>
+    
+            </div>
+        </div>
+        
+        
+        <div class="hub-shape">
+            <div class="t">
+                <h1><%= user.tag %>'s Spaces</h1>
+            </div>
+    
+            <div class="c">
+                <input class="addsp" type="submit" value="Add Space" onclick="pfpPop()">
+                <div class="space-list">
+                    <% if(spaces.length != null) { %>
+                        <% for (let i = 0; i < spaces.length; i++) { %>
+                            <form action="/space" method="POST" name="space_name">
+                            <input type = "hidden" name = "spaceid" value = "<%= spaces[i].Sid %>" />
+                            <input type="submit" value="<%= spaces[i].title %>" name="openSpace">
+                            </form>
+                        <% } %>
+                    <% } %>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+
 
     <div class="pfp-changer" id="popup">
         <button onclick="xpfpPop()" class="bcclickout"></button>
@@ -66,5 +119,16 @@
             document.getElementById('popup').style.display = 'none';
         }
 
+        function openHub() {
+            document.getElementById('hub-body').style.display = 'flex';
+            document.getElementById('space-body').style.display = 'none';
+        }
+        function openSpaceList() {
+            document.getElementById('hub-body').style.display = 'none';
+            document.getElementById('space-body').style.display = 'flex';
+        }
+
     </script>
 </body>
+
+</html>

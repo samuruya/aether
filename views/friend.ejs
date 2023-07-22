@@ -1,0 +1,88 @@
+<title>Aether/Hub</title>
+<meta name="viewport" content="width=device-width" />
+<link rel="stylesheet" type="text/css" href="looks.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+<link rel="icon" href="favicon.ico?v=1.1">
+
+<body>
+    <nav class="read-nav">
+        <a href="/" class="read-nav-logo">                    
+                <img src="https://i.ibb.co/4ZcLKjY/borderless.png" alt="">
+        </a>
+        <div class="read-nav-nav" id="nav">
+            <a class="/"></a>
+        </div>
+
+        <a href="/logout" class="read-nav-btn logout">
+            <button>logout</button>
+        </a>
+    </nav>
+
+    <div class="user-body">
+        <div class="user-wrap">
+            <div class="user-head">
+                <div class="user-banner-a">
+                    <div>
+                        <button class="pfp-edit" id="pfp-edit" onclick="">
+                            <div style="opacity: 0;">
+                                <span class="material-symbols-outlined">edit</span>
+                            </div>
+                            <img src="<%= user.pfp %>" alt="">
+                        </button>
+                    </div>
+                    <div class="user-info">
+                        <div class="info-names">
+                            <div>
+                                <h1><%= user.tag %></h1>
+                            </div>
+                            <div>
+                                <h2>@<%= user.name %></h2>
+                            </div>
+                        </div>
+                        <div class="disc">
+                            <form action="/user/disc" method="POST">
+                                <input type="text" name="disc" id="disc" placeholder="<%= user.disc %>">
+                                <button type="submit">Set</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="user-banner-b">
+                    <div class="sec-info">
+                        <h2><%= user.email %></h2>
+                        <% if(user.isDev) {%>
+                            <h1>Developer</h1>
+                        <% } else { %>
+                            <h1>Member</h1>
+                        <% } %>
+                    </div>
+                    <div>
+                        <button onclick="Pop()">Edit Profile</button>
+                    </div>
+                </div>
+            </div>
+    
+    
+            <div class="user-torso">
+                <div class="custom-SCs">
+                    <div class="sc-t"><h1>Showcases</h1></div>
+                    <div><h1>Placeholder</h1></div>
+
+                </div>
+                <div class="Fl">
+                    <h1>Friendlist</h1>
+    
+                    <div class="Fl-list">
+    
+                        
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    
+
+</body>

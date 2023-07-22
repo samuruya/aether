@@ -20,47 +20,75 @@
     </nav>
 
     <div class="user-body">
-        <div class="user-head">
-            <div class="user-banner-a">
-                <div>
-                    <button class="pfp-edit" id="pfp-edit" onclick="pfpPop()">
-                        <div>
-                            <span class="material-symbols-outlined">edit</span>
+        <div class="user-wrap">
+            <div class="user-head">
+                <div class="user-banner-a">
+                    <div>
+                        <button class="pfp-edit" id="pfp-edit" onclick="pfpPop()">
+                            <div>
+                                <span class="material-symbols-outlined">edit</span>
+                            </div>
+                            <img src="<%= user.pfp %>" alt="">
+                        </button>
+                    </div>
+                    <div class="user-info">
+                        <div class="info-names">
+                            <div>
+                                <h1><%= user.tag %></h1>
+                            </div>
+                            <div>
+                                <h2>@<%= user.name %></h2>
+                            </div>
                         </div>
-                        <img src="<%= user.pfp %>" alt="">
-                    </button>
-                </div>
-                <div class="user-info">
-                    <div class="info-names">
-                        <div>
-                            <h1><%= user.tag %></h1>
-                        </div>
-                        <div>
-                            <h2>@<%= user.name %></h2>
+                        <div class="disc">
+                            <form action="/user/disc" method="POST">
+                                <input type="text" name="disc" id="disc" placeholder="<%= user.disc %>">
+                                <button type="submit">Set</button>
+                            </form>
                         </div>
                     </div>
-                    <div class="disc">
-                        <form action="/user/disc" method="POST">
-                            <input type="text" name="disc" id="disc" placeholder="<%= user.disc %>">
-                            <button type="submit">Set</button>
-                        </form>
+                </div>
+                <div class="user-banner-b">
+                    <div class="sec-info">
+                        <h2><%= user.email %></h2>
+                        <% if(user.isDev) {%>
+                            <h1>Developer</h1>
+                        <% } else { %>
+                            <h1>Member</h1>
+                        <% } %>
+                    </div>
+                    <div>
+                        <button onclick="Pop()">Edit Profile</button>
                     </div>
                 </div>
             </div>
-            <div class="user-banner-b">
-                <div class="sec-info">
-                    <h2><%= user.email %></h2>
-                    <% if(user.isDev) {%>
-                        <h1>Developer</h1>
-                    <% } else { %>
-                        <h1>Member</h1>
-                    <% } %>
+    
+    
+            <div class="user-torso">
+                <div class="custom-SCs">
+                    <div class="sc-t"><h1>Showcases</h1></div>
+                    <div><h1>Placeholder</h1></div>
                 </div>
-                <div>
-                    <button onclick="Pop()">Edit Profile</button>
+                <div class="Fl">
+                    <h1>Friendlist</h1>
+    
+                    <div class="Fl-list">
+                        <% if(Fl.length != null) { %>
+                            <% for (let i = 0; i < Fl.length; i++) { %>
+                                <form action="/friend" method="POST" name="space_name">
+                                <input type = "hidden" name = "Fid" value = "<%= Fl[i].Fid %>" />
+                                <button type="submit"><img src="<%= Fl[i].pfp %>" alt="https://media.tenor.com/UnFx-k_lSckAAAAM/amalie-steiness.gif"><%= Fl[i].tag %></button>
+                                </form>
+                            <% } %>
+                        <% } %>
+    
+                        
+                    </div>
                 </div>
             </div>
+
         </div>
+
     </div>
     
     <div class="pfp-changer" id="pfpPop">
@@ -97,6 +125,31 @@
                     </div>
                     <div class="usredit-right edit-info" id="editInfo">
                         <h1>Edit your Account Info</h1>
+
+                        <div class="info-input">
+                            <div>
+                                <h2>Change Your tag</h2>
+                                <form action="/user/tag" method="POST">
+                                    <input type="text" name="disc" id="disc" placeholder="<%= user.tag %>" required>
+                                    <button type="submit">Set</button>
+                                </form>
+                            </div>
+                            <div>
+                                <h2>Change Username</h2>
+                                <form action="" method="POST">
+                                    <input type="text" name="disc" id="disc" placeholder="<%= user.name %>" required>
+                                    <button type="submit">Set</button>
+                                </form>
+                            </div>
+                            <div>
+                                <h2>change colors</h2>
+                                <form action="" method="POST">
+                                    <input type="text" name="disc" id="disc" placeholder="" required>
+                                    <button type="submit">Set</button>
+                                </form>
+                            </div>
+
+                        </div>
                     </div>
                     <div class="usredit-right edit-memb" id="editMemb">
                             <h1>change your member Status</h1>
@@ -182,7 +235,6 @@
             console.log("img file ready to fetch")    
             formData.append('image', imgFile);
             await fastFatch(formData)
-
             }
 
             await delay(50)
