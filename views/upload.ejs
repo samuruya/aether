@@ -4,9 +4,10 @@
 <head>
 
   <title>AetherHub</title>
+  <meta name="viewport" content="width=device-width" />
   <link rel="stylesheet" type="text/css" href="looks.css">
   <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
-
+  <link rel="icon" href="favicon.ico?v=1.1">
 </head>
 
 
@@ -249,7 +250,7 @@
  
           const qrCodeImage = document.createElement('img');
           qrCodeImage.src = qr.toDataURL();
-          // qrCodeImage.style.borderRadius = '10px';
+          qrCodeImage.style.borderRadius = '10px';
           qrCodeContainer.appendChild(qrCodeImage);
         }
 

@@ -17,6 +17,7 @@ const os = require('os');
 var favicon = require('serve-favicon');
 var path = require('path');
 const http = require('http').createServer(app);
+const io = require('socket.io')(http);
 
 const { MongoClient, Timestamp } = require("mongodb");
 const { log, Console } = require('console');
@@ -29,6 +30,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(cors());
 app.use('/public/pfp_img', express.static(path.join(__dirname, 'public/pfp_img')));
+app.use('/socket', express.static(__dirname + '/node_modules/socket.io/client-dist'));
 
 var users = []
 
@@ -693,6 +695,114 @@ res.json({ variable: urlShareLink });
     
 });
 
+
+
+const activeClients = {};
+
+app.get('/transfer', checkIOclients, (req, res) => {
+  const link = req.query.link;
+
+  res.render('sendData.ejs', { link })
+});
+
+app.get('/request',  (req, res) => {
+  const link = randomString(30, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
+  const urlLink =`${getDomain()}/transfer?link=${link}`;
+
+  activeClients[link] = null;
+
+  res.render('receive.ejs', { urlLink: urlLink, link: link  })
+});
+
+app.post('/transfer', upload.array("files"), async(req, res) => {
+  const link = req.body.link;
+  const msg = req.body.msg;
+  const files = req.files;
+  
+  if(activeClients.hasOwnProperty(link) && activeClients[link]){
+      await client.connect();
+      console.log('client connected');
+      const db = client.db(dbName);
+      const collection = db.collection('files')
+
+      for(let i =0; i < req.files.length; i++) {
+        collection.insertOne({
+          path: req.files[i].path,
+          originalName: req.files[i].originalname,
+          url: link,
+          uploadTime: new Date()
+        })
+    }
+
+
+      if(msg){
+        activeClients[link].emit('stringTransfer', msg);}
+      if(files){
+        activeClients[link].emit('downloadTransfer', { link, files });
+      }
+      activeClients[link].disconnect(true);
+  
+
+      console.log('Link:', link);
+      console.log('Message:', msg);
+      console.log('Files:', files);
+  }else{
+
+    for (const file of files) {
+      fs.unlink(file.path, (error) => {
+        if (error) {
+          console.error('Error deleting file:', error);
+        } else {
+          console.log('File deleted:', file.originalname);
+        }
+      });
+    }
+
+    res.render('error_msg.ejs', { error: 'Client is not connected ):' })
+  }
+
+});
+
+
+
+io.on('connection', (socket) => {
+  console.log("socket connected")
+  
+  socket.on('sendLink', (linkID) => {
+    
+    activeClients[linkID] = socket;
+    console.log("new socket connected with link", linkID)
+  });
+
+
+  socket.on('disconnect', () => {
+    const link = Object.keys(activeClients).find((key) => activeClients[key] === socket);
+    if (link) {
+      activeClients[link] = null;
+      console.log("client", link, "disconnected")
+    }
+  });
+
+});
+
+function checkIOclients(req, res, next){
+  let link = req.query.link;
+  if(link === undefined || link === null){
+    link = req.body.link;
+  }
+  console.log(link)
+  if (activeClients.hasOwnProperty(link) && activeClients[link]) {
+    next();
+  } else {
+    res.render('error_msg.ejs', { error: 'Client is not connected ):' })
+  }
+}
+
+
+
+
+
+
 function getTime(){
   const now = new Date();
   const hours = now.getHours().toString();
@@ -711,7 +821,7 @@ async function deleteOldFiles() {
     const collection = db.collection('files');
 
     
-    const thirtyMinutesAgo = new Date(Date.now() - 1 * 60* 1000);
+    const thirtyMinutesAgo = new Date(Date.now() - 5 * 60* 1000);
 
     
     const filesToDelete = await collection.find({
@@ -724,7 +834,7 @@ async function deleteOldFiles() {
         if (error) {
           console.error('Error deleting file:', error);
         } else {
-          console.log('File deleted:', file.filePath);
+          console.log('File deleted:', file.originalname);
         }
       });
     }
@@ -777,7 +887,7 @@ module.exports = {
 };
 
 
-app.listen(port,() => {
+http.listen(port,() => {
   connectDB();
   console.log('Running at Port', port);
   console.log(`server-adress: ${getDomain()}/`);

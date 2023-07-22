@@ -1,8 +1,9 @@
 <head>
 
     <title>AetherHub</title>
+    <meta name="viewport" content="width=device-width" />
     <link rel="stylesheet" type="text/css" href="looks.css">
-  
+    <link rel="icon" href="favicon.ico?v=1.1">
   </head>
   
   
@@ -54,7 +55,8 @@
                   createDiv(file.originalName);
                 });
 
-                createDiv();
+                let div = createDiv();
+                div.style.borderRadius = '0px 0px 5px 5px';
                 
                 
 
@@ -65,7 +67,7 @@
               div.classList.add('showFile-down');
               div.textContent = text;
               outputDiv.appendChild(div);
-
+            return div;
           }
 
         </script>

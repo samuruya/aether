@@ -1,0 +1,300 @@
+
+
+
+<head>
+    <title>AetherHub</title>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" type="text/css" href="looks.css">
+    <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
+    <script src="/socket/socket.io.js"></script>
+    <link rel="icon" href="favicon.ico?v=1.1">
+  </head>
+  
+  
+  
+  <body class="upload_page">
+    <nav class="read-nav">
+  
+      <div >
+  
+      <a href="/" class="read-nav-logo">                    
+              <img src="https://i.ibb.co/4ZcLKjY/borderless.png" alt="">
+      </a>
+  
+      <!-- <label style="align-items: baseline;">Uploads</label> -->
+  
+    </div>
+  
+      <div class="read-nav-nav" id="nav" style="width: max-content;">
+        <label>Trnasfer to: <%= link %></label>
+    </div>
+  
+  
+  </nav>
+      <div class="bc">
+  
+          <div id='stars2'></div>
+          <div id='stars3'></div>
+      </div>
+      
+      
+  
+      <div class="upl_container">
+        <div class="send_msg">
+          <label>Send a link or Upload a File</label>
+          <input type="text" id="inputTransfer">
+         </div>
+
+        <form class="box" onclick="handleFileButtonClick()">
+  
+          <div class="box_input">
+            <svg class="box_icon" xmlns="http://www.w3.org/2000/svg" width="50" height="43" viewBox="0 0 50 43"><path d="M48.4 26.5c-.9 0-1.7.7-1.7 1.7v11.6h-43.3v-11.6c0-.9-.7-1.7-1.7-1.7s-1.7.7-1.7 1.7v13.2c0 .9.7 1.7 1.7 1.7h46.7c.9 0 1.7-.7 1.7-1.7v-13.2c0-1-.7-1.7-1.7-1.7zm-24.5 6.1c.3.3.8.5 1.2.5.4 0 .9-.2 1.2-.5l10-11.6c.7-.7.7-1.7 0-2.4s-1.7-.7-2.4 0l-7.1 8.3v-25.3c0-.9-.7-1.7-1.7-1.7s-1.7.7-1.7 1.7v25.3l-7.1-8.3c-.7-.7-1.7-.7-2.4 0s-.7 1.7 0 2.4l10 11.6z"/></svg>
+            <input type="file" name="file" id="files" class="box_file" multiple />
+            <label for="file"><strong>Choose a file</strong><span class="box__dragndrop"> or drag it here</span>.</label>
+            <div class="box_button-wrapper">
+              <button type="submit" class="box_button" style="vertical-align:middle"><span>Submit </span></button>
+            </div>
+            
+          </div>
+  
+            
+          </form>
+        </div>
+        <div id="outputDiv">
+              
+        </div>
+  
+        <div class="copyLinkMessage" id="copyMessage">msg</div>
+  
+        
+  
+        <script>
+
+          const socket = io();
+
+          const urlString = '<%= link %>';
+          console.log("link: "+ urlString)
+          const formData = new FormData();
+          allFiles = [];
+  
+          droppedFiles = null;
+          const form = document.querySelector('form');
+  
+  
+          const handleFileButtonClick = () => {
+            if (!event.target.matches('.box_button') && !event.target.closest('.box_button')) {
+                  document.getElementById('files').click();
+              }
+          }
+          
+          // feature detection
+          var isAdvancedUpload = function()
+          {
+            var div = document.createElement( 'div' );
+            return ( ( 'draggable' in div ) || ( 'ondragstart' in div && 'ondrop' in div ) ) && 'FormData' in window && 'FileReader' in window;
+          }();
+          
+          
+          // applying effect
+          var forms = document.querySelectorAll( '.box' );
+          Array.prototype.forEach.call( forms, function( form )
+          {
+            var input		 = form.querySelector( 'input[type="file"]' ),
+              label		 = form.querySelector( 'label' ),
+              errorMsg	 = form.querySelector( '.box__error span' ),
+              restart		 = form.querySelectorAll( '.box__restart' ),
+              showFiles	 = function( files )
+              {
+                label.textContent = files.length > 1 ? ( input.getAttribute( 'data-multiple-caption' ) || '' ).replace( '{count}', files.length ) : files[ 0 ].name;
+              }
+              
+          
+          
+              if( isAdvancedUpload )
+              {
+                form.classList.add( 'has-advanced-upload' ); 
+          
+                [ 'drag', 'dragstart', 'dragend', 'dragover', 'dragenter', 'dragleave', 'drop' ].forEach( function( event )
+                {
+                  form.addEventListener( event, function( e )
+                  {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  });
+                });
+                [ 'dragover', 'dragenter' ].forEach( function( event )
+                {
+                  form.addEventListener( event, function()
+                  {
+                    form.classList.add( 'is-dragover' );
+                  });
+                });
+                [ 'dragleave', 'dragend', 'drop' ].forEach( function( event )
+                {
+                  form.addEventListener( event, function()
+                  {
+                    form.classList.remove( 'is-dragover' );
+                  });
+                });
+                form.addEventListener( 'drop', function( e )
+                {
+                  droppedFiles = e.dataTransfer.files; 
+  
+                  if (droppedFiles != null) {
+                  for (let i = 0; i < droppedFiles.length; i++) {
+                      allFiles.push(droppedFiles[i]);
+                  }
+                  refresh();
+              }
+  
+          
+                  });
+              }
+          
+          });
+          
+          //Show_Selected_Files
+          const fileInput = document.getElementById('files');
+
+          fileInput.addEventListener('change', function(event) {
+            for(let i =0; i < fileInput.files.length; i++) {
+                allFiles.push(fileInput.files[i]);
+                }
+            refresh();
+        });
+          
+          
+           //upload_at_submit---------------
+           form.addEventListener('submit', (e) => {
+              
+              e.preventDefault();
+  
+              for(let i =0; i < allFiles.length; i++) {
+                formData.append('files', allFiles[i]);
+                console.log("file: " +i)
+              }
+
+              const msg = document.getElementById('inputTransfer').value;
+  
+              if (getLength(formData) >= 0) {
+                console.log("Files were appended");
+                formData.append('link', urlString);
+                formData.append('msg', msg);
+  
+                  fetch('/transfer', {
+                      method: 'POST',
+                      body: formData,
+                  });
+                  
+                resetVariables();
+              }else{
+                console.log("no files appended")
+                const messageElement = document.querySelector('.copyLinkMessage');
+                messageElement.textContent = 'no files appended';
+              
+                messageElement.style.opacity = 0.8;
+  
+                setTimeout(() => {
+                  
+                  messageElement.style.opacity = 0;
+                }, 1500);
+              }
+              
+              
+  
+  
+          });
+
+  
+
+  
+          function getLength(formData){
+            var count = 0;
+            for (const value of formData.values()) {
+              count++;
+            }
+            return count;
+          }
+  
+  
+          // show files:
+  
+          var outputDiv = document.getElementById('outputDiv');
+  
+            
+  
+            function refresh(){
+  
+              outputDiv.innerHTML = '';
+              const box = document.querySelector(".box");
+              box.style.borderRadius = '5px';
+              
+              if(allFiles.length > 0){
+                console.log("bigger than 0")
+                box.style.borderRadius = '5px 5px 0px 0px';
+  
+                createDiv();
+                allFiles.forEach((file) => {
+                  console.log('File:', file);
+                  console.log('Original Name:', file.name);
+                  createDiv(file.name);
+                });
+                  div = createDiv();
+                  div.style.borderRadius = '0px 0px 5px 5px';
+  
+              }
+              
+            }
+                  
+  
+  
+            function createDiv(name) {
+  
+                const div = document.createElement('div');
+                div.classList.add('showFile');
+                // div.textContent = name;
+                const content = document.createElement('span');
+                content.textContent = name;
+                div.appendChild(content);
+                outputDiv.appendChild(div);
+  
+                if(name != null){
+                  div.classList.add('hoverable');
+                  const deleteButton = document.createElement('button');
+                  deleteButton.innerHTML = '&#x2715';
+                  
+                  deleteButton.addEventListener('click', function() {
+  
+                    const fileIndex = allFiles.findIndex((file) => file.name === name);
+                    if (fileIndex !== -1) {
+                      allFiles.splice(fileIndex, 1);
+                    }
+  
+                    refresh();
+                    })
+                  div.appendChild(deleteButton);
+                }
+    
+                return div;
+  
+            }
+  
+            function resetVariables() {
+             
+              allFiles = [];
+              droppedFiles = [];
+              for (let key of formData.keys()) {
+                  formData.delete(key);
+                }
+              console.log("-----------vars clearde----------")
+              
+              refresh();
+            }
+  
+          
+          
+          </script>
+  
+  </body>
+  
+  
