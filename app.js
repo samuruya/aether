@@ -429,12 +429,9 @@ app.post('/user/pfp', async (req, res) => {
 })
 
 
-const upStorage = multer.diskStorage({
-  destination: function (req, file, callback) {
-    callback(null, './public/pfp_img')
-  }
-});
-const uplouadPfp = multer({ storage:  upStorage });
+const uplouadPfp = multer({ storage:  multer.diskStorage({
+  destination: './public/pfp_img'
+}) });
 
 app.post('/user/pfp/upload', uplouadPfp.single('image'), async(req, res)=>{
   console.log("img upload--> post")
@@ -659,17 +656,10 @@ function makeid(length) {
 
 
 //upload_stuff
-
-const storage = multer.diskStorage({
-    destination: function (req, file, callback) {
-        callback(null, './public/uploads');
-    },
-    // filename: function (req, file, callback) {
-    //     callback(null, file.originalname);
-    // }
-  })
   
-const upload = multer({ storage: storage })
+const upload = multer({ storage: multer.diskStorage({
+  destination: './public/uploads'
+}) })
 
 app.post("/uploads", upload.array("files"),async (req, res) => {
 
@@ -737,7 +727,7 @@ app.post('/transfer', upload.array("files"), async(req, res) => {
 
       if(msg){
         activeClients[link].emit('stringTransfer', msg);}
-      if(files){
+      if(files && files.length > 0){
         activeClients[link].emit('downloadTransfer', { link, files });
       }
       activeClients[link].disconnect(true);
@@ -852,7 +842,7 @@ function del (){
   console.log("time -->  sec")
 }
 
-setInterval(deleteOldFiles, 30 * 60 * 1000);
+setInterval(deleteOldFiles, 1 * 60 * 1000);
 
 
 
