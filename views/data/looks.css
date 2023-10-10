@@ -2269,6 +2269,7 @@ footer nav {
         
         min-width: 100px;
     }
+    
     .upload_page{
         background-color: #1b1e2e;
         
@@ -2292,13 +2293,17 @@ footer nav {
     .upl_container{
         background-color: transparent;
         position: fixed;
-        bottom: 135px;
+        /* bottom: 135px; */
         display: none;  
     }
+    #upl_container_t{
+        display: block;
+        top: 50;
+    }
     .box{
-        background-color: transparent;
+        
         height: -100px;
-        /* display: none;   */
+        display: none;  
     }
     .box.is-dragover,
     .box.has-advanced-upload{
@@ -2307,7 +2312,7 @@ footer nav {
     }
 
     .box_input{
-        display: none;
+        display: flex;
         height: -100px;
     }
     
@@ -2315,6 +2320,7 @@ footer nav {
         display: flex;
         flex-direction: column;
         align-items: center;
+        padding-bottom: 100px;
       }
       
       
