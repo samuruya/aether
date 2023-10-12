@@ -77,6 +77,11 @@
         
       </body>
 
+      <div style="background-color: white;">
+        <label id="progress-percent">--%</label>
+        <progress id="progress-bar" max="100" value="0"></progress>
+      </div>
+
       <footer class="upl-footer">
         <button class="upl_input_btn" onclick="handleFileButtonClick()">Browse</button>
         <nav class="upl-nav">
@@ -186,6 +191,21 @@
             refresh();
         });
           
+
+        //progress-bar
+        const xhr = new XMLHttpRequest();
+          const progressBar = document.getElementById('progress-bar');
+          const progressPercent = document.getElementById('progress-percent');
+          xhr.upload.onprogress = (event) => {
+              if (event.lengthComputable) {
+                  const percentComplete = (event.loaded / event.total) * 100;
+                  progressBar.value = percentComplete;
+                  progressPercent.textContent = percentComplete;
+                  console.log("progress:",percentComplete)
+              }
+          };
+
+          xhr.open('POST', '/transfer', true);
           
            //upload_at_submit---------------
            form.addEventListener('submit', (e) => {
@@ -206,10 +226,7 @@
                 console.log("Files were appended");
                 formData.append('link', urlString);
   
-                  fetch('/transfer', {
-                      method: 'POST',
-                      body: formData,
-                  });
+                xhr.send(formData);
                   
                 resetVariables();
                 document.querySelector('.upl_container').style.display = 'none'
@@ -325,6 +342,7 @@
             }
   
           
+
           
           </script>
   
