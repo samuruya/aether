@@ -784,7 +784,7 @@ function checkIOclients(req, res, next){
   if (activeClients.hasOwnProperty(link) && activeClients[link]) {
     next();
   } else {
-    res.render('error_msg.ejs', { error: 'Client is not connected ):' })
+    res.render('error_msg.ejs', { error: 'Invalid URL ):' })
   }
 }
 

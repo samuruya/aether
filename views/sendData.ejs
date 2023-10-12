@@ -71,16 +71,18 @@
         <h2>Successfully Transfered</h2>
         <button class="box_button" id="done-button">Done</button>
       </div>
+
+      <div class="t_popup-progress">
+     
+        <div id="progress-bar"></div>
+        <h2>Transfering</h2>
+    </div>
   
         <div class="copyLinkMessage" id="copyMessage">msg</div>
   
         
       </body>
 
-      <div style="background-color: white;">
-        <label id="progress-percent">--%</label>
-        <progress id="progress-bar" max="100" value="0"></progress>
-      </div>
 
       <footer class="upl-footer">
         <button class="upl_input_btn" onclick="handleFileButtonClick()">Browse</button>
@@ -195,13 +197,15 @@
         //progress-bar
         const xhr = new XMLHttpRequest();
           const progressBar = document.getElementById('progress-bar');
-          const progressPercent = document.getElementById('progress-percent');
           xhr.upload.onprogress = (event) => {
               if (event.lengthComputable) {
                   const percentComplete = (event.loaded / event.total) * 100;
-                  progressBar.value = percentComplete;
-                  progressPercent.textContent = percentComplete;
-                  console.log("progress:",percentComplete)
+                  const percent = Math.round(percentComplete);
+                  progressBar.style.setProperty('--percentage', percent);
+                  if(percentComplete >= 100){
+                    document.querySelector('.t_popup-progress').style.display = 'none'
+                    document.querySelector('.t_popup').style.display = 'block'
+                  }
               }
           };
 
@@ -230,7 +234,7 @@
                   
                 resetVariables();
                 document.querySelector('.upl_container').style.display = 'none'
-                document.querySelector('.t_popup').style.display = 'block'
+                document.querySelector('.t_popup-progress').style.display = 'block'
                 document.querySelector('.box_button-nav').style.display = 'none'
               }else{
                 console.log("no files appended")
