@@ -7,14 +7,13 @@
     <link rel="stylesheet" type="text/css" href="looks.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
-    <script src="/socket/socket.io.js"></script>
     <link rel="icon" href="favicon.ico?v=1.1">
   </head>
   
   
   
   <body class="upload_page">
-    <nav class="read-nav">
+    <nav class="read-nav" id="transfer-nav">
   
       <div >
   
@@ -61,14 +60,15 @@
             
           </form>
         </div>
-        <div id="outputDiv">
+        <div id="outputDiv" class="transfer-Div">
               
         </div>
         
         <div class="t_popup">
           <!-- <svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" version="1.1" x="0px" y="0px" viewBox="0 0 97.199997 97.199997" xml:space="preserve" id="svg12" sodipodi:docname="noun_675776_cc.svg" width="97.199997" height="97.199997" inkscape:version="0.92.2 5c3e80d, 2017-08-06"><metadata id="metadata18"><rdf:RDF><cc:Work rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/><dc:title/></cc:Work></rdf:RDF></metadata><defs id="defs16"/><sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="640" inkscape:window-height="480" id="namedview14" showgrid="false" fit-margin-top="10" fit-margin-left="10" fit-margin-right="10" fit-margin-bottom="10" inkscape:zoom="1.888" inkscape:cx="48.6" inkscape:cy="36.1" inkscape:window-x="0" inkscape:window-y="0" inkscape:window-maximized="0" inkscape:current-layer="svg12"/><g id="g6" transform="translate(-1.4,-1.4)" style="fill:#008000"><polygon points="44.1,58.3 31.8,45.9 28.8,48.9 44.1,64.2 69.5,38.8 66.6,35.8 " id="polygon2" style="fill:#008000"/><path d="M 50,88.6 C 71.3,88.6 88.6,71.3 88.6,50 88.6,28.7 71.3,11.4 50,11.4 28.7,11.4 11.4,28.7 11.4,50 11.4,71.3 28.7,88.6 50,88.6 Z m 0,-73 C 68.9,15.6 84.4,31 84.4,50 84.4,69 68.9,84.4 50,84.4 31.1,84.4 15.6,68.9 15.6,50 15.6,31.1 31.1,15.6 50,15.6 Z" id="path4" inkscape:connector-curvature="0" style="fill:#008000"/></g></svg> -->
-          <svg class="t_svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" enable-background="new 0 0 64 64"><path d="M32,2C15.431,2,2,15.432,2,32c0,16.568,13.432,30,30,30c16.568,0,30-13.432,30-30C62,15.432,48.568,2,32,2z M25.025,50  l-0.02-0.02L24.988,50L11,35.6l7.029-7.164l6.977,7.184l21-21.619L53,21.199L25.025,50z" fill="#43a047"/></svg>
-        <h2>Successfully Transfered</h2>
+          <svg class="t_svg" id="t_checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" enable-background="new 0 0 64 64"><path d="M32,2C15.431,2,2,15.432,2,32c0,16.568,13.432,30,30,30c16.568,0,30-13.432,30-30C62,15.432,48.568,2,32,2z M25.025,50  l-0.02-0.02L24.988,50L11,35.6l7.029-7.164l6.977,7.184l21-21.619L53,21.199L25.025,50z" fill="#43a047"/></svg>
+          <svg class="t_svg" id="t_crossmark" style="display: none;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" enable-background="new 0 0 64 64"><path d="m32 2c-16.568 0-30 13.432-30 30s13.432 30 30 30 30-13.432 30-30-13.432-30-30-30m5.513 44.508l-5.514-9.894-5.825 9.894h-7.048l9.331-14.783-8.878-14.232h7.244l5.175 9.449 5.317-9.449h7.008l-8.878 13.996 9.429 15.02h-7.361z" fill="#e53935"></path></svg>
+        <h2 id="t_popup_txt">Successfully Transfered</h2>
         <button class="box_button" id="done-button">Done</button>
       </div>
 
@@ -89,7 +89,7 @@
         <nav class="upl-nav">
           
             <div class="mobile-nav">
-              <a href="/hub" class="hub on"><span class="material-symbols-outlined">home</span></a>
+              <a href="/" class="hub on"><span class="material-symbols-outlined">home</span></a>
                 <button type="submit" class="box_button-nav" style="vertical-align:middle" onclick="document.querySelector('.box_button').click()"><span>Submit </span></button>
                 <a href="/user" class="hub on"><span class="material-symbols-outlined">login</span></a>
                 
@@ -100,7 +100,6 @@
 
         <script>
 
-          const socket = io();
 
           const urlString = '<%= link %>';
           console.log("link: "+ urlString)
@@ -215,47 +214,75 @@
            form.addEventListener('submit', (e) => {
               
               e.preventDefault();
-  
-              for(let i =0; i < allFiles.length; i++) {
-                formData.append('files', allFiles[i]);
-                console.log("file: " +i)
-              }
 
-              const msg = document.getElementById('inputTransfer').value;
-              if(msg){
-                formData.append('msg', msg);
-              }
-  
-              if (getLength(formData) > 0) {
-                console.log("Files were appended");
-                formData.append('link', urlString);
-  
-                xhr.send(formData);
+              fetch('/checkSocketStatus', {
+                method: 'POST',
+                body: JSON.stringify({ urlString }),
+                headers: {
+                  'Content-Type': 'application/json',
+                }
+              })
+              .then(response => {
+                if (response.ok) {
+                  console.log("Fetch was successful.");
+                  //------------------
+
+                  for(let i =0; i < allFiles.length; i++) {
+                    formData.append('files', allFiles[i]);
+                    console.log("file: " +i)
+                  }
+
+                  const msg = document.getElementById('inputTransfer').value;
+                  if(msg){
+                    formData.append('msg', msg);
+                  }
+      
+                  if (getLength(formData) > 0) {
+                    console.log("Files were appended");
+                    formData.append('link', urlString);
+
+                    xhr.send(formData);
+                      
+                    resetVariables();
+                    document.querySelector('.upl_container').style.display = 'none'
+                    document.querySelector('.t_popup-progress').style.display = 'block'
+                    document.querySelector('.box_button-nav').style.display = 'none'
+                  }else{
+                    console.log("no files appended")
+                    const messageElement = document.querySelector('.copyLinkMessage');
+                    messageElement.textContent = 'no files appended';
                   
-                resetVariables();
-                document.querySelector('.upl_container').style.display = 'none'
-                document.querySelector('.t_popup-progress').style.display = 'block'
-                document.querySelector('.box_button-nav').style.display = 'none'
-              }else{
-                console.log("no files appended")
-                const messageElement = document.querySelector('.copyLinkMessage');
-                messageElement.textContent = 'no files appended';
-              
-                messageElement.style.opacity = 0.8;
-  
-                setTimeout(() => {
+                    messageElement.style.opacity = 0.8;
+      
+                    setTimeout(() => {
+                      
+                      messageElement.style.opacity = 0;
+                    }, 1500);
+                  }
                   
-                  messageElement.style.opacity = 0;
-                }, 1500);
-              }
+                  //------------------
+                } else {
+                  console.log("Fetch failed.");
+                  resetVariables();
+                  document.querySelector('.upl_container').style.display = 'none'
+                  document.querySelector('.t_popup-progress').style.display = 'block'
+                  document.querySelector('.box_button-nav').style.display = 'none'
+                  document.querySelector('.t_popup-progress').style.display = 'none'
+                  document.querySelector('.t_popup').style.display = 'block'
+                  document.getElementById('t_checkmark').style.display = 'none'
+                  document.getElementById('t_crossmark').style.display = 'inline'
+                  document.getElementById('t_popup_txt').textContent = 'Transfer Failed'
+                }
+              })
+  
+             
               
               
   
   
           });
 
-  
-
+          
   
           function getLength(formData){
             var count = 0;

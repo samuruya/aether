@@ -2323,7 +2323,6 @@ footer nav {
     /*upload.ejs */
     .upl_container,
     .box{
-        
         min-width: 100px;
     }
     
@@ -2355,7 +2354,19 @@ footer nav {
     }
     #upl_container_t{
         display: block;
-        top: 50;
+        top: -50px;
+    }
+    .send_msg {
+        background-color: rgb(200, 218, 223, 0.4);
+        background-color: rgb(62, 68, 82, 0.8);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+    }
+    #transfer-nav{
+        display: none;
+    }
+    .transfer-Div{
+        padding-top: 125px;
     }
     .box{
         

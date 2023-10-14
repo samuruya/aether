@@ -753,6 +753,20 @@ app.post('/transfer', upload.array("files"), async(req, res) => {
 
 });
 
+app.post('/checkSocketStatus', async(req, res) => {
+  const link = req.body.urlString;
+  console.log(link)
+
+  if (link in activeClients) {
+    console.log('**=> CLIENT CONNECTED')
+    res.sendStatus(200);
+  } else {
+    console.log('**=> CLIENT INVALID')
+    res.sendStatus(404);
+  }
+
+});
+
 
 
 io.on('connection', (socket) => {
@@ -765,10 +779,10 @@ io.on('connection', (socket) => {
   });
 
 
-  socket.on('disconnect', () => {
+  socket.on('disconnect', async () => {
     const link = Object.keys(activeClients).find((key) => activeClients[key] === socket);
     if (link) {
-      activeClients[link] = null;
+      delete activeClients[link]
       console.log("client", link, "disconnected")
     }
   });
@@ -781,7 +795,8 @@ function checkIOclients(req, res, next){
     link = req.body.link;
   }
   console.log(link)
-  if (activeClients.hasOwnProperty(link) && activeClients[link]) {
+
+  if (link in activeClients) {
     next();
   } else {
     res.render('error_msg.ejs', { error: 'Invalid URL ):' })
