@@ -2077,7 +2077,7 @@ background-color: #fff;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: #ffffff;
+    background-color: #ecf0f1;
     border-radius: 5px;
     padding: 25px;
     height: 450px;
@@ -2088,19 +2088,26 @@ background-color: #fff;
 }
 #progress-bar {
     --percentage: 0;
-    --primary: #369;
-    --secondary: #adf;
+    --primary: #1abc9c;
+    --secondary: #bdc3c7;
     --size: 250px;
     width: var(--size);
     aspect-ratio: 1;
     border-radius: 50%;
     position: relative;
     overflow: hidden;
-    display: grid;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    grid-template-columns: 50% 0;
     place-items: center;
     margin-left: 25px;
     margin-bottom: 50px;
+    margin-top: 10px;
+    
 }
+
 
 #progress-bar::before {
     content: "";
@@ -2116,19 +2123,29 @@ background-color: #fff;
     -webkit-mask-mode: alpha;
 }
 
-#progress-bar::after {
+.percentageInt::after{
     counter-reset: percentage var(--percentage);
-    content: counter(percentage) '%';
+    content: counter(percentage);
     font-family: Helvetica, Arial, sans-serif;
     font-size: calc(var(--size) / 5);
-    color: var(--primary);
+    color: #7f8c8d;
 }
+
+.percentageChar {
+    color: #bdc3c7;
+    font-size: 1.45em;
+    padding-bottom: 20px;
+    vertical-align: super;
+  }
+  
+  
 
 
 
 .t_svg{
     height: 250px;
     margin-bottom: 50px;
+    margin-top: 10px;
 }
 #done-button {
     margin-top: 35px;

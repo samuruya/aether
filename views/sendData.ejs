@@ -66,15 +66,15 @@
         
         <div class="t_popup">
           <!-- <svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" version="1.1" x="0px" y="0px" viewBox="0 0 97.199997 97.199997" xml:space="preserve" id="svg12" sodipodi:docname="noun_675776_cc.svg" width="97.199997" height="97.199997" inkscape:version="0.92.2 5c3e80d, 2017-08-06"><metadata id="metadata18"><rdf:RDF><cc:Work rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/><dc:title/></cc:Work></rdf:RDF></metadata><defs id="defs16"/><sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="640" inkscape:window-height="480" id="namedview14" showgrid="false" fit-margin-top="10" fit-margin-left="10" fit-margin-right="10" fit-margin-bottom="10" inkscape:zoom="1.888" inkscape:cx="48.6" inkscape:cy="36.1" inkscape:window-x="0" inkscape:window-y="0" inkscape:window-maximized="0" inkscape:current-layer="svg12"/><g id="g6" transform="translate(-1.4,-1.4)" style="fill:#008000"><polygon points="44.1,58.3 31.8,45.9 28.8,48.9 44.1,64.2 69.5,38.8 66.6,35.8 " id="polygon2" style="fill:#008000"/><path d="M 50,88.6 C 71.3,88.6 88.6,71.3 88.6,50 88.6,28.7 71.3,11.4 50,11.4 28.7,11.4 11.4,28.7 11.4,50 11.4,71.3 28.7,88.6 50,88.6 Z m 0,-73 C 68.9,15.6 84.4,31 84.4,50 84.4,69 68.9,84.4 50,84.4 31.1,84.4 15.6,68.9 15.6,50 15.6,31.1 31.1,15.6 50,15.6 Z" id="path4" inkscape:connector-curvature="0" style="fill:#008000"/></g></svg> -->
-          <svg class="t_svg" id="t_checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" enable-background="new 0 0 64 64"><path d="M32,2C15.431,2,2,15.432,2,32c0,16.568,13.432,30,30,30c16.568,0,30-13.432,30-30C62,15.432,48.568,2,32,2z M25.025,50  l-0.02-0.02L24.988,50L11,35.6l7.029-7.164l6.977,7.184l21-21.619L53,21.199L25.025,50z" fill="#43a047"/></svg>
-          <svg class="t_svg" id="t_crossmark" style="display: none;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" enable-background="new 0 0 64 64"><path d="m32 2c-16.568 0-30 13.432-30 30s13.432 30 30 30 30-13.432 30-30-13.432-30-30-30m5.513 44.508l-5.514-9.894-5.825 9.894h-7.048l9.331-14.783-8.878-14.232h7.244l5.175 9.449 5.317-9.449h7.008l-8.878 13.996 9.429 15.02h-7.361z" fill="#e53935"></path></svg>
+          <svg class="t_svg" id="t_checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="2 2 60 60" enable-background="new 0 0 64 64"><path d="M32,2C15.431,2,2,15.432,2,32c0,16.568,13.432,30,30,30c16.568,0,30-13.432,30-30C62,15.432,48.568,2,32,2z M25.025,50  l-0.02-0.02L24.988,50L11,35.6l7.029-7.164l6.977,7.184l21-21.619L53,21.199L25.025,50z" fill="#43a047"/></svg>
+          <svg class="t_svg" id="t_crossmark" style="display: none;" xmlns="http://www.w3.org/2000/svg" viewBox="2 2 60 60" enable-background="new 0 0 64 64"><path d="m32 2c-16.568 0-30 13.432-30 30s13.432 30 30 30 30-13.432 30-30-13.432-30-30-30m5.513 44.508l-5.514-9.894-5.825 9.894h-7.048l9.331-14.783-8.878-14.232h7.244l5.175 9.449 5.317-9.449h7.008l-8.878 13.996 9.429 15.02h-7.361z" fill="#e53935"></path></svg>
         <h2 id="t_popup_txt">Successfully Transfered</h2>
         <button class="box_button" id="done-button">Done</button>
       </div>
 
       <div class="t_popup-progress">
      
-        <div id="progress-bar"></div>
+        <div id="progress-bar"><div class="percentageInt"></div><div class="percentageChar">%</div></div>
         <h2>Transfering</h2>
     </div>
   
@@ -214,6 +214,17 @@
            form.addEventListener('submit', (e) => {
               
               e.preventDefault();
+              const msg = document.getElementById('inputTransfer').value;
+
+              if(!(allFiles.length > 0 || msg)){
+                    const messageElement = document.querySelector('.copyLinkMessage');
+                    messageElement.textContent = 'no files appended';
+                    messageElement.style.opacity = 0.8;
+                    setTimeout(() => {
+                      messageElement.style.opacity = 0;
+                    }, 1500);
+                    return;
+              }
 
               fetch('/checkSocketStatus', {
                 method: 'POST',
@@ -232,7 +243,6 @@
                     console.log("file: " +i)
                   }
 
-                  const msg = document.getElementById('inputTransfer').value;
                   if(msg){
                     formData.append('msg', msg);
                   }
@@ -293,7 +303,7 @@
           }
 
           document.getElementById('done-button').addEventListener('click', (e) => {
-            window.location.href = "/hub";
+            window.location.href = "/";
           });
   
   
