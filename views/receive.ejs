@@ -56,6 +56,10 @@
       <div id="outputDiv">   
         </div>
 
+        <div class="rec_progress_popup">
+          <div class="loader-line"></div>
+          <lable class="rec_p_lable">Receiving Data</lable>
+        </div>
       
 
       <script>
@@ -183,6 +187,7 @@
             document.getElementById('rec_msg_text').innerHTML = data;
             document.querySelector('.rec_msg').style.display = 'block';
             document.querySelector('.qr_window').style.display = 'none';
+            document.querySelector('.rec_progress_popup').style.display = 'none'
           });
 
 
@@ -193,8 +198,15 @@
             console.log('FILES:', files)
             document.querySelector('.rec_down').style.display = 'block';
             document.querySelector('.qr_window').style.display = 'none';
+            document.querySelector('.rec_progress_popup').style.display = 'none'
             document.getElementById('postToLink').value = link;
             showFiles(files);
+          });
+
+          socket.on('startingTransfer', () => {
+            console.log("get transfer %%%!!!")
+            document.querySelector('.qr_window').style.display = 'none';
+            document.querySelector('.rec_progress_popup').style.display = 'flex';
           });
 
 

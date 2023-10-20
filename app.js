@@ -726,8 +726,8 @@ app.post('/transfer', upload.array("files"), async(req, res) => {
 
 
       if(msg){
-        activeClients[link].emit('stringTransfer', msg);}
-      if(files && files.length > 0){
+        activeClients[link].emit('stringTransfer', msg);
+      }if(files && files.length > 0){
         activeClients[link].emit('downloadTransfer', { link, files });
       }
       activeClients[link].disconnect(true);
@@ -758,7 +758,8 @@ app.post('/checkSocketStatus', async(req, res) => {
   console.log(link)
 
   if (link in activeClients) {
-    console.log('**=> CLIENT CONNECTED')
+    console.log('**=> CLIENT CONNECTED', link)
+    activeClients[link].emit('startingTransfer')
     res.sendStatus(200);
   } else {
     console.log('**=> CLIENT INVALID')

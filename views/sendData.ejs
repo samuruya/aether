@@ -202,8 +202,8 @@
                   const percent = Math.round(percentComplete);
                   progressBar.style.setProperty('--percentage', percent);
                   if(percentComplete >= 100){
-                    document.querySelector('.t_popup-progress').style.display = 'none'
-                    document.querySelector('.t_popup').style.display = 'block'
+                    document.querySelector('.t_popup-progress').style.display = 'none';
+                    document.querySelector('.t_popup').style.display = 'block';
                   }
               }
           };
@@ -236,7 +236,7 @@
               .then(response => {
                 if (response.ok) {
                   console.log("Fetch was successful.");
-                  //------------------
+                  
 
                   for(let i =0; i < allFiles.length; i++) {
                     formData.append('files', allFiles[i]);
@@ -270,7 +270,7 @@
                     }, 1500);
                   }
                   
-                  //------------------
+                  
                 } else {
                   console.log("Fetch failed.");
                   resetVariables();
