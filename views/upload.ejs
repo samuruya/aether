@@ -54,6 +54,11 @@
             
       </div>
 
+    <div class="t_popup-progress">
+      <div id="progress-bar"><div class="percentageInt"></div><div class="percentageChar">%</div></div>
+      <h2>Uploading</h2>
+  </div>
+
       <div class="qr_popup">
         <div class="qr_window">
           <button type="back" id="qr_back">&ltBack</button>
@@ -168,6 +173,27 @@
             console.log(fileInput.files.length)
             refresh();
         });
+
+        //progress-bar
+        const xhr = new XMLHttpRequest();
+          const progressBar = document.getElementById('progress-bar');
+          xhr.upload.onprogress = (event) => {
+              if (event.lengthComputable) {
+                  const percentComplete = (event.loaded / event.total) * 100;
+                  const percent = Math.floor(percentComplete);
+                  progressBar.style.setProperty('--percentage', percent);
+                  if(percentComplete >= 100){
+                    document.querySelector('.t_popup-progress').style.display = 'none';
+                  }
+              }
+          };
+
+          xhr.onload = () => {
+              const data = JSON.parse(xhr.responseText);
+              setShareLink(data.variable);
+          };
+
+          xhr.open('POST', '/uploads', true);
         
         
         //upload_at_submit---------------
@@ -191,15 +217,12 @@
             if (getLength(formData) > 0) {
               console.log("Files were appended");
 
-                fetch('/uploads', {
-                    method: 'POST',
-                    body: formData, 
-                })
-                .then(res => res.json())
-                .then(data => {
-                setShareLink(data.variable);
-                resetVariables();
-              })
+              xhr.send(formData)
+              document.querySelector('.upl_container').style.display = 'none'
+              document.querySelector('.t_popup-progress').style.display = 'block'
+              document.querySelector('.box_button-nav').style.display = 'none'
+              resetVariables();
+                
             }else{
               console.log("no files appended")
               const messageElement = document.querySelector('.copyLinkMessage');
@@ -219,7 +242,8 @@
         })
 
         document.getElementById('qr_back').addEventListener('click', () => {
-          document.querySelector('.qr_popup').style.display = 'none';
+          // document.querySelector('.qr_popup').style.display = 'none';
+          location.reload();
         });
         
         function setShareLink(sLink){

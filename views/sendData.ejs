@@ -73,7 +73,6 @@
       </div>
 
       <div class="t_popup-progress">
-     
         <div id="progress-bar"><div class="percentageInt"></div><div class="percentageChar">%</div></div>
         <h2>Transfering</h2>
     </div>
@@ -199,7 +198,7 @@
           xhr.upload.onprogress = (event) => {
               if (event.lengthComputable) {
                   const percentComplete = (event.loaded / event.total) * 100;
-                  const percent = Math.round(percentComplete);
+                  const percent = Math.floor(percentComplete);
                   progressBar.style.setProperty('--percentage', percent);
                   if(percentComplete >= 100){
                     document.querySelector('.t_popup-progress').style.display = 'none';
