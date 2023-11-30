@@ -7,22 +7,22 @@ const Login = () => {
 
     const {loginUser, loginError, loginInfo, updateLoginInfo, isLoginLoading} = useContext(AuthContext)
     return ( 
-    <>
-        <Form onSubmit={loginUser}>
+    <div className="log-form">
+        <Form onSubmit={loginUser} className="light-for-bc">
                 <Stack gap={3}>
                     <h2>Login</h2>
 
                     <div>
                     <h3>Email</h3>
-                    <Form.Control type="text" placeholder="" 
+                    <Form.Control className="txtInput" type="text" placeholder="" 
                     onChange={(e) => updateLoginInfo({...loginInfo, email: e.target.value}) } />
                     </div>
                     <div>
                     <h3>Password</h3>
-                    <Form.Control type="text" placeholder="" 
+                    <Form.Control className="txtInput" type="password" placeholder="" 
                     onChange={(e) => updateLoginInfo({...loginInfo, password: e.target.value}) } />
                     </div>
-                    <Button className="logger-btn" variant="primary" type="submit">
+                    <Button className="logger-btn btnInput" variant="primary" type="submit">
                         {isLoginLoading ? "Getting you in..." : "Login"}
                     </Button>
                     {
@@ -34,7 +34,7 @@ const Login = () => {
         </Form>
 
 
-    </> 
+    </div> 
     );
 }
  

@@ -10,6 +10,7 @@ import Login from './pages/login'
 import Register from './pages/reg'
 import Hub from './pages/hub'
 import U from './pages/u'
+import Intro from './pages/intro'
 import{Routes, Route, Navigate} from "react-router-dom"
 
 
@@ -17,14 +18,15 @@ function App() {
   const { user } = useContext(AuthContext)
   return (
     <>
-      <Stack direction="vertical" style={{width: '100%'}}>
+      <Stack direction="vertical" className='page-body'>
       <Nav />
-      <div>
+      <div className='pages'>
       <Routes>
-        <Route path="/" element = {user ? <Hub/> : <Login/>} />
+        <Route path="/" element = {user ? <Hub/> : <Intro/>} />
         <Route path="/Login" element = {user ? <Hub/> : <Login/>} />
         <Route path="/Register" element = {user ? <Hub/> : <Register/>} />
-        <Route path="/u" element = {user ? <U/> : <Register/>}/>
+        <Route path="/u" element = {user ? <U/> : <Intro/>}/>
+        <Route path="/info" element= {<Intro/>} />
         <Route path="*" element = {<Navigate to= "/"/>} />
       </Routes>
       </div>
